@@ -8,8 +8,11 @@ const CODE_PATTERN = new RegExp(`^[${CODE_ALPHABET}]{${CODE_LENGTH}}$`);
 const TOKEN_PATTERN = /^[A-Za-z0-9]{16,64}$/;
 const SEATS = /** @type {const} */ (["a", "b"]);
 const LIMITS = { target: [1, 50], grace: [3, 60], reading: [20, 600] };
-/** reading: seconds to read a passage before its questions. passages: false leaves passage questions out. */
-const DEFAULTS = { target: 10, grace: 15, reading: 120, passages: true };
+/**
+ * reading: seconds to read a passage before its questions. passages: false leaves passage questions out.
+ * sections: the subjects that play, at least one.
+ */
+const DEFAULTS = { target: 10, grace: 15, reading: 120, passages: true, sections: ["verbal", "quantitative", "english"] };
 const FIRST_COUNTDOWN_MS = 3000;
 const NEXT_COUNTDOWN_MS = 1800;
 const REVEAL_MS = 5500;
@@ -31,6 +34,9 @@ const SECTIONS = ["verbal", "quantitative", "english"];
 const CONTEXT_KINDS = ["passage", "chart"];
 const IMAGE_CHOICES = ["1", "2", "3", "4"];
 const NITE_NOTICE = "השאלות הן מתוך נוסחי בחינות לדוגמה של המרכז הארצי לבחינות ולהערכה (מאל\"ו), בעל זכויות היוצרים. השימוש בחומרים נעשה באחריות המשתמש בלבד, ומאל\"ו אינו אחראי לדיוק או לנכונות של כל שינוי שייעשה או תוספת שתיעשה, אם תיעשה, כמו פתרונות או הסברים לשאלות.";
+
+const BUILTIN_COUNTS = {};
+for (const q of QUESTIONS) BUILTIN_COUNTS[q.section] = (BUILTIN_COUNTS[q.section] ?? 0) + 1;
 
 // The page shows the choices of a question in this order, so the bank is checked once at load.
 for (const [i, q] of QUESTIONS.entries()) {
@@ -89,7 +95,7 @@ function shuffled(length) {
  *   graceEndsAt: number | null, answers: Partial<Record<Seat, Answer>>, result: Result | null,
  *   context: string | null, ready: Record<Seat, boolean> | null }} Round
  * @typedef {{ title: string, count: number, counts: Record<string, number>, passages: number, passageQuestions: number, charts: number }} ImportedBank
- * @typedef {{ code: string, settings: { target: number, grace: number, reading: number, passages: boolean }, bank: ImportedBank | null,
+ * @typedef {{ code: string, settings: { target: number, grace: number, reading: number, passages: boolean, sections: string[] }, bank: ImportedBank | null,
  *   seats: Record<Seat, { token: string, name: string } | null>, phase: Phase,
  *   scores: Record<Seat, number>, order: number[], cursor: number, round: Round | null,
  *   deadline: number | null, winner: Seat | null, idleSince: number | null, bot: Bot | null }} State
@@ -117,7 +123,7 @@ export class Room extends DurableObject {
     if (this.s) return false;
     const bot = mode === "bot";
     this.s = {
-      code, settings: { ...DEFAULTS }, bank: null, phase: "lobby",
+      code, settings: { ...DEFAULTS, sections: [...DEFAULTS.sections] }, bank: null, phase: "lobby",
       seats: { a: null, b: bot ? { token: BOT.token, name: BOT.name } : null },
       scores: { a: 0, b: 0 }, order: shuffled(QUESTIONS.length), cursor: 0, round: null,
       deadline: null, winner: null, idleSince: Date.now(),
@@ -169,6 +175,12 @@ export class Room extends DurableObject {
         if (me.seat !== "a") return refuse("only the host changes settings");
         if (s.phase !== "lobby" && s.phase !== "over") return refuse("settings are locked during a match");
         const next = { ...s.settings };
+        if (msg.sections !== undefined) {
+          const list = msg.sections;
+          const ok = Array.isArray(list) && list.length > 0 && list.every((x) => SECTIONS.includes(x)) && new Set(list).size === list.length;
+          if (!ok) return refuse("sections must be a list of at least one subject");
+          next.sections = list;
+        }
         if (msg.passages !== undefined) {
           if (typeof msg.passages !== "boolean") return refuse("passages must be true or false");
           next.passages = msg.passages;
@@ -188,7 +200,7 @@ export class Room extends DurableObject {
         if (!s.seats.a || !s.seats.b) return refuse("waiting for a second player");
         if (s.phase !== (msg.t === "start" ? "lobby" : "over")) return refuse(`cannot ${msg.t} now`);
         const order = this.buildOrder();
-        if (!order.length) return refuse("no questions: turn passages on or import another set");
+        if (!order.length) return refuse("אין שאלות בנושאים שנבחרו. בחרו עוד נושא או הפעילו קטעי קריאה.");
         s.order = order;
         s.cursor = 0;
         s.scores = { a: 0, b: 0 };
@@ -321,9 +333,14 @@ export class Room extends DurableObject {
    */
   buildOrder() {
     const s = /** @type {State} */ (this.s);
-    if (!s.bank) return shuffled(QUESTIONS.length);
+    const sections = new Set(s.settings.sections);
+    if (!s.bank) {
+      const picked = QUESTIONS.flatMap((q, i) => (sections.has(q.section) ? [i] : []));
+      return shuffled(picked.length).map((j) => picked[j]);
+    }
     const units = new Map();
-    for (const row of this.ctx.storage.sql.exec("SELECT b.i, b.context, c.kind FROM bank b LEFT JOIN contexts c ON c.id = b.context ORDER BY b.i")) {
+    for (const row of this.ctx.storage.sql.exec("SELECT b.i, b.section, b.context, c.kind FROM bank b LEFT JOIN contexts c ON c.id = b.context ORDER BY b.i")) {
+      if (!sections.has(row.section)) continue;
       if (row.kind === "passage" && !s.settings.passages) continue;
       const key = row.kind === "passage" ? `p:${row.context}` : `q:${row.i}`;
       if (!units.has(key)) units.set(key, []);
@@ -537,7 +554,7 @@ export class Room extends DurableObject {
       t: "state", now: Date.now(), you: seat, code: s.code, settings: s.settings, phase: s.phase,
       scores: s.scores, deadline: s.deadline, winner: s.winner, taunts: TAUNTS, limits: LIMITS,
       bot: s.bot ? { level: Math.round(this.botLevel().level * 100) } : null,
-      bank: s.bank ? { ...s.bank, notice: NITE_NOTICE } : { title: null, count: QUESTIONS.length, notice: null },
+      bank: s.bank ? { ...s.bank, notice: NITE_NOTICE } : { title: null, count: QUESTIONS.length, counts: BUILTIN_COUNTS, notice: null },
       players: Object.fromEntries(SEATS.map((x) => [x, s.seats[x] && { name: s.seats[x].name, online: online.has(x) }])),
       round: round && q && {
         number: round.number, openedAt: round.openedAt, first: round.first, graceEndsAt: round.graceEndsAt,

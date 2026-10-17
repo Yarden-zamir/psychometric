@@ -421,8 +421,10 @@ function lobby() {
       <label>שניות לשני/ה אחרי תשובה ראשונה <input class="field mono" type="number" data-setting="grace" min="${L.grace[0]}" max="${L.grace[1]}" value="${grace}" ${host ? "" : "disabled"}></label>
       ${state.bank.passages ? `
       <label>שניות קריאה לקטע <input class="field mono" type="number" data-setting="reading" min="${L.reading[0]}" max="${L.reading[1]}" value="${state.settings.reading}" ${host ? "" : "disabled"}></label>
-      <label class="row"><input type="checkbox" class="tick" data-flag="passages" ${state.settings.passages ? "checked" : ""} ${host ? "" : "disabled"}> כולל קטעי קריאה (${state.bank.passages} קטעים, ${state.bank.passageQuestions} שאלות)</label>` : ""}
+      <label class="toggle"><input type="checkbox" data-flag="passages" ${state.settings.passages ? "checked" : ""} ${host ? "" : "disabled"}> כולל קטעי קריאה (${state.bank.passages} קטעים, ${state.bank.passageQuestions} שאלות)</label>` : ""}
     </div>
+    <span class="label">נושאים</span>
+    <div class="row">${Object.entries(state.bank.counts).map(([key, n]) => `<label class="toggle"><input type="checkbox" data-section="${esc(key)}" ${state.settings.sections.includes(key) ? "checked" : ""} ${host ? "" : "disabled"}>${esc(SECTION_NAMES[key] ?? key)} <span class="mono">${n}</span></label>`).join("")}</div>
     <span class="label">שאלון</span>
     <div>${bank}</div>
     ${host ? `<div class="row">
@@ -585,6 +587,13 @@ function bind() {
       const [min, max] = state.limits[el.dataset.setting];
       if (!Number.isInteger(value) || value < min || value > max) { toast(`ערך בין ${min} ל־${max}`); render(); return; }
       sendMsg({ t: "settings", [el.dataset.setting]: value });
+    });
+  }
+  for (const el of app.querySelectorAll("[data-section]")) {
+    el.addEventListener("change", () => {
+      const sections = [...app.querySelectorAll("[data-section]:checked")].map((x) => x.dataset.section);
+      if (!sections.length) { toast("צריך לפחות נושא אחד"); render(); return; }
+      sendMsg({ t: "settings", sections });
     });
   }
   for (const el of app.querySelectorAll("[data-flag]")) {

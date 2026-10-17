@@ -35,6 +35,8 @@ A 1v1 quiz race for two devices. Site: <https://psychometric.yarden-zamir.com>.
 11. The first question of a passage starts with a `reading` phase (`settings.reading` seconds,
     default 120). It ends at the deadline, or when both seats send `ready`. A bot is ready at once.
     `settings.passages: false` leaves passage questions out of the order.
+13. `settings.sections` lists the subjects that play (`verbal`, `quantitative`, `english`), at least
+    one. The order leaves out the questions of the other subjects, in the built-in and imported sets.
 12. `/api/rooms/<code>/context?id=<id>` serves only the context of the open round: a passage from its
     reading phase on, a chart from its question on.
 
