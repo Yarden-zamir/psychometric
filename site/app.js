@@ -503,7 +503,18 @@ function questionCard() {
 
 let contextOpen = matchMedia("(min-width: 700px)").matches;
 
+/** A passage read as text: its printed line numbers sit in a margin column, as on the paper. */
+function passageText(t) {
+  const lines = t.lines.map((l) => l.text === ""
+    ? `<div class="pl gap"></div>`
+    : `<div class="pl"><span class="ln">${l.n === null ? "" : l.n}</span><span>${esc(l.text)}</span></div>`).join("");
+  return `<div class="passage-text" dir="${esc(t.dir)}">
+    ${t.title ? `<h3>${esc(t.title)}</h3>` : ""}${t.instructions ? `<p class="muted">${esc(t.instructions)}</p>` : ""}
+    <div class="lines">${lines}</div></div>`;
+}
+
 function contextImage(context, zoomKey) {
+  if (context.text) return passageText(context.text);
   const src = `/api/rooms/${esc(state.code)}/context?id=${encodeURIComponent(context.id)}`;
   return `<div class="qimage-wrap ${zoomedContext === zoomKey ? "zoomed" : ""}" data-zoom="${zoomKey}"><img class="qimage" src="${src}" alt="${context.kind === "passage" ? "קטע קריאה" : "תרשים"}"></div>`;
 }

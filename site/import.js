@@ -179,7 +179,11 @@ function flowOf(chapter) {
   return chapter.pages.flatMap(page => {
     const markers = questionMarkers(page, chapter.section);
     const xs = markers.map(m => m.x);
-    const left = page.view[0] + page.width * 0.065, right = page.view[0] + page.width * 0.935;
+    // The outermost 7% contains repeating vector page ornaments. Keep those
+    // out of textual crops (and their graphic-safety checks), but retain the
+    // wider quantitative crop so figures cannot be cut to text bounds.
+    const margin = chapter.section === 'quantitative' ? 0.065 : 0.09;
+    const left = page.view[0] + page.width * margin, right = page.view[0] + page.width * (1 - margin);
     const mid = page.view[0] + page.width / 2;
     const text = page.items.filter(i => !i.rotated && i.y >= page.view[1] + 65 &&
       i.y <= page.view[3] - 65 && i.width >= page.width * 0.14 && /[א-תA-Za-z]{3}/.test(i.text));

@@ -1,0 +1,3 @@
+# Generated local review material contains licensed NITE text; never commit it.
+*.local.json
+text-review-sheets/

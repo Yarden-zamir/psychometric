@@ -100,7 +100,10 @@ function shuffled(length) {
  *   context: string | null, ready: Record<Seat, boolean> | null }} Round
  * @typedef {{ kind: "builtin" } | { kind: "import", title: string } | { kind: "nite", id: string }} Source
  *   nite: one NITE public-use test from site/banks/manifest.json, or "all" of them.
- * @typedef {{ id: string, section: string, answer: number, context: string | null, contextKind: string | null, file: string | null }} Row
+ * @typedef {{ dir: "rtl" | "ltr", stem: string, choices: string[] }} QuestionText
+ * @typedef {{ dir: "rtl" | "ltr", title: string | null, instructions: string | null, lines: { n: number | null, text: string }[] }} PassageText
+ * @typedef {{ id: string, section: string, answer: number, context: string | null, contextKind: string | null, file: string | null, text: QuestionText | null }} Row
+ *   text: a NITE question that the build read as text. Without it the question plays as its image.
  *   file: the asset path of a NITE image. An imported image is in the room's SQL tables instead.
  * @typedef {{ code: string, settings: { target: number, grace: number, reading: number, passages: boolean, sections: string[] }, source: Source,
  *   seats: Record<Seat, { token: string, name: string } | null>, phase: Phase,
@@ -115,7 +118,7 @@ export class Room extends DurableObject {
   s = null;
   /** Messages that commit sends after the state. */
   outbox = [];
-  /** @type {{ key: string, rows: Row[], contexts: Map<string, { kind: string, file: string | null }> } | null} */
+  /** @type {{ key: string, rows: Row[], contexts: Map<string, { kind: string, file: string | null, text: PassageText | null }> } | null} */
   cache = null;
   /** @type {{ banks: any[] }} */
   manifest = { banks: [] };
@@ -434,6 +437,12 @@ export class Room extends DurableObject {
     if (!rows) return { ...QUESTIONS[i], image: false, context: null, contextKind: null };
     const row = rows[i];
     if (!row) throw new Error(`question ${i} is not in the room's set`);
+    if (row.text) {
+      return {
+        id: row.id, section: row.section, kind: "nite", dir: row.text.dir, prompt: row.text.stem, choices: row.text.choices,
+        answer: row.answer, explain: null, image: false, context: row.context, contextKind: row.contextKind,
+      };
+    }
     return {
       id: row.id, section: row.section, kind: "imported", dir: "rtl", prompt: null, choices: IMAGE_CHOICES,
       answer: row.answer, explain: null, image: true, context: row.context, contextKind: row.contextKind,
@@ -451,20 +460,20 @@ export class Room extends DurableObject {
     const contexts = new Map();
     if (source.kind === "import") {
       const sql = this.ctx.storage.sql;
-      for (const c of sql.exec("SELECT id, kind FROM contexts")) contexts.set(c.id, { kind: c.kind, file: null });
+      for (const c of sql.exec("SELECT id, kind FROM contexts")) contexts.set(c.id, { kind: c.kind, file: null, text: null });
       for (const r of sql.exec("SELECT b.id, b.section, b.answer, b.context, c.kind FROM bank b LEFT JOIN contexts c ON c.id = b.context ORDER BY b.i")) {
-        rows.push({ id: r.id, section: r.section, answer: r.answer, context: r.context ?? null, contextKind: r.kind ?? null, file: null });
+        rows.push({ id: r.id, section: r.section, answer: r.answer, context: r.context ?? null, contextKind: r.kind ?? null, file: null, text: null });
       }
     } else {
       const banks = source.id === "all" ? this.manifest.banks : this.manifest.banks.filter((b) => b.id === source.id);
       // Ids get the bank id in front, so the sets of all tests can play together.
       for (const bank of banks) {
-        for (const c of bank.contexts) contexts.set(`${bank.id}/${c.id}`, { kind: c.kind, file: `/banks/${bank.id}/${c.file}` });
+        for (const c of bank.contexts) contexts.set(`${bank.id}/${c.id}`, { kind: c.kind, file: `/banks/${bank.id}/${c.file}`, text: c.text ?? null });
         for (const q of bank.questions) {
           const context = q.context ? `${bank.id}/${q.context}` : null;
           rows.push({
             id: `${bank.id}/${q.id}`, section: q.section, answer: q.answer, context,
-            contextKind: context ? contexts.get(context)?.kind ?? null : null, file: `/banks/${bank.id}/${q.file}`,
+            contextKind: context ? contexts.get(context)?.kind ?? null : null, file: `/banks/${bank.id}/${q.file}`, text: q.text ?? null,
           });
         }
       }
@@ -659,7 +668,8 @@ export class Room extends DurableObject {
       round: round && q && {
         number: round.number, openedAt: round.openedAt, first: round.first, graceEndsAt: round.graceEndsAt,
         question: shown ? { id: q.id, section: q.section, kind: q.kind, dir: q.dir, prompt: q.prompt, choices: q.choices, image: q.image } : null,
-        context: q.context && contextOpen ? { id: q.context, kind: q.contextKind } : null,
+        // A passage read as text travels in the state, so it wraps on any screen. The others are images.
+        context: q.context && contextOpen ? { id: q.context, kind: q.contextKind, text: this.cache?.contexts.get(q.context)?.text ?? null } : null,
         ready: round.ready,
         answered: { a: !!round.answers.a, b: !!round.answers.b },
         mine: seat ? round.answers[seat]?.choice ?? null : null,
@@ -680,10 +690,22 @@ async function loadManifest(env) {
   if (!Array.isArray(manifest?.banks)) throw new Error("banks manifest has no banks list");
   for (const b of manifest.banks) {
     const ok = typeof b.id === "string" && typeof b.title === "string" && Array.isArray(b.questions) && Array.isArray(b.contexts) &&
-      b.questions.every((q) => SECTIONS.includes(q.section) && Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3 && typeof q.file === "string");
+      b.questions.every((q) => SECTIONS.includes(q.section) && Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3 && typeof q.file === "string" &&
+        (q.text == null || validQuestionText(q.text))) &&
+      b.contexts.every((c) => c.text == null || validPassageText(c.text));
     if (!ok) throw new Error(`banks manifest: bank ${b?.id} is not valid`);
   }
   return manifest;
+}
+
+function validQuestionText(t) {
+  return (t.dir === "rtl" || t.dir === "ltr") && typeof t.stem === "string" && t.stem.trim() !== "" &&
+    Array.isArray(t.choices) && t.choices.length === 4 && t.choices.every((c) => typeof c === "string" && c.trim() !== "");
+}
+
+function validPassageText(t) {
+  return (t.dir === "rtl" || t.dir === "ltr") && Array.isArray(t.lines) && t.lines.length > 0 &&
+    t.lines.every((l) => typeof l.text === "string" && (l.n === null || Number.isInteger(l.n)));
 }
 
 function clamp(x, min, max) {

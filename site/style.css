@@ -168,6 +168,13 @@ details.passage { border: var(--bw) solid var(--border); border-radius: var(--ra
 details.passage > summary { cursor: pointer; padding: 6px 12px; font-weight: 800; }
 details.passage > .qimage-wrap { border-width: var(--bw) 0 0; border-radius: 0; max-height: 60vh; overflow-y: auto; }
 .grace.reading-timer .fill { background: var(--info); }
+.passage-text { padding: 12px 14px; background: var(--surface); border: var(--bw) solid var(--border); border-radius: var(--radius); font-size: 1.1rem; line-height: 1.7; }
+.passage-text h3 { font-size: 1.15rem; margin-bottom: 4px; }
+.passage-text p { margin: 0 0 8px; font-size: 0.95rem; }
+.passage-text .pl { display: grid; grid-template-columns: 2.2em 1fr; }
+.passage-text .pl.gap { height: 0.7em; }
+.passage-text .ln { font-family: var(--mono); font-size: 0.75em; color: var(--muted); padding-top: 0.25em; }
+details.passage > .passage-text { border-width: var(--bw) 0 0; border-radius: 0; max-height: 55vh; overflow-y: auto; }
 .qcard:not(:has(.qimage-wrap:not(.fits))) .zoom-hint { display: none; }
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .choices.numbers { grid-template-columns: repeat(4, 1fr); }

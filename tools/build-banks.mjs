@@ -8,6 +8,9 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { findQuestions, getImportDiagnostics } from '../site/import.js';
+import { createTextExtractor } from './build-banks-text.mjs';
+import { validateTextManifest } from './validate-bank-text.mjs';
+import { createHash } from 'node:crypto';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
@@ -117,7 +120,13 @@ async function main() {
       const document = await loading.promise;
       const result = await findQuestions(document), diagnostic = getImportDiagnostics(document);
       await validateRegions(document, result, diagnostic);
-      scanned.push({ source, result, diagnostic });
+      const extract = createTextExtractor(document), textReport = { questions: [], contexts: [] };
+      for (const kind of ['questions', 'contexts']) for (const region of result[kind]) {
+        const extracted = await extract(region);
+        region.text = extracted.text;
+        textReport[kind].push({ id: region.id, reason: extracted.reason });
+      }
+      scanned.push({ source, result, diagnostic, textReport });
     } catch (error) { throw new Error(`${source.source}: ${error.message}`, { cause: error }); }
     finally { await loading.destroy(); }
   }
@@ -131,8 +140,8 @@ async function main() {
     const directory = join(output, source.id);
     await mkdir(directory);
     const questions = result.questions.map(q => ({ id: q.id, section: q.section, answer: q.answer,
-      context: q.context, file: `q-${q.id}.webp` }));
-    const contexts = result.contexts.map(c => ({ id: c.id, kind: c.kind, file: `c-${c.id}.webp` }));
+      context: q.context, file: `q-${q.id}.webp`, text: q.text }));
+    const contexts = result.contexts.map(c => ({ id: c.id, kind: c.kind, file: `c-${c.id}.webp`, text: c.text }));
     const regions = [...result.questions.map(q => ({ ...q, file: `q-${q.id}.webp` })),
       ...result.contexts.map(c => ({ ...c, file: `c-${c.id}.webp` }))];
     const rendered = spawnSync('uv', ['run', '--script', join(here, 'build-banks-render.py'),
@@ -159,13 +168,19 @@ async function main() {
       `contexts ${JSON.stringify(countBy(contexts, 'kind'))}; skipped ${diagnostic.skipped.length} ` +
       `${JSON.stringify(countBy(diagnostic.skipped, 'reason'))}; ${bytes} bytes`);
     if (diagnostic.contextSkipped.length) console.log(`  Context skips: ${JSON.stringify(countBy(diagnostic.contextSkipped, 'reason'))}`);
+    console.log(`  Text: ${questions.filter(q => q.text).length} questions; ${contexts.filter(c => c.text).length} passages`);
   }
   // Publish the manifest only after all banks and every referenced image pass.
   for (const bank of banks) for (const item of [...bank.questions, ...bank.contexts]) {
     assert((await stat(join(output, bank.id, item.file))).isFile(), `Missing manifest file: ${bank.id}/${item.file}`);
   }
+  validateTextManifest({ banks });
   const manifest = JSON.stringify({ banks }, null, 2) + '\n';
   await writeFile(join(output, 'manifest.json'), manifest);
+  await writeFile(join(here, 'text-extraction.local.json'), JSON.stringify({
+    manifestSha256: createHash('sha256').update(manifest).digest('hex'),
+    banks: scanned.map(({ source, textReport }) => ({ id: source.id, ...textReport })),
+  }, null, 2) + '\n');
   totalBytes += Buffer.byteLength(manifest);
   console.log(`Validated ${banks.length} banks, ${banks.reduce((n, b) => n + b.questions.length, 0)} questions, ` +
     `${imageCount} WebP images; ${totalBytes} total bytes including manifest. Output: ${output}`);

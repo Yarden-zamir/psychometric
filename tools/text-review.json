@@ -1,0 +1,2949 @@
+{
+  "manifestSha256": "ea44c683c047c0201d1b5dc4ad48c31ab77524f6d68294b2f8ed199bd2b2362e",
+  "method": "Every listed sheet was personally compared: source crop beside browser-shaped text. Only ids, reasons and hashes are stored here; sheets and source text stay gitignored.",
+  "constraints": [
+    "Quantitative questions and chart contexts always use images.",
+    "Any image overlapping a crop, including the large watermark in the autumn/winter 2020 PDFs, forces image fallback.",
+    "Underlines, other graphics, invalid text controls and small math labels force image fallback; no Unicode repair or normalization."
+  ],
+  "banks": [
+    {
+      "id": "nite-2019-spring",
+      "questions": {
+        "withText": [
+          "verbal-1-1",
+          "verbal-1-2",
+          "verbal-1-3",
+          "verbal-1-4",
+          "verbal-1-5",
+          "verbal-1-6",
+          "verbal-1-7",
+          "verbal-1-8",
+          "verbal-1-9",
+          "verbal-1-10",
+          "verbal-1-11",
+          "verbal-1-12",
+          "verbal-1-13",
+          "verbal-1-14",
+          "verbal-1-15",
+          "verbal-1-16",
+          "verbal-1-17",
+          "verbal-1-18",
+          "verbal-1-19",
+          "verbal-1-20",
+          "verbal-1-21",
+          "verbal-1-22",
+          "verbal-1-23",
+          "verbal-2-1",
+          "verbal-2-2",
+          "verbal-2-3",
+          "verbal-2-4",
+          "verbal-2-5",
+          "verbal-2-6",
+          "verbal-2-7",
+          "verbal-2-8",
+          "verbal-2-9",
+          "verbal-2-11",
+          "verbal-2-12",
+          "verbal-2-13",
+          "verbal-2-14",
+          "verbal-2-15",
+          "verbal-2-16",
+          "verbal-2-17",
+          "verbal-2-18",
+          "verbal-2-19",
+          "verbal-2-20",
+          "verbal-2-21",
+          "verbal-2-22",
+          "verbal-2-23",
+          "english-1-1",
+          "english-1-2",
+          "english-1-3",
+          "english-1-4",
+          "english-1-5",
+          "english-1-6",
+          "english-1-7",
+          "english-1-8",
+          "english-1-9",
+          "english-1-10",
+          "english-1-11",
+          "english-1-12",
+          "english-1-13",
+          "english-1-14",
+          "english-1-16",
+          "english-1-17",
+          "english-1-19",
+          "english-1-21",
+          "english-2-1",
+          "english-2-2",
+          "english-2-3",
+          "english-2-4",
+          "english-2-5",
+          "english-2-6",
+          "english-2-7",
+          "english-2-8",
+          "english-2-9",
+          "english-2-10",
+          "english-2-11",
+          "english-2-12",
+          "english-2-13",
+          "english-2-14",
+          "english-2-15",
+          "english-2-17",
+          "english-2-18",
+          "english-2-19",
+          "english-2-20",
+          "english-2-21",
+          "english-2-22"
+        ],
+        "nullText": [
+          {
+            "id": "quantitative-1-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-12",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-12",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "english-1-15",
+            "reason": "non-blank-horizontal-line"
+          },
+          {
+            "id": "english-1-18",
+            "reason": "non-blank-horizontal-line"
+          },
+          {
+            "id": "english-1-22",
+            "reason": "non-blank-horizontal-line"
+          }
+        ]
+      },
+      "contexts": {
+        "withText": [
+          "verbal-1-passage-1",
+          "verbal-2-passage-1",
+          "english-1-passage-1",
+          "english-1-passage-2",
+          "english-2-passage-1",
+          "english-2-passage-2"
+        ],
+        "nullText": [
+          {
+            "id": "quantitative-1-chart-1",
+            "reason": "chart-image-only"
+          },
+          {
+            "id": "quantitative-2-chart-1",
+            "reason": "chart-image-only"
+          }
+        ]
+      },
+      "sheetsChecked": [
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-01.png",
+          "ids": [
+            "verbal-1-1",
+            "verbal-1-2",
+            "verbal-1-3",
+            "verbal-1-4",
+            "verbal-1-5",
+            "verbal-1-6",
+            "verbal-1-7",
+            "verbal-1-8",
+            "verbal-1-9",
+            "verbal-1-10"
+          ],
+          "sha256": "ed99bc61903c47d625df673f9ba8fe6fd20c0ca4758ae8b4aaaa3585f0836cd5"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-02.png",
+          "ids": [
+            "verbal-1-11",
+            "verbal-1-12",
+            "verbal-1-13",
+            "verbal-1-14",
+            "verbal-1-15",
+            "verbal-1-16",
+            "verbal-1-17",
+            "verbal-1-18",
+            "verbal-1-19"
+          ],
+          "sha256": "7aaf5abbcbef7104228c979b5bb1615ada8ff0133f9e94b69273c28623f556ce"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-03.png",
+          "ids": [
+            "verbal-1-20",
+            "verbal-1-21",
+            "verbal-1-22",
+            "verbal-1-23",
+            "verbal-2-1",
+            "verbal-2-2",
+            "verbal-2-3",
+            "verbal-2-4",
+            "verbal-2-5",
+            "verbal-2-6"
+          ],
+          "sha256": "82159efc6a080e6bbaa6e3dd1f156ce9cf1dbb57aad13d30571be6079dbdb355"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-04.png",
+          "ids": [
+            "verbal-2-7",
+            "verbal-2-8",
+            "verbal-2-9",
+            "verbal-2-11",
+            "verbal-2-12",
+            "verbal-2-13",
+            "verbal-2-14",
+            "verbal-2-15"
+          ],
+          "sha256": "bea9ed4d5bcfeefd869e69bdd83bff375624032989926e11a55cf70639e1d7c2"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-05.png",
+          "ids": [
+            "verbal-2-16",
+            "verbal-2-17",
+            "verbal-2-18",
+            "verbal-2-19",
+            "verbal-2-20",
+            "verbal-2-21",
+            "verbal-2-22",
+            "verbal-2-23",
+            "english-1-1",
+            "english-1-2"
+          ],
+          "sha256": "796c0c83f7d37c4c6cc8ba918a2f5ba0f4317ef3b145c032c8dcabe5d201a671"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-06.png",
+          "ids": [
+            "english-1-3",
+            "english-1-4",
+            "english-1-5",
+            "english-1-6",
+            "english-1-7",
+            "english-1-8",
+            "english-1-9",
+            "english-1-10",
+            "english-1-11",
+            "english-1-12"
+          ],
+          "sha256": "070de4b1d5f4f357c37c3e3ae855e3419cca268b10acfc14981ea18d52f7a4dd"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-07.png",
+          "ids": [
+            "english-1-13",
+            "english-1-14",
+            "english-1-16",
+            "english-1-17",
+            "english-1-19",
+            "english-1-21",
+            "english-2-1",
+            "english-2-2",
+            "english-2-3",
+            "english-2-4"
+          ],
+          "sha256": "442b86df0f2df04d3ded8f05f8d7c09db95dce6ef963db2b683f22e787ecd2c4"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-08.png",
+          "ids": [
+            "english-2-5",
+            "english-2-6",
+            "english-2-7",
+            "english-2-8",
+            "english-2-9",
+            "english-2-10",
+            "english-2-11",
+            "english-2-12",
+            "english-2-13",
+            "english-2-14"
+          ],
+          "sha256": "93f43d0af4afd9d6c1ccac5c79f120fb0c1135cb5a99d81fe6ab990d71096a30"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-09.png",
+          "ids": [
+            "english-2-15",
+            "english-2-17",
+            "english-2-18",
+            "english-2-19",
+            "english-2-20",
+            "english-2-21",
+            "english-2-22"
+          ],
+          "sha256": "0f19bdf8158b32bbb41d6b7c7f35768cbf15fe38e329600e0dabbe997eaeca55"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-10.png",
+          "ids": [
+            "verbal-1-passage-1"
+          ],
+          "sha256": "d6f6c53be9bdb06da10a1d1e34c184a904963c519291f063cb6c62a58b2e3722"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-11.png",
+          "ids": [
+            "verbal-2-passage-1",
+            "english-1-passage-1"
+          ],
+          "sha256": "0a82070e2520436bd7717263b78244ac8f205b07b701ad0f998926cce5f287cc"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-12.png",
+          "ids": [
+            "english-1-passage-2",
+            "english-2-passage-1"
+          ],
+          "sha256": "f08f7786453a200e7806027fc0fef6f3de2aae6a63a764e4537ac930999ecc44"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-spring-13.png",
+          "ids": [
+            "english-2-passage-2"
+          ],
+          "sha256": "d54a1f869566b6c5e2a33dd3ff4c472838fda6216fcb1e45628c67e4da44cd1e"
+        }
+      ]
+    },
+    {
+      "id": "nite-2019-winter",
+      "questions": {
+        "withText": [
+          "verbal-1-1",
+          "verbal-1-2",
+          "verbal-1-3",
+          "verbal-1-4",
+          "verbal-1-5",
+          "verbal-1-6",
+          "verbal-1-7",
+          "verbal-1-8",
+          "verbal-1-10",
+          "verbal-1-11",
+          "verbal-1-12",
+          "verbal-1-13",
+          "verbal-1-14",
+          "verbal-1-15",
+          "verbal-1-16",
+          "verbal-1-17",
+          "verbal-1-18",
+          "verbal-1-19",
+          "verbal-1-20",
+          "verbal-1-21",
+          "verbal-1-22",
+          "verbal-1-23",
+          "verbal-2-1",
+          "verbal-2-2",
+          "verbal-2-3",
+          "verbal-2-4",
+          "verbal-2-5",
+          "verbal-2-6",
+          "verbal-2-8",
+          "verbal-2-9",
+          "verbal-2-10",
+          "verbal-2-11",
+          "verbal-2-12",
+          "verbal-2-13",
+          "verbal-2-14",
+          "verbal-2-15",
+          "verbal-2-16",
+          "verbal-2-17",
+          "verbal-2-18",
+          "verbal-2-19",
+          "verbal-2-20",
+          "verbal-2-21",
+          "verbal-2-22",
+          "verbal-2-23",
+          "english-1-1",
+          "english-1-2",
+          "english-1-3",
+          "english-1-4",
+          "english-1-5",
+          "english-1-6",
+          "english-1-7",
+          "english-1-8",
+          "english-1-9",
+          "english-1-10",
+          "english-1-11",
+          "english-1-12",
+          "english-1-13",
+          "english-1-14",
+          "english-1-15",
+          "english-1-16",
+          "english-1-17",
+          "english-1-18",
+          "english-1-19",
+          "english-1-21",
+          "english-1-22",
+          "english-2-1",
+          "english-2-2",
+          "english-2-3",
+          "english-2-4",
+          "english-2-5",
+          "english-2-6",
+          "english-2-7",
+          "english-2-8",
+          "english-2-9",
+          "english-2-10",
+          "english-2-11",
+          "english-2-12",
+          "english-2-13",
+          "english-2-14",
+          "english-2-15",
+          "english-2-16",
+          "english-2-17",
+          "english-2-18",
+          "english-2-20",
+          "english-2-21"
+        ],
+        "nullText": [
+          {
+            "id": "verbal-1-9",
+            "reason": "graphic-vector"
+          },
+          {
+            "id": "verbal-2-7",
+            "reason": "graphic-horizontal"
+          },
+          {
+            "id": "quantitative-1-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-12",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "english-1-20",
+            "reason": "non-blank-horizontal-line"
+          },
+          {
+            "id": "english-2-19",
+            "reason": "non-blank-horizontal-line"
+          },
+          {
+            "id": "english-2-22",
+            "reason": "non-blank-horizontal-line"
+          }
+        ]
+      },
+      "contexts": {
+        "withText": [
+          "verbal-2-passage-1",
+          "english-1-passage-1",
+          "english-1-passage-2",
+          "english-2-passage-1",
+          "english-2-passage-2"
+        ],
+        "nullText": [
+          {
+            "id": "verbal-1-passage-1",
+            "reason": "unplaceable-text-item"
+          },
+          {
+            "id": "quantitative-1-chart-1",
+            "reason": "chart-image-only"
+          },
+          {
+            "id": "quantitative-2-chart-1",
+            "reason": "chart-image-only"
+          }
+        ]
+      },
+      "sheetsChecked": [
+        {
+          "file": "tools/text-review-sheets/nite-2019-winter-01.png",
+          "ids": [
+            "verbal-1-1",
+            "verbal-1-2",
+            "verbal-1-3",
+            "verbal-1-4",
+            "verbal-1-5",
+            "verbal-1-6",
+            "verbal-1-7",
+            "verbal-1-8",
+            "verbal-1-10",
+            "verbal-1-11"
+          ],
+          "sha256": "6ef647b541e35631633b5f26884acbe08a3a858cf8d3aad21901a60c890c5102"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-winter-02.png",
+          "ids": [
+            "verbal-1-12",
+            "verbal-1-13",
+            "verbal-1-14",
+            "verbal-1-15",
+            "verbal-1-16",
+            "verbal-1-17",
+            "verbal-1-18",
+            "verbal-1-19",
+            "verbal-1-20",
+            "verbal-1-21"
+          ],
+          "sha256": "9905290d81f407cf7038f6b955251c3bf766377ec43aecbcf0911163ce776441"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-winter-03.png",
+          "ids": [
+            "verbal-1-22",
+            "verbal-1-23",
+            "verbal-2-1",
+            "verbal-2-2",
+            "verbal-2-3",
+            "verbal-2-4",
+            "verbal-2-5",
+            "verbal-2-6",
+            "verbal-2-8",
+            "verbal-2-9"
+          ],
+          "sha256": "79f70fd124a9eb395a0fb8bd62ea6a8a778230688ca59eec10a42489baab5b9e"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-winter-04.png",
+          "ids": [
+            "verbal-2-10",
+            "verbal-2-11",
+            "verbal-2-12",
+            "verbal-2-13",
+            "verbal-2-14",
+            "verbal-2-15",
+            "verbal-2-16"
+          ],
+          "sha256": "1172df60fae456885010c796dde0af1fdc1765b496334eeac3834d0317ff1b76"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-winter-05.png",
+          "ids": [
+            "verbal-2-17",
+            "verbal-2-18",
+            "verbal-2-19",
+            "verbal-2-20",
+            "verbal-2-21",
+            "verbal-2-22",
+            "verbal-2-23",
+            "english-1-1",
+            "english-1-2",
+            "english-1-3"
+          ],
+          "sha256": "c2a64f95c56dbdea05bba09c2f93ca1b769057a092f72112c5b074bdeb7f35fe"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-winter-06.png",
+          "ids": [
+            "english-1-4",
+            "english-1-5",
+            "english-1-6",
+            "english-1-7",
+            "english-1-8",
+            "english-1-9",
+            "english-1-10",
+            "english-1-11",
+            "english-1-12",
+            "english-1-13"
+          ],
+          "sha256": "e57d753278e22b6d53c07251d3af4d54be66f49b6129e0ee9014addf136f6427"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-winter-07.png",
+          "ids": [
+            "english-1-14",
+            "english-1-15",
+            "english-1-16",
+            "english-1-17",
+            "english-1-18",
+            "english-1-19",
+            "english-1-21",
+            "english-1-22",
+            "english-2-1",
+            "english-2-2"
+          ],
+          "sha256": "b061b0c01f557bbce19fd200d6906562e4a608bf9a2ba3908a206998ea34ed8f"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-winter-08.png",
+          "ids": [
+            "english-2-3",
+            "english-2-4",
+            "english-2-5",
+            "english-2-6",
+            "english-2-7",
+            "english-2-8",
+            "english-2-9",
+            "english-2-10",
+            "english-2-11",
+            "english-2-12"
+          ],
+          "sha256": "c7f076d8f74c3cdef9d23fa42f8b6012a9b3dd34575f81924ddc56af3b7bc0cd"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-winter-09.png",
+          "ids": [
+            "english-2-13",
+            "english-2-14",
+            "english-2-15",
+            "english-2-16",
+            "english-2-17",
+            "english-2-18",
+            "english-2-20",
+            "english-2-21"
+          ],
+          "sha256": "dbb71057831a82f4cabf10377dc9b6192151888428fcd590fd2ce3bf5a6a2a87"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-winter-10.png",
+          "ids": [
+            "verbal-2-passage-1",
+            "english-1-passage-1"
+          ],
+          "sha256": "d965b8dcf2867f1766f27a1da9ede23b3ea39c98bbe4b2a009a99da99138b27e"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2019-winter-11.png",
+          "ids": [
+            "english-1-passage-2",
+            "english-2-passage-1",
+            "english-2-passage-2"
+          ],
+          "sha256": "30ad475f9f9a882b2746eb334c4d15ad74f9aa8e99f133ade0ece7a0e3a25471"
+        }
+      ]
+    },
+    {
+      "id": "nite-2020-spring",
+      "questions": {
+        "withText": [
+          "verbal-1-1",
+          "verbal-1-2",
+          "verbal-1-4",
+          "verbal-1-6",
+          "verbal-1-7",
+          "verbal-1-8",
+          "verbal-1-9",
+          "verbal-1-10",
+          "verbal-1-11",
+          "verbal-1-12",
+          "verbal-1-13",
+          "verbal-1-14",
+          "verbal-1-15",
+          "verbal-1-16",
+          "verbal-1-18",
+          "verbal-1-19",
+          "verbal-1-20",
+          "verbal-1-21",
+          "verbal-1-22",
+          "verbal-1-23",
+          "verbal-2-1",
+          "verbal-2-2",
+          "verbal-2-3",
+          "verbal-2-5",
+          "verbal-2-6",
+          "verbal-2-7",
+          "verbal-2-8",
+          "verbal-2-9",
+          "verbal-2-10",
+          "verbal-2-11",
+          "verbal-2-12",
+          "verbal-2-13",
+          "verbal-2-15",
+          "verbal-2-16",
+          "verbal-2-17",
+          "verbal-2-18",
+          "verbal-2-19",
+          "verbal-2-20",
+          "verbal-2-21",
+          "verbal-2-22",
+          "verbal-2-23",
+          "english-1-1",
+          "english-1-2",
+          "english-1-3",
+          "english-1-4",
+          "english-1-5",
+          "english-1-6",
+          "english-1-7",
+          "english-1-8",
+          "english-1-9",
+          "english-1-10",
+          "english-1-11",
+          "english-1-12",
+          "english-1-13",
+          "english-1-14",
+          "english-1-15",
+          "english-1-17",
+          "english-1-18",
+          "english-1-20",
+          "english-1-21",
+          "english-1-22",
+          "english-2-1",
+          "english-2-2",
+          "english-2-3",
+          "english-2-4",
+          "english-2-5",
+          "english-2-6",
+          "english-2-7",
+          "english-2-8",
+          "english-2-9",
+          "english-2-10",
+          "english-2-11",
+          "english-2-12",
+          "english-2-13",
+          "english-2-14",
+          "english-2-15",
+          "english-2-17",
+          "english-2-18",
+          "english-2-19",
+          "english-2-20",
+          "english-2-21",
+          "english-2-22"
+        ],
+        "nullText": [
+          {
+            "id": "verbal-1-3",
+            "reason": "unplaceable-text-item"
+          },
+          {
+            "id": "verbal-1-5",
+            "reason": "unplaceable-text-item"
+          },
+          {
+            "id": "verbal-1-17",
+            "reason": "unplaceable-text-item"
+          },
+          {
+            "id": "verbal-2-4",
+            "reason": "unplaceable-text-item"
+          },
+          {
+            "id": "verbal-2-14",
+            "reason": "unplaceable-text-item"
+          },
+          {
+            "id": "quantitative-1-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-12",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-12",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "english-1-16",
+            "reason": "non-blank-horizontal-line"
+          },
+          {
+            "id": "english-1-19",
+            "reason": "non-blank-horizontal-line"
+          },
+          {
+            "id": "english-2-16",
+            "reason": "non-blank-horizontal-line"
+          }
+        ]
+      },
+      "contexts": {
+        "withText": [
+          "verbal-1-passage-1",
+          "verbal-1-passage-2",
+          "english-1-passage-1",
+          "english-1-passage-2",
+          "english-2-passage-1",
+          "english-2-passage-2"
+        ],
+        "nullText": [
+          {
+            "id": "verbal-2-passage-1",
+            "reason": "unplaceable-text-item"
+          },
+          {
+            "id": "quantitative-1-chart-1",
+            "reason": "chart-image-only"
+          },
+          {
+            "id": "quantitative-2-chart-1",
+            "reason": "chart-image-only"
+          }
+        ]
+      },
+      "sheetsChecked": [
+        {
+          "file": "tools/text-review-sheets/nite-2020-spring-01.png",
+          "ids": [
+            "verbal-1-1",
+            "verbal-1-2",
+            "verbal-1-4",
+            "verbal-1-6",
+            "verbal-1-7",
+            "verbal-1-8",
+            "verbal-1-9",
+            "verbal-1-10",
+            "verbal-1-11",
+            "verbal-1-12"
+          ],
+          "sha256": "5918bc09d3b5067fd495b83caf513e560a37fe80563ddb98f1ca4e63b183724d"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-spring-02.png",
+          "ids": [
+            "verbal-1-13",
+            "verbal-1-14",
+            "verbal-1-15",
+            "verbal-1-16",
+            "verbal-1-18",
+            "verbal-1-19",
+            "verbal-1-20",
+            "verbal-1-21",
+            "verbal-1-22",
+            "verbal-1-23"
+          ],
+          "sha256": "198a8de684c716c216834d2da9a967eadf59857ff3da713a25fcd58d10351a92"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-spring-03.png",
+          "ids": [
+            "verbal-2-1",
+            "verbal-2-2",
+            "verbal-2-3",
+            "verbal-2-5",
+            "verbal-2-6",
+            "verbal-2-7",
+            "verbal-2-8",
+            "verbal-2-9",
+            "verbal-2-10",
+            "verbal-2-11"
+          ],
+          "sha256": "0e14b731669634cf7b0b74ec71b2562a1eb67d9189f40af53bb6f57f9a194c6b"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-spring-04.png",
+          "ids": [
+            "verbal-2-12",
+            "verbal-2-13",
+            "verbal-2-15",
+            "verbal-2-16",
+            "verbal-2-17",
+            "verbal-2-18",
+            "verbal-2-19",
+            "verbal-2-20",
+            "verbal-2-21"
+          ],
+          "sha256": "66b2544014f31052c7fe47ce645e2bc2a768b6919e3c685b8e59c073b1ef52fa"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-spring-05.png",
+          "ids": [
+            "verbal-2-22",
+            "verbal-2-23",
+            "english-1-1",
+            "english-1-2",
+            "english-1-3",
+            "english-1-4",
+            "english-1-5",
+            "english-1-6",
+            "english-1-7",
+            "english-1-8"
+          ],
+          "sha256": "6c8769137fd98cb04f0814e5da927b77d693244915f677f4e6b845664d7f3fd2"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-spring-06.png",
+          "ids": [
+            "english-1-9",
+            "english-1-10",
+            "english-1-11",
+            "english-1-12",
+            "english-1-13",
+            "english-1-14",
+            "english-1-15",
+            "english-1-17",
+            "english-1-18",
+            "english-1-20"
+          ],
+          "sha256": "b2181bab9ad2a1f69dae2e454c8fa99ec57a8ba010fd0d9f67f73f9609b54821"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-spring-07.png",
+          "ids": [
+            "english-1-21",
+            "english-1-22",
+            "english-2-1",
+            "english-2-2",
+            "english-2-3",
+            "english-2-4",
+            "english-2-5",
+            "english-2-6",
+            "english-2-7",
+            "english-2-8"
+          ],
+          "sha256": "ec01a561bfd6873c9ab30f9653e34ed92081aa61f7794accb0ffd55776c97422"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-spring-08.png",
+          "ids": [
+            "english-2-9",
+            "english-2-10",
+            "english-2-11",
+            "english-2-12",
+            "english-2-13",
+            "english-2-14",
+            "english-2-15",
+            "english-2-17",
+            "english-2-18",
+            "english-2-19"
+          ],
+          "sha256": "85bcfedac2410ed672cd095f2d2c452c2afe30836688ccbb9c6df273c652e0d4"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-spring-09.png",
+          "ids": [
+            "english-2-20",
+            "english-2-21",
+            "english-2-22",
+            "verbal-1-passage-1",
+            "verbal-1-passage-2"
+          ],
+          "sha256": "edc16609122b454c7fe25a243de5c98106de2f510dc1acc3b02cd6913d21883b"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-spring-10.png",
+          "ids": [
+            "english-1-passage-1",
+            "english-1-passage-2",
+            "english-2-passage-1"
+          ],
+          "sha256": "d410215dfa48378bf6ab51e2f50e4859b94083f972218adba5b2b787e3da1e4d"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-spring-11.png",
+          "ids": [
+            "english-2-passage-2"
+          ],
+          "sha256": "0db29949ce1e6a3539d0a84c7c3ebb1fab7de7bb90ed954d7b9550c5781f323e"
+        }
+      ]
+    },
+    {
+      "id": "nite-2020-summer",
+      "questions": {
+        "withText": [
+          "verbal-1-1",
+          "verbal-1-2",
+          "verbal-1-3",
+          "verbal-1-4",
+          "verbal-1-5",
+          "verbal-1-6",
+          "verbal-1-7",
+          "verbal-1-8",
+          "verbal-1-9",
+          "verbal-1-10",
+          "verbal-1-11",
+          "verbal-1-12",
+          "verbal-1-14",
+          "verbal-1-15",
+          "verbal-1-16",
+          "verbal-1-17",
+          "verbal-1-18",
+          "verbal-1-19",
+          "verbal-1-20",
+          "verbal-1-21",
+          "verbal-1-22",
+          "verbal-2-1",
+          "verbal-2-2",
+          "verbal-2-3",
+          "verbal-2-4",
+          "verbal-2-5",
+          "verbal-2-6",
+          "verbal-2-7",
+          "verbal-2-8",
+          "verbal-2-9",
+          "verbal-2-10",
+          "verbal-2-11",
+          "verbal-2-12",
+          "verbal-2-13",
+          "verbal-2-14",
+          "verbal-2-15",
+          "verbal-2-16",
+          "verbal-2-17",
+          "verbal-2-18",
+          "verbal-2-19",
+          "verbal-2-20",
+          "verbal-2-21",
+          "verbal-2-22",
+          "verbal-2-23",
+          "english-1-1",
+          "english-1-2",
+          "english-1-3",
+          "english-1-4",
+          "english-1-5",
+          "english-1-6",
+          "english-1-7",
+          "english-1-8",
+          "english-1-9",
+          "english-1-10",
+          "english-1-11",
+          "english-1-12",
+          "english-1-13",
+          "english-1-14",
+          "english-1-15",
+          "english-1-16",
+          "english-1-17",
+          "english-1-18",
+          "english-1-19",
+          "english-1-20",
+          "english-1-21",
+          "english-2-1",
+          "english-2-2",
+          "english-2-3",
+          "english-2-4",
+          "english-2-5",
+          "english-2-6",
+          "english-2-7",
+          "english-2-8",
+          "english-2-9",
+          "english-2-10",
+          "english-2-11",
+          "english-2-12",
+          "english-2-13",
+          "english-2-14",
+          "english-2-15",
+          "english-2-16",
+          "english-2-17",
+          "english-2-18",
+          "english-2-19",
+          "english-2-20",
+          "english-2-21",
+          "english-2-22"
+        ],
+        "nullText": [
+          {
+            "id": "verbal-1-13",
+            "reason": "unplaceable-text-item"
+          },
+          {
+            "id": "verbal-1-23",
+            "reason": "unplaceable-text-item"
+          },
+          {
+            "id": "quantitative-1-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-12",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-12",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "english-1-22",
+            "reason": "non-blank-horizontal-line"
+          }
+        ]
+      },
+      "contexts": {
+        "withText": [
+          "verbal-2-passage-1",
+          "english-1-passage-1",
+          "english-1-passage-2",
+          "english-2-passage-1",
+          "english-2-passage-2"
+        ],
+        "nullText": [
+          {
+            "id": "verbal-1-passage-1",
+            "reason": "unplaceable-text-item"
+          },
+          {
+            "id": "quantitative-1-chart-1",
+            "reason": "chart-image-only"
+          },
+          {
+            "id": "quantitative-2-chart-1",
+            "reason": "chart-image-only"
+          }
+        ]
+      },
+      "sheetsChecked": [
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-01.png",
+          "ids": [
+            "verbal-1-1",
+            "verbal-1-2",
+            "verbal-1-3",
+            "verbal-1-4",
+            "verbal-1-5",
+            "verbal-1-6",
+            "verbal-1-7",
+            "verbal-1-8",
+            "verbal-1-9",
+            "verbal-1-10"
+          ],
+          "sha256": "97bad7f3bad8e81d56b1974815126dada0092a6fca2fb1cf74908ffc44d19aae"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-02.png",
+          "ids": [
+            "verbal-1-11",
+            "verbal-1-12",
+            "verbal-1-14",
+            "verbal-1-15",
+            "verbal-1-16",
+            "verbal-1-17",
+            "verbal-1-18",
+            "verbal-1-19",
+            "verbal-1-20"
+          ],
+          "sha256": "301793828f52fcafae637e4fa5f978e25905fedd31b47c0663b9e7db1abca2ed"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-03.png",
+          "ids": [
+            "verbal-1-21",
+            "verbal-1-22",
+            "verbal-2-1",
+            "verbal-2-2",
+            "verbal-2-3",
+            "verbal-2-4",
+            "verbal-2-5",
+            "verbal-2-6",
+            "verbal-2-7",
+            "verbal-2-8"
+          ],
+          "sha256": "3519b1d08e45ceff57e422e62a312b14ebfa3c49d452c6b560b6f65f6c5ffef6"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-04.png",
+          "ids": [
+            "verbal-2-9",
+            "verbal-2-10",
+            "verbal-2-11",
+            "verbal-2-12",
+            "verbal-2-13",
+            "verbal-2-14",
+            "verbal-2-15",
+            "verbal-2-16",
+            "verbal-2-17"
+          ],
+          "sha256": "e911dcfd37c8ec995d40dfff98c9e737fc59d9982a78cfffcb4dc1196409af0f"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-05.png",
+          "ids": [
+            "verbal-2-18",
+            "verbal-2-19",
+            "verbal-2-20",
+            "verbal-2-21",
+            "verbal-2-22",
+            "verbal-2-23",
+            "english-1-1",
+            "english-1-2",
+            "english-1-3",
+            "english-1-4"
+          ],
+          "sha256": "8fa99903453e0f7cd0097dfc44cbb730f713a291b62e20410247eaf26d41c1cb"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-06.png",
+          "ids": [
+            "english-1-5",
+            "english-1-6",
+            "english-1-7",
+            "english-1-8",
+            "english-1-9",
+            "english-1-10",
+            "english-1-11",
+            "english-1-12",
+            "english-1-13",
+            "english-1-14"
+          ],
+          "sha256": "078a0abd0788f77dc6ca977427ec447df2cc42899c24ae3e4e73dc6f4d148658"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-07.png",
+          "ids": [
+            "english-1-15",
+            "english-1-16",
+            "english-1-17",
+            "english-1-18",
+            "english-1-19",
+            "english-1-20",
+            "english-1-21",
+            "english-2-1",
+            "english-2-2",
+            "english-2-3"
+          ],
+          "sha256": "a4cc4da5b018e6bc3b3b0a7a36b73c4188c843f0017526c4f4ef51de019934d8"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-08.png",
+          "ids": [
+            "english-2-4",
+            "english-2-5",
+            "english-2-6",
+            "english-2-7",
+            "english-2-8",
+            "english-2-9",
+            "english-2-10",
+            "english-2-11",
+            "english-2-12",
+            "english-2-13"
+          ],
+          "sha256": "8b965e5ed6c89cb8e5d2fff29b1aff38b10669b230e558499fd6d12fe5996e41"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-09.png",
+          "ids": [
+            "english-2-14",
+            "english-2-15",
+            "english-2-16",
+            "english-2-17",
+            "english-2-18",
+            "english-2-19",
+            "english-2-20",
+            "english-2-21",
+            "english-2-22"
+          ],
+          "sha256": "ab6a7c2f1427829fefd30d8d948a21b35aa9540dae6fe76f19b9dde1f7b35c54"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-10.png",
+          "ids": [
+            "verbal-2-passage-1",
+            "english-1-passage-1"
+          ],
+          "sha256": "5aefc2d2b488795bd1e9f70b1c0b9839a47fb79043eec61ea814bdf48c24df0a"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-11.png",
+          "ids": [
+            "english-1-passage-2",
+            "english-2-passage-1"
+          ],
+          "sha256": "a4ca0e1d0ee3b5def785b74b1155b53eb5db79b9c8745cbe0d917ab9a05d478f"
+        },
+        {
+          "file": "tools/text-review-sheets/nite-2020-summer-12.png",
+          "ids": [
+            "english-2-passage-2"
+          ],
+          "sha256": "7423a77441db1c636aaa95819f611762e1c8eacbd8a9f645aca56565187e0a8c"
+        }
+      ]
+    },
+    {
+      "id": "nite-2020-autumn",
+      "questions": {
+        "withText": [
+          "verbal-1-5",
+          "verbal-1-18",
+          "verbal-1-19",
+          "verbal-2-5",
+          "english-1-5",
+          "english-1-14",
+          "english-1-19",
+          "english-2-5",
+          "english-2-14",
+          "english-2-19"
+        ],
+        "nullText": [
+          {
+            "id": "verbal-1-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-2",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-3",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-4",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-6",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-7",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-8",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-9",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-10",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-11",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-12",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-13",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-14",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-15",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-16",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-17",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-20",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-21",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-22",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-23",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-2",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-3",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-4",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-6",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-7",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-8",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-9",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-10",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-11",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-12",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-13",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-14",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-15",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-16",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-17",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-18",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-19",
+            "reason": "choices-differ-only-in-formatting"
+          },
+          {
+            "id": "verbal-2-20",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-21",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-22",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-23",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "quantitative-1-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-12",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-12",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "english-1-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-2",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-3",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-4",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-6",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-7",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-8",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-9",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-10",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-11",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-12",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-13",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-15",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-16",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-17",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-18",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-20",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-21",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-22",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-2",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-3",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-4",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-6",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-7",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-8",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-9",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-10",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-11",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-12",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-13",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-15",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-16",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-17",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-18",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-20",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-21",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-22",
+            "reason": "graphic-image"
+          }
+        ]
+      },
+      "contexts": {
+        "withText": [],
+        "nullText": [
+          {
+            "id": "verbal-1-passage-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-passage-2",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-passage-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "quantitative-1-chart-1",
+            "reason": "chart-image-only"
+          },
+          {
+            "id": "quantitative-2-chart-1",
+            "reason": "chart-image-only"
+          },
+          {
+            "id": "english-1-passage-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-passage-2",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-passage-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-passage-2",
+            "reason": "graphic-image"
+          }
+        ]
+      },
+      "sheetsChecked": [
+        {
+          "file": "tools/text-review-sheets/nite-2020-autumn-01.png",
+          "ids": [
+            "verbal-1-5",
+            "verbal-1-18",
+            "verbal-1-19",
+            "verbal-2-5",
+            "english-1-5",
+            "english-1-14",
+            "english-1-19",
+            "english-2-5",
+            "english-2-14",
+            "english-2-19"
+          ],
+          "sha256": "5de7eb1833016ebde06bd5efd75907015b8e898a9849a86fb9d8a5fc83ef831f"
+        }
+      ]
+    },
+    {
+      "id": "nite-2020-winter",
+      "questions": {
+        "withText": [
+          "verbal-1-5",
+          "verbal-1-9",
+          "verbal-2-5",
+          "verbal-2-18",
+          "verbal-2-19",
+          "english-1-5",
+          "english-1-14",
+          "english-2-5",
+          "english-2-14",
+          "english-2-19"
+        ],
+        "nullText": [
+          {
+            "id": "verbal-1-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-2",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-3",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-4",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-6",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-7",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-8",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-10",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-11",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-12",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-13",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-14",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-15",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-16",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-17",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-18",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-19",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-20",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-21",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-22",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-1-23",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-2",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-3",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-4",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-6",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-7",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-8",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-9",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-10",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-11",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-12",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-13",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-14",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-15",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-16",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-17",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-20",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-21",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-22",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "verbal-2-23",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "quantitative-1-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-12",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-1-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-1",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-2",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-3",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-4",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-5",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-6",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-7",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-8",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-9",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-10",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-11",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-12",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-13",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-14",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-15",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-16",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-17",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-18",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-19",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "quantitative-2-20",
+            "reason": "quantitative-image-only"
+          },
+          {
+            "id": "english-1-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-2",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-3",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-4",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-6",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-7",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-8",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-9",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-10",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-11",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-12",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-13",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-15",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-16",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-17",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-18",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-19",
+            "reason": "non-blank-horizontal-line"
+          },
+          {
+            "id": "english-1-20",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-21",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-22",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-2",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-3",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-4",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-6",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-7",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-8",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-9",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-10",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-11",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-12",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-13",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-15",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-16",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-17",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-18",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-20",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-21",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-22",
+            "reason": "graphic-image"
+          }
+        ]
+      },
+      "contexts": {
+        "withText": [],
+        "nullText": [
+          {
+            "id": "verbal-1-passage-1",
+            "reason": "unplaceable-text-item"
+          },
+          {
+            "id": "verbal-2-passage-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "quantitative-1-chart-1",
+            "reason": "chart-image-only"
+          },
+          {
+            "id": "quantitative-2-chart-1",
+            "reason": "chart-image-only"
+          },
+          {
+            "id": "english-1-passage-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-1-passage-2",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-passage-1",
+            "reason": "graphic-image"
+          },
+          {
+            "id": "english-2-passage-2",
+            "reason": "graphic-image"
+          }
+        ]
+      },
+      "sheetsChecked": [
+        {
+          "file": "tools/text-review-sheets/nite-2020-winter-01.png",
+          "ids": [
+            "verbal-1-5",
+            "verbal-1-9",
+            "verbal-2-5",
+            "verbal-2-18",
+            "verbal-2-19",
+            "english-1-5",
+            "english-1-14",
+            "english-2-5",
+            "english-2-14",
+            "english-2-19"
+          ],
+          "sha256": "00f947c1ab2948c444fee0dda1c2aa5b750dadf1c2057b3fd45505ff47af51b2"
+        }
+      ]
+    }
+  ]
+}
