@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": { "check": "node import-check.mjs" },
+  "dependencies": {
+    "pdfjs-dist": "6.4.299"
+  }
+}

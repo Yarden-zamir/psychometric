@@ -23,6 +23,12 @@ A 1v1 quiz race for two devices. Site: <https://psychometric.yarden-zamir.com>.
 6. A socket never sees the correct answer or the choice of the other player before the reveal.
    An imported question image is served only for the open round.
 7. A room with no sockets for 6 hours deletes its storage.
+8. A bot room (`POST /api/rooms` with `{"mode": "bot"}`) puts the bot in seat `b`. Its token is
+   `bot`, which fails the token check, so no person can take the seat.
+9. Bot level = the accuracy of the human (moving average) + a lean of 0.04 per point of score gap,
+   capped at ±0.15, then clamped to 0.2–0.92. The level is the chance that the bot knows the
+   answer. If it does not know, it guesses. Its answer time follows the human's speed. If the human
+   answers first, the bot answers inside the grace time. The constants are in `BOT` in `worker/index.js`.
 
 ## Questions
 

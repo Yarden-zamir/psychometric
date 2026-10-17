@@ -162,6 +162,8 @@ let retry = 0;
 let code = null;
 let fatal = null;
 let importStatus = "";
+// Imported questions are wide page crops. A tap zooms them, and the zoom holds across renders.
+let zoomed = false;
 const serverNow = () => Date.now() + clockOffset;
 
 function connect() {
@@ -357,7 +359,8 @@ function playerCard(seat) {
     const d = round.result.deltas[seat];
     status = round.result.tie ? `<span class="sticker info">תיקו</span>` : d > 0 ? `<span class="sticker ok ltr">+1</span>` : d < 0 ? `<span class="sticker bad ltr">−1</span>` : `<span class="sticker">0</span>`;
   }
-  const you = state.you === seat ? `<span class="sticker wait tag">אני</span>` : "";
+  const you = state.you === seat ? `<span class="sticker wait tag">אני</span>`
+    : seat === "b" && state.bot ? `<span class="sticker info tag">רמה ${state.bot.level}%</span>` : "";
   return `<div class="card player ${seat} ${p.online ? "" : "offline"}">${you}
     <span class="name">${esc(p.name)}</span>
     <span class="score">${score}</span>${pips}<div class="answered">${status}</div></div>`;
@@ -378,7 +381,7 @@ function lobby() {
     : `<b>השאלון המובנה</b> · ${state.bank.count} שאלות`;
   return `
   <section class="card pad stack center">
-    <span class="label">קוד החדר</span>
+    <span class="label">${state.bot ? "קוד החדר (אפשר לצפות)" : "קוד החדר"}</span>
     <span class="code-big">${esc(state.code)}</span>
     <div class="row"><button class="btn" data-act="share" data-link="${esc(link)}">🔗 שיתוף קישור</button>
       ${state.you ? "" : `<span class="sticker">צופים</span>`}</div>
@@ -405,6 +408,7 @@ function lobby() {
       <li>אחרי התשובה הראשונה, ליריב/ה יש ${grace} שניות לענות.</li>
       <li>תשובה נכונה: +1. תשובה שגויה: −1. שתי תשובות נכונות: תיקו, אין נקודות.</li>
       <li>מי שמגיע/ה ראשון/ה ל־${target} נקודות מנצח/ת.</li>
+      ${state.bot ? `<li>הבוט מעתיק את הדיוק והמהירות שלך. כשמישהו מוביל, הבוט מתחזק או נחלש קצת.</li>` : ""}
     </ul>
   </section>`;
 }
@@ -429,7 +433,8 @@ function questionCard() {
     return `<button class="${cls.join(" ")}" data-choice="${i}" ${canAnswer ? "" : "disabled"}>${label}${who ? `<span class="who">${who}</span>` : ""}</button>`;
   }).join("");
   const body = q.image
-    ? `<img class="qimage" src="/api/rooms/${esc(state.code)}/image?round=${round.number}" alt="שאלה ${round.number}">`
+    ? `<div class="qimage-wrap ${zoomed ? "zoomed" : ""}"><img class="qimage" src="/api/rooms/${esc(state.code)}/image?round=${round.number}" alt="שאלה ${round.number}"></div>
+       <span class="muted zoom-hint">👆 הקשה על השאלה מגדילה אותה</span>`
     : `<div class="prompt" dir="${esc(q.dir)}">${esc(q.prompt)}</div>`;
   const grace = state.phase === "question" && round.graceEndsAt
     ? `<div class="grace"><div class="secs">${state.settings.grace}</div><div class="bar"><div class="fill"></div></div></div>`
@@ -469,21 +474,27 @@ function renderHome() {
   </section>
   <section class="card pad stack">
     <label class="stack"><span class="label">השם שלך</span><input class="field" id="name" maxlength="20" value="${esc(name)}" placeholder="למשל: נועה"></label>
-    <div class="row"><button class="btn go" data-act="create">⚔️ חדר חדש</button></div>
+    <div class="row"><button class="btn go" data-act="create" data-mode="duel">⚔️ חדר חדש</button>
+      <button class="btn primary" data-act="create" data-mode="bot">🤖 נגד בוט</button></div>
+    <p class="muted">הבוט לומד את הקצב והדיוק שלך ומתאים את עצמו, אבל רק עד גבול מסוים.</p>
     <div class="row"><span class="label">או הצטרפות עם קוד</span>
       <input class="field code" id="join-code" maxlength="4" autocomplete="off" placeholder="AB3K" dir="ltr">
       <button class="btn primary" data-act="join">הצטרפות</button></div>
   </section>`;
   const nameInput = document.getElementById("name");
   nameInput.addEventListener("input", () => localStorage.setItem(NAME_KEY, nameInput.value.trim()));
-  app.querySelector('[data-act="create"]').addEventListener("click", async (e) => {
-    sound();
-    e.currentTarget.disabled = true;
-    const res = await fetch("/api/rooms", { method: "POST" });
-    const data = await res.json();
-    if (!res.ok) { toast(data.error ?? "יצירת החדר נכשלה"); e.currentTarget.disabled = false; return; }
-    openRoom(data.code);
-  });
+  for (const button of app.querySelectorAll('[data-act="create"]')) {
+    button.addEventListener("click", async () => {
+      sound();
+      button.disabled = true;
+      const res = await fetch("/api/rooms", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: button.dataset.mode }),
+      });
+      const data = await res.json();
+      if (!res.ok) { toast(data.error ?? "יצירת החדר נכשלה"); button.disabled = false; return; }
+      openRoom(data.code);
+    });
+  }
   const join = () => {
     sound();
     const value = document.getElementById("join-code").value.trim().toUpperCase();
@@ -514,6 +525,10 @@ function bind() {
   for (const el of app.querySelectorAll("[data-taunt]")) {
     el.addEventListener("click", () => { sound(); sendMsg({ t: "taunt", emoji: el.dataset.taunt }); el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); });
   }
+  app.querySelector(".qimage-wrap")?.addEventListener("click", (e) => {
+    zoomed = !zoomed;
+    e.currentTarget.classList.toggle("zoomed", zoomed);
+  });
   app.querySelector('[data-act="start"]')?.addEventListener("click", () => { sound(); sendMsg({ t: "start" }); });
   app.querySelector('[data-act="rematch"]')?.addEventListener("click", () => { sound(); sendMsg({ t: "rematch" }); });
   app.querySelector('[data-act="share"]')?.addEventListener("click", async (e) => {

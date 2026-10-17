@@ -16,6 +16,13 @@ const IDLE_MS = 6 * 3600_000;
 const NAME_MAX = 20;
 const TAUNTS = ["😏", "😱", "🐢", "🔥", "🤡", "🫡", "💀", "🧠"];
 const TAUNT_GAP_MS = 600;
+// The bot copies the accuracy and speed of the human player, then leans against the score gap.
+// The lean is capped, so a stronger player still wins more often.
+const BOT = {
+  name: "בוטי 🤖", token: "bot", startAccuracy: 0.6, startSpeedMs: 20_000, learnRate: 0.2,
+  leanPerPoint: 0.04, maxLean: 0.15, minLevel: 0.2, maxLevel: 0.92, minDelayMs: 2500, maxDelayMs: 60_000,
+  tauntChance: 0.4,
+};
 const IMPORT_MAX_QUESTIONS = 400;
 const IMAGE_MAX_BYTES = 1_000_000;
 const IMAGE_TYPES = ["image/webp", "image/png", "image/jpeg"];
@@ -34,10 +41,13 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname === "/api/rooms" && request.method === "POST") {
+      const body = await request.json().catch(() => ({}));
+      const mode = body?.mode ?? "duel";
+      if (mode !== "duel" && mode !== "bot") return Response.json({ error: "mode must be duel or bot" }, { status: 400 });
       // A random code can hit a live room. init refuses a used room, so retry with a new code.
       for (let attempt = 0; attempt < 8; attempt++) {
         const code = randomCode();
-        if (await env.ROOMS.get(env.ROOMS.idFromName(code)).init(code)) return Response.json({ code });
+        if (await env.ROOMS.get(env.ROOMS.idFromName(code)).init(code, mode)) return Response.json({ code });
       }
       return Response.json({ error: "no free room code" }, { status: 503 });
     }
@@ -79,13 +89,16 @@ function shuffled(length) {
  * @typedef {{ code: string, settings: { target: number, grace: number }, bank: ImportedBank | null,
  *   seats: Record<Seat, { token: string, name: string } | null>, phase: Phase,
  *   scores: Record<Seat, number>, order: number[], cursor: number, round: Round | null,
- *   deadline: number | null, winner: Seat | null, idleSince: number | null }} State
+ *   deadline: number | null, winner: Seat | null, idleSince: number | null, bot: Bot | null }} State
+ * @typedef {{ accuracy: number, speedMs: number, plan: { at: number, choice: number } | null }} Bot
  * @typedef {{ token: string | null, seat: Seat | null, lastTaunt: number }} Attachment
  */
 
 export class Room extends DurableObject {
   /** @type {State | null} */
   s = null;
+  /** Messages that commit sends after the state. */
+  outbox = [];
 
   constructor(ctx, env) {
     super(ctx, env);
@@ -94,13 +107,16 @@ export class Room extends DurableObject {
     });
   }
 
-  /** Returns false when the room already exists. */
-  async init(code) {
+  /** Returns false when the room already exists. In a bot room the bot holds seat b. */
+  async init(code, mode) {
     if (this.s) return false;
+    const bot = mode === "bot";
     this.s = {
-      code, settings: { ...DEFAULTS }, bank: null, seats: { a: null, b: null }, phase: "lobby",
+      code, settings: { ...DEFAULTS }, bank: null, phase: "lobby",
+      seats: { a: null, b: bot ? { token: BOT.token, name: BOT.name } : null },
       scores: { a: 0, b: 0 }, order: shuffled(QUESTIONS.length), cursor: 0, round: null,
       deadline: null, winner: null, idleSince: Date.now(),
+      bot: bot ? { accuracy: BOT.startAccuracy, speedMs: BOT.startSpeedMs, plan: null } : null,
     };
     await this.commit();
     return true;
@@ -168,16 +184,10 @@ export class Room extends DurableObject {
         break;
       }
       case "answer": {
-        const round = s.round;
-        if (!me.seat || s.phase !== "question" || !round) return refuse("no open question");
+        if (!me.seat || s.phase !== "question" || !s.round) return refuse("no open question");
         if (!Number.isInteger(msg.choice) || msg.choice < 0 || msg.choice > 3) return refuse("bad choice");
-        if (round.answers[me.seat]) return refuse("already answered");
-        round.answers[me.seat] = { choice: msg.choice, at: now };
-        if (!round.first) {
-          round.first = me.seat;
-          round.graceEndsAt = now + s.settings.grace * 1000;
-        }
-        if (SEATS.every((x) => round.answers[x])) this.reveal(now);
+        if (s.round.answers[me.seat]) return refuse("already answered");
+        this.submit(me.seat, msg.choice, now);
         break;
       }
       case "taunt": {
@@ -216,6 +226,9 @@ export class Room extends DurableObject {
       s.phase = "question";
       s.deadline = null;
       if (s.round) s.round.openedAt = now;
+      this.planBot(now);
+    } else if (s.phase === "question" && s.bot?.plan && !s.round?.answers.b && now >= s.bot.plan.at) {
+      this.submit("b", s.bot.plan.choice, now);
     } else if (s.phase === "question" && s.round?.graceEndsAt != null && now >= s.round.graceEndsAt) {
       this.reveal(now);
     } else if (s.phase === "reveal" && s.deadline !== null && now >= s.deadline) {
@@ -227,6 +240,56 @@ export class Room extends DurableObject {
       }
     }
     await this.commit();
+  }
+
+  submit(seat, choice, now) {
+    const s = /** @type {State} */ (this.s);
+    const round = /** @type {Round} */ (s.round);
+    round.answers[seat] = { choice, at: now };
+    if (!round.first) {
+      round.first = seat;
+      round.graceEndsAt = now + s.settings.grace * 1000;
+      // The human locked in first: a bot that was slower now answers inside the grace time.
+      const plan = s.bot?.plan;
+      if (plan && seat === "a") plan.at = Math.min(plan.at, now + s.settings.grace * 1000 * (0.3 + Math.random() * 0.6));
+    }
+    if (SEATS.every((x) => round.answers[x])) this.reveal(now);
+  }
+
+  /** The level is the chance that the bot knows the answer: the human's accuracy plus a capped lean. */
+  botLevel() {
+    const s = /** @type {State} */ (this.s);
+    const bot = /** @type {Bot} */ (s.bot);
+    const lean = clamp((s.scores.a - s.scores.b) * BOT.leanPerPoint, -BOT.maxLean, BOT.maxLean);
+    return { level: clamp(bot.accuracy + lean, BOT.minLevel, BOT.maxLevel), lean };
+  }
+
+  planBot(now) {
+    const s = /** @type {State} */ (this.s);
+    if (!s.bot || !s.round) return;
+    const { level, lean } = this.botLevel();
+    const correct = this.question(s.round.q).answer;
+    // A bot that does not know guesses one of the 4 choices, so it is sometimes right by luck.
+    const choice = Math.random() < level ? correct : Math.floor(Math.random() * 4);
+    const delay = s.bot.speedMs * (1 - 2 * lean) * (0.7 + Math.random() * 0.6);
+    s.bot.plan = { at: now + clamp(delay, BOT.minDelayMs, BOT.maxDelayMs), choice };
+  }
+
+  /** After each round the bot learns how often and how fast the human answers right. */
+  learnFromHuman(correct) {
+    const s = /** @type {State} */ (this.s);
+    const bot = s.bot;
+    const round = s.round;
+    if (!bot || !round) return;
+    const answer = round.answers.a;
+    const hit = answer?.choice === correct ? 1 : 0;
+    bot.accuracy += BOT.learnRate * (hit - bot.accuracy);
+    if (answer && round.openedAt !== null) bot.speedMs += BOT.learnRate * (answer.at - round.openedAt - bot.speedMs);
+    bot.plan = null;
+    if (Math.random() < BOT.tauntChance) {
+      const d = round.result?.deltas.b ?? 0;
+      this.outbox.push({ t: "taunt", seat: "b", emoji: d > 0 ? "😏" : d < 0 ? "🤡" : "🫡" });
+    }
   }
 
   nextRound(now, countdownMs) {
@@ -260,6 +323,7 @@ export class Room extends DurableObject {
       s.scores[seat] += deltas[seat];
     }
     round.result = { correct, tie, deltas };
+    this.learnFromHuman(correct);
     // Only one player can gain in a round, so at most one player reaches the target.
     s.winner = SEATS.find((x) => deltas[x] > 0 && s.scores[x] >= s.settings.target) ?? null;
     s.phase = "reveal";
@@ -351,13 +415,16 @@ export class Room extends DurableObject {
     const wakes = [];
     if (s.phase === "countdown" || s.phase === "reveal") wakes.push(s.deadline);
     if (s.phase === "question") wakes.push(s.round?.graceEndsAt);
+    if (s.phase === "question" && !s.round?.answers.b) wakes.push(s.bot?.plan?.at);
     if (s.idleSince !== null) wakes.push(s.idleSince + IDLE_MS);
     const next = Math.min(...wakes.filter((x) => typeof x === "number"));
     if (Number.isFinite(next)) await this.ctx.storage.setAlarm(next);
     else await this.ctx.storage.deleteAlarm();
 
     const online = new Set(sockets.map((ws) => ws.deserializeAttachment()?.seat).filter(Boolean));
+    if (s.bot) online.add("b");
     for (const ws of sockets) send(ws, this.view(ws.deserializeAttachment()?.seat ?? null, online));
+    for (const msg of this.outbox.splice(0)) for (const ws of sockets) send(ws, msg);
   }
 
   /** What one socket may see: no correct answer and no rival choice before the reveal. */
@@ -370,6 +437,7 @@ export class Room extends DurableObject {
     return {
       t: "state", now: Date.now(), you: seat, code: s.code, settings: s.settings, phase: s.phase,
       scores: s.scores, deadline: s.deadline, winner: s.winner, taunts: TAUNTS, limits: LIMITS,
+      bot: s.bot ? { level: Math.round(this.botLevel().level * 100) } : null,
       bank: s.bank ? { ...s.bank, notice: NITE_NOTICE } : { title: null, count: QUESTIONS.length, notice: null },
       players: Object.fromEntries(SEATS.map((x) => [x, s.seats[x] && { name: s.seats[x].name, online: online.has(x) }])),
       round: round && q && {
@@ -383,6 +451,10 @@ export class Room extends DurableObject {
       },
     };
   }
+}
+
+function clamp(x, min, max) {
+  return Math.min(max, Math.max(min, x));
 }
 
 function send(ws, data) {

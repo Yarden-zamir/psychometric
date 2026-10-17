@@ -132,7 +132,12 @@ main { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; display: grid;
 .qhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .prompt { font-size: 1.2rem; font-weight: 600; white-space: pre-wrap; }
 .prompt[dir="ltr"], .choices[dir="ltr"] { font-family: var(--sans); text-align: left; }
-.qimage { width: 100%; height: auto; background: #FFFFFF; border: var(--bw) solid var(--border); border-radius: var(--radius); }
+.qimage-wrap { overflow-x: auto; cursor: zoom-in; border: var(--bw) solid var(--border); border-radius: var(--radius); background: #FFFFFF; }
+.qimage-wrap.zoomed { cursor: zoom-out; }
+.qimage { display: block; width: 100%; height: auto; }
+.qimage-wrap.zoomed .qimage { width: 220%; max-width: none; }
+.zoom-hint { font-size: 0.75rem; }
+@media (min-width: 700px) { .zoom-hint { display: none; } }
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .choices.numbers { grid-template-columns: repeat(4, 1fr); }
 .choice {
