@@ -39,14 +39,23 @@ A 1v1 quiz race for two devices. Site: <https://psychometric.yarden-zamir.com>.
     one. The order leaves out the questions of the other subjects, in the built-in and imported sets.
 12. `/api/rooms/<code>/context?id=<id>` serves only the context of the open round: a passage from its
     reading phase on, a chart from its question on.
+14. The host picks the set with `{ t: "bank", id }`: `builtin`, `nite:<bank id>` or `nite:all`, in the
+    lobby or after a match. In `nite:all`, question and context ids start with `<bank id>/`.
 
 ## Questions
 
 - `worker/questions.json`: original questions. Fields: `id`, `section` (`verbal`, `quantitative`,
   `english`), `kind`, `dir` (`rtl`, `ltr`), `prompt`, `choices` (4), `answer` (0 to 3), `explain`.
   The worker checks the file when it loads.
-- Do not copy NITE test text into this repository. NITE licenses the recent tests for personal use
-  only. An imported set stays in its room, and the page shows the NITE notice for it.
+- NITE sets: `node tools/build-banks.mjs` turns the PDFs in `../_shared/nite-public/` into
+  `site/banks/<bank id>/*.webp` and `site/banks/manifest.json`. Run it before a deploy. `site/banks/`
+  is ignored by git. The worker answers 404 to `/banks/*`; a room reads the files through the
+  `ASSETS` binding and serves one open round at a time. A new room plays all NITE sets.
+- Only the tests from the NITE public-use page (form at
+  https://www.nite.org.il/practice-tests/hebrew-tests-public-use/) go into `_shared/nite-public/`.
+  NITE licenses the other tests for personal use only: a player can import one into a room, and it
+  stays in that room. The page shows the NITE notice for every NITE or imported set.
+- Do not copy NITE test content into git.
 - `site/import.js` splits a NITE PDF into question images and reads the answer key. It also cuts
   the shared passages and charts as context images, and stacks a question that crosses a page.
   `tools/import-check.mjs` checks it against sample PDFs.

@@ -423,13 +423,16 @@ function lobby() {
       <label>שניות קריאה לקטע <input class="field mono" type="number" data-setting="reading" min="${L.reading[0]}" max="${L.reading[1]}" value="${state.settings.reading}" ${host ? "" : "disabled"}></label>
       <label class="toggle"><input type="checkbox" data-flag="passages" ${state.settings.passages ? "checked" : ""} ${host ? "" : "disabled"}> כולל קטעי קריאה (${state.bank.passages} קטעים, ${state.bank.passageQuestions} שאלות)</label>` : ""}
     </div>
+    <span class="label">שאלון</span>
+    <select class="field" data-act="bank" ${host ? "" : "disabled"}>
+      ${state.bank.sets.map((x) => `<option value="${esc(x.id)}" ${x.id === state.bank.set ? "selected" : ""}>${esc(x.title)} · ${x.count} שאלות</option>`).join("")}
+      ${state.bank.set === "import" ? `<option value="import" selected>${esc(state.bank.title)} (מיובא) · ${state.bank.count} שאלות</option>` : ""}
+    </select>
+    <div>${bank}</div>
     <span class="label">נושאים</span>
     <div class="row">${Object.entries(state.bank.counts).map(([key, n]) => `<label class="toggle"><input type="checkbox" data-section="${esc(key)}" ${state.settings.sections.includes(key) ? "checked" : ""} ${host ? "" : "disabled"}>${esc(SECTION_NAMES[key] ?? key)} <span class="mono">${n}</span></label>`).join("")}</div>
-    <span class="label">שאלון</span>
-    <div>${bank}</div>
     ${host ? `<div class="row">
       <label class="btn">📄 ייבוא שאלון מ־PDF<input type="file" accept="application/pdf" data-act="import" hidden></label>
-      ${state.bank.title ? `<button class="btn small" data-act="builtin">חזרה לשאלון המובנה</button>` : ""}
       <span id="import-status" class="muted">${esc(importStatus)}</span></div>
       <p class="muted">ייבוא של בחינה לדוגמה של מאל"ו: <a href="https://www.nite.org.il/practice-tests/hebrew-tests-public-use/" target="_blank" rel="noopener">לשימוש ציבורי</a> או <a href="https://www.nite.org.il/?page_id=2617" target="_blank" rel="noopener">לתרגול אישי</a>.</p>` : ""}
   </section>
@@ -624,7 +627,10 @@ function bind() {
     }
   });
   app.querySelector('[data-act="import"]')?.addEventListener("change", (e) => importFile(e.currentTarget.files?.[0]));
-  app.querySelector('[data-act="builtin"]')?.addEventListener("click", () => uploadBank("DELETE", {}).catch((error) => toast(error.message)));
+  app.querySelector('[data-act="bank"]')?.addEventListener("change", (e) => {
+    const id = e.currentTarget.value;
+    if (id !== "import") sendMsg({ t: "bank", id });
+  });
 }
 
 /* ---------- Import a question set from a NITE PDF ---------- */

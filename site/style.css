@@ -76,7 +76,7 @@ code, .mono { font-family: var(--mono); }
   background: linear-gradient(135deg, #6C5CE7 0%, #FF5277 100%); color: #FFFFFF;
   box-shadow: 3px 3px 0 0 var(--shadow-ink); font-size: 1.2rem; padding: 10px 22px; font-weight: 800;
 }
-input.field {
+:is(input, select).field {
   font: inherit; font-weight: 700; padding: 6px 10px; color: var(--ink); background: var(--surface);
   border: var(--bw) solid var(--border); border-radius: var(--radius); min-width: 0;
 }

@@ -33,6 +33,8 @@ const IMAGE_TYPES = ["image/webp", "image/png", "image/jpeg"];
 const SECTIONS = ["verbal", "quantitative", "english"];
 const CONTEXT_KINDS = ["passage", "chart"];
 const IMAGE_CHOICES = ["1", "2", "3", "4"];
+const NITE_ALL = "כל הבחינות של מאל\"ו";
+const ASSET_ORIGIN = "https://assets.invalid";
 const NITE_NOTICE = "השאלות הן מתוך נוסחי בחינות לדוגמה של המרכז הארצי לבחינות ולהערכה (מאל\"ו), בעל זכויות היוצרים. השימוש בחומרים נעשה באחריות המשתמש בלבד, ומאל\"ו אינו אחראי לדיוק או לנכונות של כל שינוי שייעשה או תוספת שתיעשה, אם תיעשה, כמו פתרונות או הסברים לשאלות.";
 
 const BUILTIN_COUNTS = {};
@@ -59,6 +61,8 @@ export default {
       }
       return Response.json({ error: "no free room code" }, { status: 503 });
     }
+    // The NITE images are assets, but only a room may read them, one open round at a time.
+    if (url.pathname.startsWith("/banks/")) return Response.json({ error: "not found" }, { status: 404 });
     const match = url.pathname.match(/^\/api\/rooms\/([^/]+)\/(ws|bank|image|context)$/);
     if (match) {
       const [, rawCode, route] = match;
@@ -94,8 +98,11 @@ function shuffled(length) {
  * @typedef {{ number: number, q: number, openedAt: number | null, first: Seat | null,
  *   graceEndsAt: number | null, answers: Partial<Record<Seat, Answer>>, result: Result | null,
  *   context: string | null, ready: Record<Seat, boolean> | null }} Round
- * @typedef {{ title: string, count: number, counts: Record<string, number>, passages: number, passageQuestions: number, charts: number }} ImportedBank
- * @typedef {{ code: string, settings: { target: number, grace: number, reading: number, passages: boolean, sections: string[] }, bank: ImportedBank | null,
+ * @typedef {{ kind: "builtin" } | { kind: "import", title: string } | { kind: "nite", id: string }} Source
+ *   nite: one NITE public-use test from site/banks/manifest.json, or "all" of them.
+ * @typedef {{ id: string, section: string, answer: number, context: string | null, contextKind: string | null, file: string | null }} Row
+ *   file: the asset path of a NITE image. An imported image is in the room's SQL tables instead.
+ * @typedef {{ code: string, settings: { target: number, grace: number, reading: number, passages: boolean, sections: string[] }, source: Source,
  *   seats: Record<Seat, { token: string, name: string } | null>, phase: Phase,
  *   scores: Record<Seat, number>, order: number[], cursor: number, round: Round | null,
  *   deadline: number | null, winner: Seat | null, idleSince: number | null, bot: Bot | null }} State
@@ -108,13 +115,19 @@ export class Room extends DurableObject {
   s = null;
   /** Messages that commit sends after the state. */
   outbox = [];
+  /** @type {{ key: string, rows: Row[], contexts: Map<string, { kind: string, file: string | null }> } | null} */
+  cache = null;
+  /** @type {{ banks: any[] }} */
+  manifest = { banks: [] };
 
   constructor(ctx, env) {
     super(ctx, env);
     ctx.blockConcurrencyWhile(async () => {
+      this.manifest = await loadManifest(env);
       this.s = (await ctx.storage.get("s")) ?? null;
       // A room saved by an older version lacks newer settings.
       if (this.s) this.s.settings = { ...DEFAULTS, ...this.s.settings };
+      if (this.s && !this.s.source) this.s.source = this.s.bank ? { kind: "import", title: this.s.bank.title } : { kind: "builtin" };
     });
   }
 
@@ -123,7 +136,10 @@ export class Room extends DurableObject {
     if (this.s) return false;
     const bot = mode === "bot";
     this.s = {
-      code, settings: { ...DEFAULTS, sections: [...DEFAULTS.sections] }, bank: null, phase: "lobby",
+      // A new room plays the real NITE tests when the build step made them, else the built-in set.
+      code, settings: { ...DEFAULTS, sections: [...DEFAULTS.sections] },
+      source: this.manifest.banks.length ? { kind: "nite", id: this.manifest.banks.length > 1 ? "all" : this.manifest.banks[0].id } : { kind: "builtin" },
+      phase: "lobby",
       seats: { a: null, b: bot ? { token: BOT.token, name: BOT.name } : null },
       scores: { a: 0, b: 0 }, order: shuffled(QUESTIONS.length), cursor: 0, round: null,
       deadline: null, winner: null, idleSince: Date.now(),
@@ -214,6 +230,14 @@ export class Room extends DurableObject {
         if (!Number.isInteger(msg.choice) || msg.choice < 0 || msg.choice > 3) return refuse("bad choice");
         if (s.round.answers[me.seat]) return refuse("already answered");
         this.submit(me.seat, msg.choice, now);
+        break;
+      }
+      case "bank": {
+        if (me.seat !== "a") return refuse("only the host picks the questions");
+        if (s.phase !== "lobby" && s.phase !== "over") return refuse("questions are locked during a match");
+        if (!this.sets().some((x) => x.id === msg.id)) return refuse("unknown question set");
+        s.source = msg.id === "builtin" ? { kind: "builtin" } : { kind: "nite", id: msg.id.slice("nite:".length) };
+        this.resetBank();
         break;
       }
       case "ready": {
@@ -334,17 +358,18 @@ export class Room extends DurableObject {
   buildOrder() {
     const s = /** @type {State} */ (this.s);
     const sections = new Set(s.settings.sections);
-    if (!s.bank) {
+    const rows = this.rows();
+    if (!rows) {
       const picked = QUESTIONS.flatMap((q, i) => (sections.has(q.section) ? [i] : []));
       return shuffled(picked.length).map((j) => picked[j]);
     }
     const units = new Map();
-    for (const row of this.ctx.storage.sql.exec("SELECT b.i, b.section, b.context, c.kind FROM bank b LEFT JOIN contexts c ON c.id = b.context ORDER BY b.i")) {
+    for (const [i, row] of rows.entries()) {
       if (!sections.has(row.section)) continue;
-      if (row.kind === "passage" && !s.settings.passages) continue;
-      const key = row.kind === "passage" ? `p:${row.context}` : `q:${row.i}`;
+      if (row.contextKind === "passage" && !s.settings.passages) continue;
+      const key = row.contextKind === "passage" ? `p:${row.context}` : `q:${i}`;
       if (!units.has(key)) units.set(key, []);
-      units.get(key).push(row.i);
+      units.get(key).push(i);
     }
     const list = [...units.values()];
     return shuffled(list.length).flatMap((u) => list[u]);
@@ -405,11 +430,85 @@ export class Room extends DurableObject {
    * It can point to a context: a passage or a chart that several questions share.
    */
   question(i) {
-    if (!this.s?.bank) return { ...QUESTIONS[i], image: false, context: null, contextKind: null };
-    const row = this.ctx.storage.sql.exec("SELECT b.id, b.section, b.answer, b.context, c.kind FROM bank b LEFT JOIN contexts c ON c.id = b.context WHERE b.i = ?", i).one();
+    const rows = this.rows();
+    if (!rows) return { ...QUESTIONS[i], image: false, context: null, contextKind: null };
+    const row = rows[i];
+    if (!row) throw new Error(`question ${i} is not in the room's set`);
     return {
       id: row.id, section: row.section, kind: "imported", dir: "rtl", prompt: null, choices: IMAGE_CHOICES,
-      answer: row.answer, explain: null, image: true, context: row.context ?? null, contextKind: row.kind ?? null,
+      answer: row.answer, explain: null, image: true, context: row.context, contextKind: row.contextKind,
+    };
+  }
+
+  /** The rows of an imported or NITE set, in test order, or null for the built-in set. */
+  rows() {
+    const source = this.s?.source;
+    if (!source || source.kind === "builtin") return null;
+    const key = JSON.stringify(source);
+    if (this.cache?.key === key) return this.cache.rows;
+    /** @type {Row[]} */
+    const rows = [];
+    const contexts = new Map();
+    if (source.kind === "import") {
+      const sql = this.ctx.storage.sql;
+      for (const c of sql.exec("SELECT id, kind FROM contexts")) contexts.set(c.id, { kind: c.kind, file: null });
+      for (const r of sql.exec("SELECT b.id, b.section, b.answer, b.context, c.kind FROM bank b LEFT JOIN contexts c ON c.id = b.context ORDER BY b.i")) {
+        rows.push({ id: r.id, section: r.section, answer: r.answer, context: r.context ?? null, contextKind: r.kind ?? null, file: null });
+      }
+    } else {
+      const banks = source.id === "all" ? this.manifest.banks : this.manifest.banks.filter((b) => b.id === source.id);
+      // Ids get the bank id in front, so the sets of all tests can play together.
+      for (const bank of banks) {
+        for (const c of bank.contexts) contexts.set(`${bank.id}/${c.id}`, { kind: c.kind, file: `/banks/${bank.id}/${c.file}` });
+        for (const q of bank.questions) {
+          const context = q.context ? `${bank.id}/${q.context}` : null;
+          rows.push({
+            id: `${bank.id}/${q.id}`, section: q.section, answer: q.answer, context,
+            contextKind: context ? contexts.get(context)?.kind ?? null : null, file: `/banks/${bank.id}/${q.file}`,
+          });
+        }
+      }
+    }
+    this.cache = { key, rows, contexts };
+    return rows;
+  }
+
+  /** The question sets the host can pick: the built-in set, each NITE test, and all NITE tests together. */
+  sets() {
+    const banks = this.manifest.banks;
+    const sets = [{ id: "builtin", title: "השאלון המובנה", count: QUESTIONS.length }];
+    for (const b of banks) sets.push({ id: `nite:${b.id}`, title: b.title, count: b.questions.length });
+    if (banks.length > 1) sets.push({ id: "nite:all", title: NITE_ALL, count: banks.reduce((n, b) => n + b.questions.length, 0) });
+    return sets;
+  }
+
+  /** A new set: the match order starts over, and a finished match goes back to the lobby. */
+  resetBank() {
+    const s = /** @type {State} */ (this.s);
+    this.cache = null;
+    s.cursor = 0;
+    s.order = [];
+    s.round = null;
+    if (s.phase === "over") { s.phase = "lobby"; s.winner = null; s.scores = { a: 0, b: 0 }; }
+  }
+
+  bankView() {
+    const s = /** @type {State} */ (this.s);
+    const rows = this.rows();
+    const base = { sets: this.sets() };
+    if (!rows) return { ...base, set: "builtin", title: null, count: QUESTIONS.length, counts: BUILTIN_COUNTS, passages: 0, passageQuestions: 0, charts: 0, notice: null };
+    const counts = {};
+    for (const r of rows) counts[r.section] = (counts[r.section] ?? 0) + 1;
+    const kinds = [...(this.cache?.contexts.values() ?? [])].map((c) => c.kind);
+    const source = s.source;
+    const title = source.kind === "import" ? source.title
+      : source.id === "all" ? NITE_ALL : this.manifest.banks.find((b) => b.id === source.id)?.title ?? source.id;
+    return {
+      ...base, set: source.kind === "import" ? "import" : `nite:${source.id}`, title, count: rows.length, counts,
+      passages: kinds.filter((k) => k === "passage").length,
+      passageQuestions: rows.filter((r) => r.contextKind === "passage").length,
+      charts: kinds.filter((k) => k === "chart").length,
+      notice: NITE_NOTICE,
     };
   }
 
@@ -434,7 +533,7 @@ export class Room extends DurableObject {
     };
     if (remove) {
       this.ctx.storage.transactionSync(reset);
-      s.bank = null;
+      s.source = { kind: "builtin" };
     } else {
       const list = body.questions;
       const title = typeof body.title === "string" ? body.title.trim().slice(0, 80) : "";
@@ -468,22 +567,11 @@ export class Room extends DurableObject {
         for (const row of contexts.values()) sql.exec("INSERT INTO contexts (id, kind, mime, image) VALUES (?, ?, ?, ?)", ...row);
         for (const row of rows) sql.exec("INSERT INTO bank (i, id, section, answer, mime, image, context) VALUES (?, ?, ?, ?, ?, ?, ?)", ...row);
       });
-      const counts = {};
-      for (const q of list) counts[q.section] = (counts[q.section] ?? 0) + 1;
-      const kinds = [...contexts.values()].map(([, kind]) => kind);
-      s.bank = {
-        title: title || "שאלון מיובא", count: rows.length, counts,
-        passages: kinds.filter((k) => k === "passage").length,
-        passageQuestions: rows.filter((r) => r[6] !== null && contexts.get(r[6])[1] === "passage").length,
-        charts: kinds.filter((k) => k === "chart").length,
-      };
+      s.source = { kind: "import", title: title || "שאלון מיובא" };
     }
-    s.cursor = 0;
-    s.order = [];
-    s.round = null;
-    if (s.phase === "over") { s.phase = "lobby"; s.winner = null; s.scores = { a: 0, b: 0 }; }
+    this.resetBank();
     await this.commit();
-    return Response.json({ ok: true, count: s.bank?.count ?? QUESTIONS.length });
+    return Response.json({ ok: true, count: this.rows()?.length ?? QUESTIONS.length });
   }
 
   /** The image of the open question only, so nobody can read a question before it opens. */
@@ -492,9 +580,18 @@ export class Room extends DurableObject {
     const round = s.round;
     const wanted = Number(new URL(request.url).searchParams.get("round"));
     const shown = s.phase === "question" || s.phase === "reveal" || s.phase === "over";
-    if (!s.bank || !round || !shown || round.number !== wanted) return Response.json({ error: "no image for this round" }, { status: 404 });
-    const row = this.ctx.storage.sql.exec("SELECT mime, image FROM bank WHERE i = ?", round.q).one();
-    return new Response(row.image, { headers: { "Content-Type": row.mime, "Cache-Control": "private, max-age=600" } });
+    const row = round ? this.rows()?.[round.q] : null;
+    if (!row || !shown || round?.number !== wanted) return Response.json({ error: "no image for this round" }, { status: 404 });
+    if (row.file) return this.asset(row.file, 600);
+    const r = this.ctx.storage.sql.exec("SELECT mime, image FROM bank WHERE i = ?", round.q).one();
+    return new Response(r.image, { headers: { "Content-Type": r.mime, "Cache-Control": "private, max-age=600" } });
+  }
+
+  /** A NITE image from the assets. The worker blocks /banks/ for browsers, the binding still reads it. */
+  async asset(file, maxAge) {
+    const res = await this.env.ASSETS.fetch(new URL(file, ASSET_ORIGIN));
+    if (!res.ok) throw new Error(`asset ${file} is missing (${res.status})`);
+    return new Response(res.body, { headers: { "Content-Type": res.headers.get("Content-Type") ?? "image/webp", "Cache-Control": `private, max-age=${maxAge}` } });
   }
 
   /**
@@ -509,7 +606,9 @@ export class Room extends DurableObject {
     const open = q?.contextKind === "passage"
       ? ["reading", "countdown", "question", "reveal", "over"].includes(s.phase)
       : ["question", "reveal", "over"].includes(s.phase);
-    if (!s.bank || !q || !id || q.context !== id || !open) return Response.json({ error: "no context for this round" }, { status: 404 });
+    if (!q || !id || q.context !== id || !open) return Response.json({ error: "no context for this round" }, { status: 404 });
+    const file = this.cache?.contexts.get(id)?.file;
+    if (file) return this.asset(file, 3600);
     const row = this.ctx.storage.sql.exec("SELECT mime, image FROM contexts WHERE id = ?", id).one();
     return new Response(row.image, { headers: { "Content-Type": row.mime, "Cache-Control": "private, max-age=3600" } });
   }
@@ -554,7 +653,7 @@ export class Room extends DurableObject {
       t: "state", now: Date.now(), you: seat, code: s.code, settings: s.settings, phase: s.phase,
       scores: s.scores, deadline: s.deadline, winner: s.winner, taunts: TAUNTS, limits: LIMITS,
       bot: s.bot ? { level: Math.round(this.botLevel().level * 100) } : null,
-      bank: s.bank ? { ...s.bank, notice: NITE_NOTICE } : { title: null, count: QUESTIONS.length, counts: BUILTIN_COUNTS, notice: null },
+      bank: this.bankView(),
       players: Object.fromEntries(SEATS.map((x) => [x, s.seats[x] && { name: s.seats[x].name, online: online.has(x) }])),
       round: round && q && {
         number: round.number, openedAt: round.openedAt, first: round.first, graceEndsAt: round.graceEndsAt,
@@ -569,6 +668,21 @@ export class Room extends DurableObject {
       },
     };
   }
+}
+
+/** The NITE sets that the build step wrote (tools/build-banks.mjs). No manifest means no NITE sets. */
+async function loadManifest(env) {
+  const res = await env.ASSETS.fetch(new URL("/banks/manifest.json", ASSET_ORIGIN));
+  if (res.status === 404) return { banks: [] };
+  if (!res.ok) throw new Error(`banks manifest: HTTP ${res.status}`);
+  const manifest = await res.json();
+  if (!Array.isArray(manifest?.banks)) throw new Error("banks manifest has no banks list");
+  for (const b of manifest.banks) {
+    const ok = typeof b.id === "string" && typeof b.title === "string" && Array.isArray(b.questions) && Array.isArray(b.contexts) &&
+      b.questions.every((q) => SECTIONS.includes(q.section) && Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3 && typeof q.file === "string");
+    if (!ok) throw new Error(`banks manifest: bank ${b?.id} is not valid`);
+  }
+  return manifest;
 }
 
 function clamp(x, min, max) {

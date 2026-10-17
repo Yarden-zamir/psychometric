@@ -16,6 +16,9 @@ A 1v1 quiz duel in the style of the Israeli Psychometric Entrance Test, at
 
 ## Questions
 
+- A new room plays 776 real questions from 6 NITE public-use practice tests (spring 2019 to
+  winter 2020). The host can pick one test, all of them, or the built-in set.
+
 - The built-in set (`worker/questions.json`) has 100 original questions in the formats of the test.
   They are not NITE questions.
 - The host can import a NITE practice test PDF into a room (`site/import.js`). The room keeps the
@@ -33,6 +36,7 @@ A 1v1 quiz duel in the style of the Israeli Psychometric Entrance Test, at
 
 ```sh
 npx wrangler dev --port 8795   # local server with a local Durable Object
+node tools/build-banks.mjs     # build the NITE sets from ../_shared/nite-public/ into site/banks/
 npx wrangler deploy            # deploy to Cloudflare
 npm install --prefix tools --package-lock=false && node tools/import-check.mjs   # check the importer on PDFs
 ```

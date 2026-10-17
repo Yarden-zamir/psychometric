@@ -204,7 +204,8 @@ function flowOf(chapter) {
 function before(a, b) { return a.slot < b.slot || a.slot === b.slot && a.y > b.y; }
 function questionHeading(line) {
   // Displaced accessible diagram labels may share the heading's baseline.
-  return line.items.some(i => /^(?:השאלות|Questions)\s*:?$/i.test(i.text));
+  // A word-sized span inside "answer the following questions" is not a heading.
+  return line.items.some(i => i.size >= 12 && /^(?:השאלות|Questions)\s*:?$/i.test(i.text));
 }
 function instructionHeading(line) {
   return /הוראותלשאלות|לשאלותהוראות|instructionsforquestions/i.test((line.compact ?? '').replace(/\s/g, ''));
@@ -294,7 +295,10 @@ export async function findQuestions(pdfDocument) {
       const skip = reason => skipped.push({ id, page: marker.page, reason });
       if (!answers.has(id)) { skip('unverified-answer'); continue; }
       if (duplicates.has(marker.number)) { skip('ambiguous-number'); continue; }
-      const preceding = headings.filter(h => before(h, marker)).at(-1);
+      // A short shared introduction applies only to its printed range; later
+      // standalone questions resume the enclosing group's instructions.
+      const preceding = headings.filter(h => before(h, marker) &&
+        (!h.range || marker.number >= h.range[0] && marker.number <= h.range[1])).at(-1);
       const group = groups.find(g => before(g.heading, marker) && (!g.next || before(marker, g.next)) &&
         (!g.heading.range || marker.number >= g.heading.range[0] && marker.number <= g.heading.range[1]));
       if (preceding?.kind.startsWith('shared') && (!group || !group.valid)) { skip('unresolved-context'); continue; }
