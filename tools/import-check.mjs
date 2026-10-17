@@ -175,6 +175,9 @@ async function selfTest() {
   const encodings = [], draws = [], canvases = [];
   globalThis.document = { createElement: () => {
     const canvas = { width: 0, height: 0, getContext: () => ({ fillRect() {},
+      // The renderer now inspects pixels when trimming empty margins. This
+      // encoding/stacking mock has no drawn ink, so trimming keeps its canvas.
+      getImageData: () => ({ data: new Uint8ClampedArray(canvas.width * canvas.height * 4).fill(255) }),
       drawImage: (part, x, y) => draws.push({ width: part.width, height: part.height, x, y }) }),
     toBlob: (callback, type, quality) => {
       encodings.push({ width: canvas.width, height: canvas.height, type, quality });

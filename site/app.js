@@ -503,14 +503,20 @@ function questionCard() {
 
 let contextOpen = matchMedia("(min-width: 700px)").matches;
 
-/** A passage read as text: its printed line numbers sit in a margin column, as on the paper. */
+/**
+ * A passage read as text. Each paragraph flows to the screen width. A printed line number becomes a small
+ * marker where its line starts, so a question about "line 25" still points to the right place.
+ */
 function passageText(t) {
-  const lines = t.lines.map((l) => l.text === ""
-    ? `<div class="pl gap"></div>`
-    : `<div class="pl"><span class="ln">${l.n === null ? "" : l.n}</span><span>${esc(l.text)}</span></div>`).join("");
+  const paragraphs = [[]];
+  for (const l of t.lines) {
+    if (l.text === "") paragraphs.push([]);
+    else paragraphs.at(-1).push(`${l.n === null ? "" : `<span class="ln">${l.n}</span>`}${esc(l.text)}`);
+  }
+  const body = paragraphs.filter((p) => p.length).map((p) => `<p>${p.join(" ")}</p>`).join("");
   return `<div class="passage-text" dir="${esc(t.dir)}">
     ${t.title ? `<h3>${esc(t.title)}</h3>` : ""}${t.instructions ? `<p class="muted">${esc(t.instructions)}</p>` : ""}
-    <div class="lines">${lines}</div></div>`;
+    ${body}</div>`;
 }
 
 function contextImage(context, zoomKey) {

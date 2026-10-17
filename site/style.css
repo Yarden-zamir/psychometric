@@ -155,7 +155,7 @@ label.toggle .mono { font-weight: 600; opacity: 0.75; }
 /* Question. */
 .qcard { padding: 18px; display: grid; gap: 14px; }
 .qhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.prompt { font-size: 1.3rem; line-height: 1.6; font-weight: 600; white-space: pre-wrap; }
+.prompt { font-size: 1.25rem; line-height: 1.55; font-weight: 500; white-space: pre-wrap; }
 .prompt[dir="ltr"], .choices[dir="ltr"] { font-family: var(--sans); text-align: left; }
 .qimage-wrap { overflow-x: auto; cursor: zoom-in; border: var(--bw) solid var(--border); border-radius: var(--radius); background: #FFFFFF; }
 .qimage-wrap.zoomed { cursor: zoom-out; }
@@ -168,12 +168,15 @@ details.passage { border: var(--bw) solid var(--border); border-radius: var(--ra
 details.passage > summary { cursor: pointer; padding: 6px 12px; font-weight: 800; }
 details.passage > .qimage-wrap { border-width: var(--bw) 0 0; border-radius: 0; max-height: 60vh; overflow-y: auto; }
 .grace.reading-timer .fill { background: var(--info); }
-.passage-text { padding: 12px 14px; background: var(--surface); border: var(--bw) solid var(--border); border-radius: var(--radius); font-size: 1.1rem; line-height: 1.7; }
+.passage-text { padding: 12px 14px; background: var(--surface); border: var(--bw) solid var(--border); border-radius: var(--radius); font-size: 1.05rem; line-height: 1.65; }
 .passage-text h3 { font-size: 1.15rem; margin-bottom: 4px; }
-.passage-text p { margin: 0 0 8px; font-size: 0.95rem; }
-.passage-text .pl { display: grid; grid-template-columns: 2.2em 1fr; }
-.passage-text .pl.gap { height: 0.7em; }
-.passage-text .ln { font-family: var(--mono); font-size: 0.75em; color: var(--muted); padding-top: 0.25em; }
+.passage-text p { margin: 0 0 0.8em; }
+.passage-text p.muted { font-size: 0.95rem; }
+/* A printed line number: a small boxed marker inside the text. */
+.passage-text .ln {
+  display: inline-block; font-family: var(--mono); font-size: 0.68em; line-height: 1.3; padding: 0 4px; margin-inline-end: 4px;
+  color: var(--muted); border: 1px solid var(--muted); border-radius: 3px; vertical-align: 0.15em; unicode-bidi: isolate; direction: ltr;
+}
 details.passage > .passage-text { border-width: var(--bw) 0 0; border-radius: 0; max-height: 55vh; overflow-y: auto; }
 .qcard:not(:has(.qimage-wrap:not(.fits))) .zoom-hint { display: none; }
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -183,6 +186,8 @@ details.passage > .passage-text { border-width: var(--bw) 0 0; border-radius: 0;
   justify-content: flex-start;
 }
 .choices.numbers .choice { justify-content: center; font-size: 1.6rem; font-family: var(--mono); }
+/* Long answer text reads better at a normal weight; the button frame already marks it. */
+.choices:not(.numbers) .choice { font-weight: 500; line-height: 1.45; }
 .choice .num { font-family: var(--mono); font-weight: 600; color: var(--muted); margin-inline-end: 6px; }
 .choice.mine { background: var(--select); color: var(--select-fg); transform: translate(3px, 3px); box-shadow: none; }
 .choice.correct { background: var(--green); color: #000000; }
@@ -272,6 +277,7 @@ body.panic::after { content: ""; position: fixed; inset: 0; pointer-events: none
   /* On a phone the question image gets the full card width. */
   main { padding-inline: 10px; }
   .qcard { padding: 12px 10px; }
-  .prompt { font-size: 1.2rem; }
+  .prompt { font-size: 1.12rem; }
+  .choice { font-size: 1rem; padding: 8px 10px; }
   .vs { font-size: 1.1rem; }
 }

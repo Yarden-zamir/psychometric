@@ -1,6 +1,27 @@
 // Conservative, read-only extraction from pdf.js text AND drawing operators.
 // Never normalize Unicode: Hebrew points and punctuation belong to the source.
 import { OPS, Util } from 'pdfjs-dist/legacy/build/pdf.mjs';
+import { createHash } from 'node:crypto';
+
+// Visually identified NITE checkmark, NOT a generic pale-image exemption.
+// These are decoded RGB pixels (minimum channel 228, mean 250.883/255).
+// Resource names/refs differ on every page; the pixels are identical in both
+// autumn/winter 2020 PDFs. No PDF/operator/image is ever changed or removed.
+export const NITE_WATERMARK = Object.freeze({
+  sha256: '3053ec4f4976a43ec74ae945b60e1042a9188494eae8aacd9fa0c43f0c8de3b2',
+  width: 1090, height: 1650, kind: 2,
+  page: Object.freeze([0, 0, 595.276, 841.89]),
+  matrix: Object.freeze([278.0777114723683, 0, 0, 420.9433272, 158.5986023, 210.4725037]),
+  minimumPages: 10,
+});
+const near = (a, b) => a?.length === b.length && b.every((v, i) => Math.abs(a[i] - v) < 0.01);
+
+export function isNiteWatermark(graphic, view, image, sha256) {
+  return graphic.kind === 'image' && typeof graphic.imageId === 'string' &&
+    near(view, NITE_WATERMARK.page) && near(graphic.matrix, NITE_WATERMARK.matrix) &&
+    image?.kind === NITE_WATERMARK.kind && image.width === NITE_WATERMARK.width &&
+    image.height === NITE_WATERMARK.height && sha256 === NITE_WATERMARK.sha256;
+}
 
 const space = s => s.replace(/\s+/gu, ' ').trim();
 const fail = reason => { throw new Error(reason); };
@@ -52,7 +73,8 @@ export function graphicsOf(list) {
       // Normal image XObjects paint the unit square. Repeated/mask/grouped image
       // operators have additional transforms; conservatively reject the page.
       const simple = [OPS.paintImageXObject, OPS.paintInlineImageXObject, OPS.paintImageMaskXObject].includes(op);
-      graphics.push({ box: simple ? bounds(matrix, [0, 0, 1, 1]) : [-Infinity, -Infinity, Infinity, Infinity], kind: 'image' });
+      graphics.push({ box: simple ? bounds(matrix, [0, 0, 1, 1]) : [-Infinity, -Infinity, Infinity, Infinity], kind: 'image',
+        ...(op === OPS.paintImageXObject ? { imageId: args[0], matrix: [...matrix] } : {}) });
     } else if ([OPS.stroke, OPS.closeStroke, OPS.fill, OPS.eoFill, OPS.fillStroke,
       OPS.eoFillStroke, OPS.closeFillStroke, OPS.closeEOFillStroke].includes(op)) {
       graphics.push({ box: [-Infinity, -Infinity, Infinity, Infinity], kind: 'unknown-paint' });
@@ -151,7 +173,39 @@ function paragraphs(lines, dir) {
 }
 
 export function createTextExtractor(document) {
-  const cache = new Map();
+  const cache = new Map(), graphicCache = new Map();
+  async function pageGraphics(n) {
+    if (!graphicCache.has(n)) graphicCache.set(n, (async () => {
+      const page = await document.getPage(n);
+      return { page, graphics: graphicsOf(await page.getOperatorList()) };
+    })());
+    return graphicCache.get(n);
+  }
+  let watermarkScan, watermarkEvidence = null;
+  async function watermarks() {
+    if (!watermarkScan) watermarkScan = (async () => {
+      const candidates = [], pages = new Set();
+      for (let n = 1; n <= document.numPages; n++) {
+        const { page, graphics } = await pageGraphics(n);
+        for (const graphic of graphics) {
+          if (!graphic.imageId || !near(page.view, NITE_WATERMARK.page) ||
+            !near(graphic.matrix, NITE_WATERMARK.matrix)) continue;
+          const objects = graphic.imageId.startsWith('g_') ? page.commonObjs : page.objs;
+          const image = await new Promise(resolve => objects.get(graphic.imageId, resolve));
+          if (image?.kind !== NITE_WATERMARK.kind || image.width !== NITE_WATERMARK.width ||
+            image.height !== NITE_WATERMARK.height || image.data?.length !== image.width * image.height * 3) continue;
+          const hash = createHash('sha256').update(image.data).digest('hex');
+          if (isNiteWatermark(graphic, page.view, image, hash)) { candidates.push(graphic); pages.add(n); }
+        }
+      }
+      // Repetition counts distinct pages, never multiple draws on one page.
+      if (pages.size >= NITE_WATERMARK.minimumPages) watermarkEvidence = {
+        ...NITE_WATERMARK, pages: [...pages], occurrences: candidates.length,
+      };
+      return new Set(pages.size >= NITE_WATERMARK.minimumPages ? candidates : []);
+    })();
+    return watermarkScan;
+  }
   async function pageData(n) {
     if (!cache.has(n)) cache.set(n, (async () => {
       const page = await document.getPage(n), content = await page.getTextContent();
@@ -162,12 +216,12 @@ export function createTextExtractor(document) {
           rotated: Math.abs(i.transform[1]) > 0.01 || Math.abs(i.transform[2]) > 0.01,
           top: i.transform[5] + size * (style.ascent ?? 0.9), bottom: i.transform[5] + size * (style.descent ?? -0.25) };
       });
-      return { items, graphics: graphicsOf(await page.getOperatorList()) };
+      return { items, graphics: (await pageGraphics(n)).graphics };
     })());
     return cache.get(n);
   }
   async function regionLines(region, dir) {
-    const all = [], seen = new Set();
+    const all = [], seen = new Set(), ignored = await watermarks();
     for (let part = 0; part < region.parts.length; part++) {
       const { page: n, box: b } = region.parts[part], page = await pageData(n);
       if (part) {
@@ -187,7 +241,7 @@ export function createTextExtractor(document) {
         if (item.x < b.x - 1 || item.x + item.width > b.x + b.width + 1 || item.y < b.y || item.y > b.y + b.height) fail('clipped-text-item');
       }
       const lines = linesOf(items.map(i => ({ ...i, part })));
-      for (const graphic of page.graphics.filter(g => intersects(g.box, box))) {
+      for (const graphic of page.graphics.filter(g => !ignored.has(g) && intersects(g.box, box))) {
         const g = graphic.box, w = g[2] - g[0];
         if (graphic.kind !== 'horizontal' || w < 12 || w > 90) fail(`graphic-${graphic.kind}`);
         const line = lines.find(l => l.y - g[1] >= -0.3 && l.y - g[1] <= 4);
@@ -200,7 +254,7 @@ export function createTextExtractor(document) {
     if (!all.length) fail('empty-region');
     return all;
   }
-  return async function extract(region) {
+  async function extract(region) {
     if (region.section === 'quantitative' || region.kind === 'chart') return { text: null, reason: region.kind === 'chart' ? 'chart-image-only' : 'quantitative-image-only' };
     const dir = region.section === 'english' ? 'ltr' : 'rtl';
     try {
@@ -282,5 +336,7 @@ export function createTextExtractor(document) {
     } catch (error) {
       return { text: null, reason: error.message };
     }
-  };
+  }
+  extract.watermarkEvidence = async () => { await watermarks(); return watermarkEvidence; };
+  return extract;
 }

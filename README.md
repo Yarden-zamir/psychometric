@@ -18,6 +18,8 @@ A 1v1 quiz duel in the style of the Israeli Psychometric Entrance Test, at
 
 - A new room plays 776 real questions from 6 NITE public-use practice tests (spring 2019 to
   winter 2020). The host can pick one test, all of them, or the built-in set.
+  515 of them, and 34 of the 38 passages, play as real text that wraps to any screen. Quantitative
+  questions and charts play as images.
 
 - The built-in set (`worker/questions.json`) has 100 original questions in the formats of the test.
   They are not NITE questions.

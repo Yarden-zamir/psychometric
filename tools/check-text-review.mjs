@@ -1,4 +1,5 @@
-// After personally comparing EVERY sheet: node tools/check-text-review.mjs --record-all-checked
+// After personally comparing every NEW/CHANGED sheet: ... --record-all-checked
+// Byte-identical sheets may carry their previous visual comparison forward.
 // Otherwise: verify the recorded review still covers every non-null text.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -18,11 +19,15 @@ assert.equal(index.manifestSha256, hash, 'Review sheets are stale; regenerate th
 assert.equal(extraction.manifestSha256, hash, 'Extraction report is stale; rebuild');
 for (const sheet of index.sheets) assert.equal(sha(await readFile(join(root, sheet.file))), sheet.sha256, `Sheet changed: ${sheet.file}`);
 if (process.argv.includes('--record-all-checked')) {
+  const previous = await readFile(join(here, 'text-review.json'), 'utf8').then(JSON.parse).catch(error => {
+    if (error.code === 'ENOENT') return null;
+    throw error;
+  });
   const review = { manifestSha256: hash,
-    method: 'Every listed sheet was personally compared: source crop beside browser-shaped text. Only ids, reasons and hashes are stored here; sheets and source text stay gitignored.',
+    method: 'Every new or changed sheet was personally compared: source crop beside browser-shaped text. Byte-identical sheets carry their earlier comparison forward; reviewedInManifest records its provenance. Only ids, reasons and hashes are stored here; sheets and source text stay gitignored.',
     constraints: [
       'Quantitative questions and chart contexts always use images.',
-      'Any image overlapping a crop, including the large watermark in the autumn/winter 2020 PDFs, forces image fallback.',
+      'Only the visually identified NITE watermark with its exact decoded RGB hash, dimensions, placement and repetition on at least ten distinct pages is ignored by the graphics check. Every image fallback keeps the original watermark unchanged.',
       'Underlines, other graphics, invalid text controls and small math labels force image fallback; no Unicode repair or normalization.',
     ],
     banks: manifest.banks.map(bank => {
@@ -33,8 +38,12 @@ if (process.argv.includes('--record-all-checked')) {
           assert(reason, `No fallback reason for ${bank.id}/${i.id}`);
           return { id: i.id, reason };
         }) });
-      return { id: bank.id, questions: group('questions'), contexts: group('contexts'),
-        sheetsChecked: index.sheets.filter(s => s.bank === bank.id).map(({ file, ids, sha256 }) => ({ file, ids, sha256 })) };
+      return { id: bank.id, watermark: reasons.watermark, questions: group('questions'), contexts: group('contexts'),
+        sheetsChecked: index.sheets.filter(s => s.bank === bank.id).map(({ file, ids, sha256 }) => {
+          const prior = previous?.banks.find(b => b.id === bank.id)?.sheetsChecked.find(s =>
+            s.sha256 === sha256 && JSON.stringify(s.ids) === JSON.stringify(ids));
+          return { file, ids, sha256, reviewedInManifest: prior?.reviewedInManifest ?? (prior ? previous.manifestSha256 : hash) };
+        }) };
     }) };
   await writeFile(join(here, 'text-review.json'), JSON.stringify(review, null, 2) + '\n');
 }

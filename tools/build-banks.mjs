@@ -126,6 +126,7 @@ async function main() {
         region.text = extracted.text;
         textReport[kind].push({ id: region.id, reason: extracted.reason });
       }
+      textReport.watermark = await extract.watermarkEvidence();
       scanned.push({ source, result, diagnostic, textReport });
     } catch (error) { throw new Error(`${source.source}: ${error.message}`, { cause: error }); }
     finally { await loading.destroy(); }

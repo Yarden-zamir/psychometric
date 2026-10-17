@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { OPS } from 'pdfjs-dist/legacy/build/pdf.mjs';
-import { createTextExtractor, graphicsOf, lineText } from './build-banks-text.mjs';
+import { readFile } from 'node:fs/promises';
+import { OPS, getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
+import { createTextExtractor, graphicsOf, lineText, isNiteWatermark, NITE_WATERMARK } from './build-banks-text.mjs';
 
 const item = (str, x, y, width = str.length * 5) => ({ str, width, height: 11,
   transform: [11, 0, 0, 11, x, y], fontName: 'test' });
@@ -48,6 +49,61 @@ test('two horizontal gaps become blanks, including a terminal blank', async () =
 test('images and non-blank vector strokes always fall back', async () => {
   assert.equal((await extract(question(), [[OPS.paintImageXObject, ['image', 1, 1]]])).text, null);
   assert.equal((await extract(question(), [path(50, 449)])).text, null);
+});
+test('only the known watermark pixels AND original placement are eligible', () => {
+  const graphic = { kind: 'image', imageId: 'page-local-resource', matrix: [...NITE_WATERMARK.matrix] };
+  const image = { kind: 2, width: 1090, height: 1650 };
+  const check = (g = graphic, v = NITE_WATERMARK.page, im = image, hash = NITE_WATERMARK.sha256) => isNiteWatermark(g, v, im, hash);
+  assert.equal(check(), true);
+  assert.equal(check({ ...graphic, imageId: 'different-resource-same-pixels' }), true);
+  assert.equal(check(graphic, NITE_WATERMARK.page, image, 'another-pale-image'), false);
+  assert.equal(check({ ...graphic, matrix: [10, 0, 0, 10, 20, 20] }), false);
+  assert.equal(check({ ...graphic, matrix: [-278.0777, 0, 0, 420.9433, 436.6763, 210.4725] }), false);
+  assert.equal(check({ ...graphic, imageId: undefined }), false);
+  assert.equal(check(graphic, [0, 0, 600, 850]), false);
+  assert.equal(check(graphic, NITE_WATERMARK.page, { ...image, kind: 3 }), false);
+  assert.equal(check(graphic, NITE_WATERMARK.page, { ...image, width: 100 }), false);
+});
+test('repeated pale image with the right geometry but different pixels is rejected', async () => {
+  const ops = { fnArray: [OPS.transform, OPS.paintImageXObject], argsArray: [[...NITE_WATERMARK.matrix], ['image', 1090, 1650]] };
+  const fn = createTextExtractor({ numPages: 12, getPage: async () => ({
+    view: NITE_WATERMARK.page,
+    objs: { get: (_, resolve) => resolve({ kind: 2, width: 1090, height: 1650, data: new Uint8Array(1090 * 1650 * 3).fill(250) }) },
+    getTextContent: async () => ({ items: question(), styles: {} }), getOperatorList: async () => ops,
+  }) });
+  assert.equal((await fn(region)).reason, 'graphic-image');
+  assert.equal(await fn.watermarkEvidence(), null);
+});
+test('real watermark: ten distinct pages required; other images and vectors still reject', async t => {
+  // Optional read-only public fixture; no NITE pixels/text are committed.
+  let bytes;
+  try { bytes = await readFile(new URL('../../_shared/nite-public/psychometric_autumn_2020_td.pdf', import.meta.url)); }
+  catch (error) { if (error.code === 'ENOENT') return t.skip('Public PDF fixture not installed'); throw error; }
+  const loading = getDocument({ data: new Uint8Array(bytes) });
+  try {
+    const page = await (await loading.promise).getPage(3), list = await page.getOperatorList();
+    const graphic = graphicsOf(list).find(g => g.imageId);
+    const image = await new Promise(resolve => page.objs.get(graphic.imageId, resolve));
+    const watermark = [[OPS.save, []], [OPS.transform, NITE_WATERMARK.matrix],
+      [OPS.paintImageXObject, ['known', 1090, 1650]], [OPS.restore, []]];
+    async function run(numPages, extra = [], copies = 1) {
+      const ops = [...Array.from({ length: copies }, () => watermark).flat(), ...extra];
+      const fn = createTextExtractor({ numPages, getPage: async () => ({
+        view: page.view, objs: { get: (_, resolve) => resolve(image) },
+        getTextContent: async () => ({ items: question(), styles: {} }),
+        getOperatorList: async () => ({ fnArray: ops.map(o => o[0]), argsArray: ops.map(o => o[1]) }),
+      }) });
+      return { result: await fn(region), evidence: await fn.watermarkEvidence() };
+    }
+    assert.equal((await run(9)).result.reason, 'graphic-image');
+    assert.equal((await run(1, [], 10)).result.reason, 'graphic-image');
+    const accepted = await run(10);
+    assert(accepted.result.text);
+    assert.equal(accepted.evidence.pages.length, 10);
+    assert.equal(accepted.evidence.sha256, NITE_WATERMARK.sha256);
+    assert.equal((await run(10, [[OPS.paintImageXObject, ['other', 1, 1]]])).result.reason, 'graphic-image');
+    assert.equal((await run(10, [path(50, 449)])).result.reason, 'non-blank-horizontal-line');
+  } finally { await loading.destroy(); }
 });
 test('graphics follow nested form and save/transform matrices', () => {
   const ops = [[OPS.paintFormXObjectBegin, [[1, 0, 0, 1, 40, 50], null]],

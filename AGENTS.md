@@ -56,6 +56,10 @@ A 1v1 quiz race for two devices. Site: <https://psychometric.yarden-zamir.com>.
   https://www.nite.org.il/practice-tests/hebrew-tests-public-use/) go into `_shared/nite-public/`.
   NITE licenses the other tests for personal use only: a player can import one into a room, and it
   stays in that room. The page shows the NITE notice for every NITE or imported set.
+- The build also reads the PDF text layer (`tools/build-banks-text.mjs`, notes in
+  `tools/text-extraction.md`). Verbal and English questions and passages get `text` when every check
+  passes and the text matches its image on a contact sheet (`tools/text-review.json`). The page shows
+  that text; everything else, including all quantitative questions and charts, plays as its image.
 - Do not copy NITE test content into git.
 - `site/import.js` splits a NITE PDF into question images and reads the answer key. It also cuts
   the shared passages and charts as context images, and stacks a question that crosses a page.
