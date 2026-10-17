@@ -158,11 +158,9 @@ label.toggle .mono { font-weight: 600; opacity: 0.75; }
 .prompt { font-size: 1.25rem; line-height: 1.55; font-weight: 500; white-space: pre-wrap; }
 .prompt[dir="ltr"], .choices[dir="ltr"] { font-family: var(--sans); text-align: left; }
 .qimage-wrap { overflow-x: auto; cursor: zoom-in; border: var(--bw) solid var(--border); border-radius: var(--radius); background: #FFFFFF; }
-.qimage-wrap.zoomed { cursor: zoom-out; }
 /* app.js sets the width from the image pixels, so the text shows at reading size. */
 .qimage { display: block; max-width: 100%; height: auto; }
-.qimage-wrap.zoomed .qimage { max-width: none; }
-.qimage-wrap.fits { cursor: default; }
+
 .zoom-hint { font-size: 0.9rem; }
 details.passage { border: var(--bw) solid var(--border); border-radius: var(--radius); background: var(--raised); }
 details.passage > summary { cursor: pointer; padding: 6px 12px; font-weight: 800; }
@@ -178,7 +176,18 @@ details.passage > .qimage-wrap { border-width: var(--bw) 0 0; border-radius: 0; 
   color: var(--muted); border: 1px solid var(--muted); border-radius: 3px; vertical-align: 0.15em; unicode-bidi: isolate; direction: ltr;
 }
 details.passage > .passage-text { border-width: var(--bw) 0 0; border-radius: 0; max-height: 55vh; overflow-y: auto; }
-.qcard:not(:has(.qimage-wrap:not(.fits))) .zoom-hint { display: none; }
+/* The zoom view. It sits under the banners (z 50), so a lock-in banner still shows over it. */
+.viewer { position: fixed; inset: 0; z-index: 45; display: grid; grid-template-rows: auto 1fr auto; background: color-mix(in srgb, var(--canvas) 94%, transparent); }
+.viewer-bar, .viewer-answers { background: var(--surface); padding: 8px; }
+.viewer-bar { display: flex; gap: 8px; justify-content: center; align-items: center; border-bottom: var(--bw) solid var(--border); flex-wrap: wrap; }
+.viewer-pct { min-width: 4.5ch; text-align: center; font-weight: 600; }
+.viewer-scroll { overflow: auto; touch-action: none; cursor: grab; padding: 12px; overscroll-behavior: contain; }
+.viewer-scroll:active { cursor: grabbing; }
+.viewer-scroll img { display: block; margin: 0 auto; max-width: none; background: #FFFFFF; border: var(--bw) solid var(--border); user-select: none; -webkit-user-drag: none; }
+.viewer-answers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; border-top: var(--bw) solid var(--border); }
+.viewer-answers[hidden] { display: none; }
+.viewer-answers .btn { font-family: var(--mono); font-size: 1.5rem; padding: 8px 0; }
+.viewer-answers .btn.mine { background: var(--select); color: var(--select-fg); }
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .choices.numbers { grid-template-columns: repeat(4, 1fr); }
 .choice {

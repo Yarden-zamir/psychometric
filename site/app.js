@@ -179,9 +179,148 @@ let fatal = null;
 let importStatus = "";
 // The NITE images are rendered at 2x the PDF size. 0.62 of their pixels shows the text at about 16px.
 const IMAGE_READING_SCALE = 0.62;
-// Imported questions are wide page crops. A tap zooms them, and the zoom holds across renders.
-let zoomed = false;
-let zoomedContext = null;
+/* ---------- Zoom view: a full-screen viewer for question, passage and chart images ---------- */
+
+const ZOOM_MIN = 0.5;
+const ZOOM_MAX = 5;
+const ZOOM_STEP = 1.25;
+/** @type {{ el: HTMLElement, img: HTMLImageElement, scroller: HTMLElement, zoom: number, round: number | null, contextId: string | null } | null} */
+let viewer = null;
+
+/** Zoom 1 is the reading size. "Fit" fills the viewer width. */
+function fitZoom() {
+  if (!viewer?.img.naturalWidth) return 1;
+  const room = viewer.scroller.clientWidth - 24;
+  return Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, room / (viewer.img.naturalWidth * IMAGE_READING_SCALE)));
+}
+
+/** Sets the zoom and keeps the point under (x, y) in place, so a pinch or ctrl+wheel zooms where it points. */
+function setZoom(zoom, x = null, y = null) {
+  if (!viewer) return;
+  const { img, scroller } = viewer;
+  const next = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, zoom));
+  const box = scroller.getBoundingClientRect();
+  const ax = (x ?? box.left + box.width / 2) - box.left;
+  const ay = (y ?? box.top + box.height / 2) - box.top;
+  const ratio = next / viewer.zoom;
+  const left = (scroller.scrollLeft + ax) * ratio - ax;
+  const top = (scroller.scrollTop + ay) * ratio - ay;
+  viewer.zoom = next;
+  img.style.width = `${Math.round(img.naturalWidth * IMAGE_READING_SCALE * next)}px`;
+  scroller.scrollLeft = left;
+  scroller.scrollTop = top;
+  viewer.el.querySelector(".viewer-pct").textContent = `${Math.round(next * 100)}%`;
+}
+
+function openViewer(src, contextId) {
+  closeViewer();
+  const el = document.createElement("div");
+  el.className = "viewer";
+  el.setAttribute("role", "dialog");
+  el.setAttribute("aria-modal", "true");
+  el.innerHTML = `
+    <div class="viewer-bar">
+      <button class="btn small" data-z="out" aria-label="הקטנה">−</button>
+      <span class="viewer-pct mono"></span>
+      <button class="btn small" data-z="in" aria-label="הגדלה">＋</button>
+      <button class="btn small" data-z="fit">לרוחב המסך</button>
+      <button class="btn small" data-z="close" aria-label="סגירה">✕ סגירה</button>
+    </div>
+    <div class="viewer-scroll" dir="ltr"><img alt=""></div>
+    <div class="viewer-answers"></div>`;
+  document.body.append(el);
+  const img = el.querySelector("img");
+  const scroller = el.querySelector(".viewer-scroll");
+  viewer = { el, img, scroller, zoom: 1, round: state?.round?.number ?? null, contextId };
+  img.addEventListener("load", () => setZoom(fitZoom()), { once: true });
+  img.src = src;
+
+  el.querySelector('[data-z="in"]').addEventListener("click", () => setZoom(viewer.zoom * ZOOM_STEP));
+  el.querySelector('[data-z="out"]').addEventListener("click", () => setZoom(viewer.zoom / ZOOM_STEP));
+  el.querySelector('[data-z="fit"]').addEventListener("click", () => setZoom(fitZoom()));
+  el.querySelector('[data-z="close"]').addEventListener("click", closeViewer);
+  // A click on the empty area around the image closes the viewer.
+  scroller.addEventListener("click", (e) => { if (e.target === scroller && !moved) closeViewer(); });
+
+  // ctrl+wheel is a trackpad pinch on a laptop; a plain wheel scrolls.
+  scroller.addEventListener("wheel", (e) => {
+    if (!e.ctrlKey) return;
+    e.preventDefault();
+    setZoom(viewer.zoom * Math.exp(-e.deltaY * 0.005), e.clientX, e.clientY);
+  }, { passive: false });
+
+  // One pointer drags the image, two pointers pinch.
+  const pointers = new Map();
+  let pinch = null;
+  let moved = false;
+  scroller.addEventListener("pointerdown", (e) => {
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    scroller.setPointerCapture(e.pointerId);
+    moved = false;
+    if (pointers.size === 2) {
+      const [a, b] = [...pointers.values()];
+      pinch = { dist: Math.hypot(a.x - b.x, a.y - b.y), zoom: viewer.zoom };
+    }
+  });
+  scroller.addEventListener("pointermove", (e) => {
+    const last = pointers.get(e.pointerId);
+    if (!last || !viewer) return;
+    const now = { x: e.clientX, y: e.clientY };
+    pointers.set(e.pointerId, now);
+    if (pointers.size === 2 && pinch) {
+      const [a, b] = [...pointers.values()];
+      setZoom(pinch.zoom * Math.hypot(a.x - b.x, a.y - b.y) / pinch.dist, (a.x + b.x) / 2, (a.y + b.y) / 2);
+    } else if (pointers.size === 1) {
+      scroller.scrollLeft -= now.x - last.x;
+      scroller.scrollTop -= now.y - last.y;
+    }
+    if (Math.abs(now.x - last.x) + Math.abs(now.y - last.y) > 2) moved = true;
+  });
+  const lift = (e) => { pointers.delete(e.pointerId); if (pointers.size < 2) pinch = null; };
+  scroller.addEventListener("pointerup", lift);
+  scroller.addEventListener("pointercancel", lift);
+
+  document.addEventListener("keydown", viewerKeys);
+  updateViewer();
+}
+
+function viewerKeys(e) {
+  if (!viewer) return;
+  if (e.key === "Escape") closeViewer();
+  else if (e.key === "+" || e.key === "=") setZoom(viewer.zoom * ZOOM_STEP);
+  else if (e.key === "-") setZoom(viewer.zoom / ZOOM_STEP);
+  else if (e.key === "0") setZoom(fitZoom());
+  else if (["1", "2", "3", "4"].includes(e.key)) viewer.el.querySelector(`[data-viewer-choice="${Number(e.key) - 1}"]`)?.click();
+}
+
+function closeViewer() {
+  if (!viewer) return;
+  viewer.el.remove();
+  viewer = null;
+  document.removeEventListener("keydown", viewerKeys);
+}
+
+/** After each state: close when the round or passage moved on, and keep the answer buttons current. */
+function updateViewer() {
+  if (!viewer) return;
+  const round = state?.round;
+  const contextMoved = viewer.contextId !== null && round?.context?.id !== viewer.contextId;
+  const roundMoved = viewer.contextId === null && (round?.number !== viewer.round || !["question", "reveal"].includes(state.phase));
+  if (!round || contextMoved || roundMoved || state.phase === "lobby") return closeViewer();
+  const box = viewer.el.querySelector(".viewer-answers");
+  const open = state.you && state.phase === "question" && round.question;
+  box.hidden = !open;
+  if (!open) return;
+  box.innerHTML = [0, 1, 2, 3].map((i) => `<button class="btn ${round.mine === i ? "mine" : ""}" data-viewer-choice="${i}" ${round.mine === null ? "" : "disabled"}>${i + 1}</button>`).join("");
+  for (const b of box.querySelectorAll("[data-viewer-choice]")) {
+    b.addEventListener("click", () => {
+      sound();
+      sendMsg({ t: "answer", choice: Number(b.dataset.viewerChoice) });
+      for (const x of box.querySelectorAll("button")) x.disabled = true;
+      b.classList.add("mine");
+    });
+  }
+}
 const serverNow = () => Date.now() + clockOffset;
 
 function connect() {
@@ -371,6 +510,7 @@ function render() {
   if (state.phase === "over") parts.push(overCard());
   if (state.you && state.phase !== "lobby") parts.push(tauntBar());
   app.innerHTML = parts.join("");
+  queueMicrotask(updateViewer);
   bind();
 }
 
@@ -483,8 +623,8 @@ function questionCard() {
     return `<button class="${cls.join(" ")}" data-choice="${i}" ${canAnswer ? "" : "disabled"}>${label}${who ? `<span class="who">${who}</span>` : ""}</button>`;
   }).join("");
   const body = q.image
-    ? `<div class="qimage-wrap ${zoomed ? "zoomed" : ""}" dir="${q.section === "english" ? "ltr" : "rtl"}"><img class="qimage" src="/api/rooms/${esc(state.code)}/image?round=${round.number}" alt="שאלה ${round.number}"></div>
-       <span class="muted zoom-hint">👆 הקשה מגדילה · 📱 לרוחב נוח יותר לקרוא</span>`
+    ? `<div class="qimage-wrap" dir="${q.section === "english" ? "ltr" : "rtl"}" title="זום"><img class="qimage" src="/api/rooms/${esc(state.code)}/image?round=${round.number}" alt="שאלה ${round.number}"></div>
+       <span class="muted zoom-hint">🔍 לחיצה על השאלה פותחת זום</span>`
     : `<div class="prompt" dir="${esc(q.dir)}">${esc(q.prompt)}</div>`;
   const grace = state.phase === "question" && round.graceEndsAt
     ? `<div class="grace"><div class="secs">${state.settings.grace}</div><div class="bar"><div class="fill"></div></div></div>`
@@ -522,7 +662,7 @@ function passageText(t) {
 function contextImage(context, zoomKey) {
   if (context.text) return passageText(context.text);
   const src = `/api/rooms/${esc(state.code)}/context?id=${encodeURIComponent(context.id)}`;
-  return `<div class="qimage-wrap ${zoomedContext === zoomKey ? "zoomed" : ""}" data-zoom="${zoomKey}"><img class="qimage" src="${src}" alt="${context.kind === "passage" ? "קטע קריאה" : "תרשים"}"></div>`;
+  return `<div class="qimage-wrap" data-context="${esc(context.id)}" title="זום"><img class="qimage" src="${src}" alt="${context.kind === "passage" ? "קטע קריאה" : "תרשים"}"></div>`;
 }
 
 /** The passage before its questions. Both players read, then press ready, or the timer ends it. */
@@ -634,18 +774,13 @@ function bind() {
     el.addEventListener("click", () => { sound(); sendMsg({ t: "taunt", emoji: el.dataset.taunt }); el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); });
   }
   for (const img of app.querySelectorAll("img.qimage")) {
-    const fit = () => {
-      img.style.width = `${Math.round(img.naturalWidth * IMAGE_READING_SCALE)}px`;
-      img.parentElement?.classList.toggle("fits", img.naturalWidth * IMAGE_READING_SCALE <= (img.parentElement?.clientWidth ?? 0));
-    };
+    const fit = () => { img.style.width = `${Math.round(img.naturalWidth * IMAGE_READING_SCALE)}px`; };
     if (img.complete && img.naturalWidth) fit(); else img.addEventListener("load", fit, { once: true });
   }
   for (const wrap of app.querySelectorAll(".qimage-wrap")) {
     wrap.addEventListener("click", () => {
-      const key = wrap.dataset.zoom;
-      if (key) zoomedContext = zoomedContext === key ? null : key;
-      else zoomed = !zoomed;
-      wrap.classList.toggle("zoomed", key ? zoomedContext === key : zoomed);
+      const img = wrap.querySelector("img");
+      if (img?.src) openViewer(img.src, wrap.dataset.context ?? null);
     });
   }
   app.querySelector("details.passage")?.addEventListener("toggle", (e) => { contextOpen = e.currentTarget.open; });
