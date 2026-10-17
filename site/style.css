@@ -150,6 +150,14 @@ main { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; display: grid;
 .choice.correct { background: var(--green); color: #000000; }
 .choice.wrong { background: var(--error); color: #000000; }
 .choice .who { position: absolute; top: -10px; inset-inline-end: 6px; display: flex; gap: 4px; }
+.verdict {
+  font-weight: 900; font-size: 1.15rem; padding: 6px 12px; color: #000000; background: var(--select);
+  border: var(--bw) solid var(--border); border-radius: var(--radius); transform: rotate(-0.6deg);
+}
+.verdict.good { background: var(--green); }
+.verdict.bad { background: var(--error); }
+.verdict.info { background: var(--info); }
+.verdict small { font-weight: 800; font-size: 0.85em; margin-inline-start: 8px; }
 .explain { padding: 10px 12px; background: var(--raised); border: var(--bw) solid var(--border); border-radius: var(--radius); }
 
 /* The grace timer: a bar that drains, and a number. */
@@ -167,11 +175,13 @@ main { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; display: grid;
 #fx { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
 .flash { position: absolute; inset: 0; animation: flash 520ms ease-out forwards; }
 .banner {
-  position: absolute; top: 38%; left: 50%; max-width: 92vw; text-align: center;
+  /* High on the screen, so the question and the answers stay visible under it. */
+  position: absolute; top: 20%; left: 50%; max-width: 92vw; text-align: center;
   font-weight: 900; font-size: clamp(2rem, 9vw, 4.5rem); line-height: 1.05; padding: 8px 20px;
   background: var(--select); color: var(--select-fg); border: 3px solid var(--border); border-radius: 6px;
   box-shadow: 6px 6px 0 0 var(--shadow-ink);
-  animation: slam 1500ms cubic-bezier(.2, 1.6, .4, 1) forwards;
+  transform: translate(-50%, -50%) rotate(-3deg);
+  animation: slam 2500ms cubic-bezier(.2, 1.6, .4, 1) forwards;
 }
 .banner.good { background: var(--green); color: #000000; }
 .banner.bad { background: var(--error); color: #000000; }
@@ -196,8 +206,8 @@ body.panic::after { content: ""; position: fixed; inset: 0; pointer-events: none
 @keyframes flash { from { opacity: 0.85; } to { opacity: 0; } }
 @keyframes slam {
   0% { transform: translate(-50%, -50%) scale(3) rotate(-8deg); opacity: 0; }
-  18% { transform: translate(-50%, -50%) scale(1) rotate(-3deg); opacity: 1; }
-  80% { transform: translate(-50%, -50%) scale(1) rotate(-3deg); opacity: 1; }
+  10% { transform: translate(-50%, -50%) scale(1) rotate(-3deg); opacity: 1; }
+  90% { transform: translate(-50%, -50%) scale(1) rotate(-3deg); opacity: 1; }
   100% { transform: translate(-50%, -80%) scale(0.9) rotate(-3deg); opacity: 0; }
 }
 @keyframes count { 0% { transform: translate(-50%, -50%) scale(2.6); opacity: 0; } 30% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(0.7); opacity: 0; } }
@@ -213,7 +223,8 @@ body.panic::after { content: ""; position: fixed; inset: 0; pointer-events: none
 .pop { animation: pop 380ms ease-out; }
 
 @media (prefers-reduced-motion: reduce) {
-  .banner, .count, .standoff, .standoff *, .fly, .float, body.shake main, body.panic::after, .grace.urgent .secs { animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
+  .banner { animation-name: fade; }
+  .count, .standoff, .standoff *, .fly, .float, body.shake main, body.panic::after, .grace.urgent .secs { animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
 }
 @media (max-width: 560px) {
   .choices { grid-template-columns: 1fr; }

@@ -83,15 +83,29 @@ function flash(color) {
   fx.append(el);
   el.addEventListener("animationend", () => el.remove());
 }
-function banner(html, kind = "", ms = 1500) {
+/** The banner stays long enough to read: about 55 ms per character, from 2.2 s to 4 s. */
+function banner(html, kind = "") {
+  for (const old of fx.querySelectorAll(".banner")) old.remove();
   const el = document.createElement("div");
   el.className = `banner ${kind}`;
   el.innerHTML = html;
+  const ms = Math.min(4000, Math.max(2200, 1400 + 55 * el.textContent.length));
   el.style.animationDuration = `${ms}ms`;
   fx.append(el);
   el.addEventListener("animationend", () => el.remove());
   announce.textContent = el.textContent;
 }
+/**
+ * The banner is the effect. The same text stays in the question card for the rest of the phase,
+ * so a player who missed the banner can still read it.
+ * @type {{ round: number, phase: string, html: string, kind: string } | null}
+ */
+let verdict = null;
+function say(html, kind, next) {
+  banner(html, kind);
+  verdict = { round: next.round.number, phase: next.phase, html, kind };
+}
+
 function shake() {
   document.body.classList.remove("shake");
   void document.body.offsetWidth;
@@ -194,7 +208,7 @@ function sendMsg(data) {
   if (socket?.readyState === WebSocket.OPEN) socket.send(JSON.stringify(data));
 }
 function toast(text) {
-  banner(esc(text), "bad", 1800);
+  banner(esc(text), "bad");
 }
 
 /* ---------- State changes fire the effects ---------- */
@@ -228,12 +242,12 @@ function effects(prev, next) {
   if (next.phase === "question" && first && prev?.round?.first !== first && !roundChanged) {
     if (first === me) {
       sfx.mine();
-      banner(pick(LINES.mineFirst), "info", 1100);
+      say(`${pick(LINES.mineFirst)}<small>${esc(names[other(first)])} עוד חושבים</small>`, "info", next);
     } else {
       sfx.lock();
       flash("var(--error)");
       shake();
-      banner(`${pick(LINES.locked)}<small>${esc(names[first])} ענו. יש לך ${next.settings.grace} שניות</small>`, "bad", 1600);
+      say(`${pick(LINES.locked)}<small>${esc(names[first])} ענו. יש לך ${next.settings.grace} שניות</small>`, "bad", next);
       if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
     }
   }
@@ -242,14 +256,14 @@ function effects(prev, next) {
     if (me && next.winner === me) {
       sfx.win();
       burst(["🏆", "🎉", "👑", "🧠", "✨"], 60);
-      banner("ניצחון! 🏆", "good", 2600);
+      banner("ניצחון! 🏆", "good");
     } else if (me) {
       sfx.lose();
       burst(["💀", "🫠", "🐢"], 20);
-      banner(`${esc(names[next.winner])} ניצחו 😵`, "bad", 2600);
+      banner(`${esc(names[next.winner])} ניצחו 😵`, "bad");
     } else {
       sfx.win();
-      banner(`${esc(names[next.winner])} ניצחו! 🏆`, "good", 2600);
+      banner(`${esc(names[next.winner])} ניצחו! 🏆`, "good");
     }
   }
 }
@@ -267,21 +281,21 @@ function revealEffects(next, me) {
   if (result.tie) {
     sfx.tie();
     burst(["🤝", "🧠"], 14);
-    banner(pick(LINES.tie), "info");
+    say(`${pick(LINES.tie)}<small>שניכם צדקתם, אין נקודות</small>`, "info", next);
   } else if (mine > 0) {
     sfx.right();
     flash("var(--green)");
     burst(["✨", "🧠", "💥", "⭐"], 26);
-    banner(`${pick(LINES.right)}<small><span class="ltr">+1</span>${theirs < 0 ? ` · והיריב/ה <span class="ltr">−1</span> 😈` : ""}</small>`, "good");
+    say(`${pick(LINES.right)}<small><span class="ltr">+1</span>${theirs < 0 ? ` · והיריב/ה <span class="ltr">−1</span> 😈` : ""}</small>`, "good", next);
   } else if (mine < 0) {
     sfx.wrong();
     flash("var(--error)");
     shake();
-    banner(`${pick(LINES.wrong)}<small><span class="ltr">−1</span>${theirs > 0 ? ` · והיריב/ה <span class="ltr">+1</span>` : ""}</small>`, "bad", 1900);
+    say(`${pick(LINES.wrong)}<small><span class="ltr">−1</span>${theirs > 0 ? ` · והיריב/ה <span class="ltr">+1</span>` : ""}</small>`, "bad", next);
   } else if (!answered) {
     sfx.freeze();
     burst(["🧊", "⌛"], 12);
-    banner(`${pick(LINES.freeze)}<small>${theirs > 0 ? pick(LINES.rivalRight) : theirs < 0 ? pick(LINES.rivalWrong) : ""}</small>`, theirs > 0 ? "bad" : "info", 1800);
+    say(`${pick(LINES.freeze)}<small>${theirs > 0 ? pick(LINES.rivalRight) : theirs < 0 ? pick(LINES.rivalWrong) : ""}</small>`, theirs > 0 ? "bad" : "info", next);
   }
 }
 
@@ -440,10 +454,12 @@ function questionCard() {
     ? `<div class="grace"><div class="secs">${state.settings.grace}</div><div class="bar"><div class="fill"></div></div></div>`
     : "";
   const explain = revealed && round.explain ? `<div class="explain">💡 ${esc(round.explain)}</div>` : "";
+  const line = verdict && verdict.round === round.number && verdict.phase === (revealed ? "reveal" : "question")
+    ? `<div class="verdict ${verdict.kind}">${verdict.html}</div>` : "";
   return `<section class="card qcard">
     <div class="qhead"><span class="label">סיבוב ${round.number} · ${esc(SECTION_NAMES[q.section] ?? q.section)}</span>
       ${revealed ? `<span class="sticker ok">התשובה: (${result.correct + 1})</span>` : ""}</div>
-    ${body}${grace}
+    ${line}${body}${grace}
     <div class="choices ${q.image ? "numbers" : ""}" dir="${esc(q.dir)}">${choices}</div>
     ${explain}
   </section>`;
@@ -537,7 +553,7 @@ function bind() {
       try { await navigator.share({ title: "דו־קרב פסיכומטרי", text: `קוד: ${state.code}`, url: link }); } catch {}
     } else {
       await navigator.clipboard.writeText(link);
-      banner("הקישור הועתק 📋", "info", 1000);
+      banner("הקישור הועתק 📋", "info");
     }
   });
   app.querySelector('[data-act="import"]')?.addEventListener("change", (e) => importFile(e.currentTarget.files?.[0]));
@@ -566,7 +582,7 @@ async function importFile(file) {
     })));
     await uploadBank("POST", { title: title || file.name.replace(/\.pdf$/i, ""), questions: payload });
     say("");
-    banner(`יובאו ${questions.length} שאלות 📄`, "good", 1400);
+    banner(`יובאו ${questions.length} שאלות 📄`, "good");
   } catch (error) {
     say("");
     toast(error instanceof Error ? error.message : String(error));
