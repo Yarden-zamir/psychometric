@@ -652,7 +652,8 @@ export class Room extends DurableObject {
     return {
       t: "state", now: Date.now(), you: seat, code: s.code, settings: s.settings, phase: s.phase,
       scores: s.scores, deadline: s.deadline, winner: s.winner, taunts: TAUNTS, limits: LIMITS,
-      bot: s.bot ? { level: Math.round(this.botLevel().level * 100) } : null,
+      // The bot level stays on the server: players should feel a rival, not see the balancing.
+      bot: Boolean(s.bot),
       bank: this.bankView(),
       players: Object.fromEntries(SEATS.map((x) => [x, s.seats[x] && { name: s.seats[x].name, online: online.has(x) }])),
       round: round && q && {

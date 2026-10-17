@@ -386,8 +386,7 @@ function playerCard(seat) {
     const d = round.result.deltas[seat];
     status = round.result.tie ? `<span class="sticker info">תיקו</span>` : d > 0 ? `<span class="sticker ok ltr">+1</span>` : d < 0 ? `<span class="sticker bad ltr">−1</span>` : `<span class="sticker">0</span>`;
   }
-  const you = state.you === seat ? `<span class="sticker wait tag">אני</span>`
-    : seat === "b" && state.bot ? `<span class="sticker info tag">רמה ${state.bot.level}%</span>` : "";
+  const you = state.you === seat ? `<span class="sticker wait tag">אני</span>` : "";
   return `<div class="card player ${seat} ${p.online ? "" : "offline"}">${you}
     <span class="name">${esc(p.name)}</span>
     <span class="score">${score}</span>${pips}<div class="answered">${status}</div></div>`;
@@ -433,8 +432,7 @@ function lobby() {
     <div class="row">${Object.entries(state.bank.counts).map(([key, n]) => `<label class="toggle"><input type="checkbox" data-section="${esc(key)}" ${state.settings.sections.includes(key) ? "checked" : ""} ${host ? "" : "disabled"}>${esc(SECTION_NAMES[key] ?? key)} <span class="mono">${n}</span></label>`).join("")}</div>
     ${host ? `<div class="row">
       <label class="btn">📄 ייבוא שאלון מ־PDF<input type="file" accept="application/pdf" data-act="import" hidden></label>
-      <span id="import-status" class="muted">${esc(importStatus)}</span></div>
-      <p class="muted">ייבוא של בחינה לדוגמה של מאל"ו: <a href="https://www.nite.org.il/practice-tests/hebrew-tests-public-use/" target="_blank" rel="noopener">לשימוש ציבורי</a> או <a href="https://www.nite.org.il/?page_id=2617" target="_blank" rel="noopener">לתרגול אישי</a>.</p>` : ""}
+      <span id="import-status" class="muted">${esc(importStatus)}</span></div>` : ""}
   </section>
   <section class="card pad stack">
     <span class="label">חוקים</span>
@@ -444,7 +442,6 @@ function lobby() {
       <li>תשובה נכונה: +1. תשובה שגויה: −1. שתי תשובות נכונות: תיקו, אין נקודות.</li>
       <li>מי שמגיע/ה ראשון/ה ל־${target} נקודות מנצח/ת.</li>
       ${state.bank.passages && state.settings.passages ? `<li>קטע קריאה: קודם קוראים (עד ${state.settings.reading} שניות, או עד ששניכם מוכנים), ואז מתחרים על השאלות שלו.</li>` : ""}
-      ${state.bot ? `<li>הבוט מעתיק את הדיוק והמהירות שלך. כשמישהו מוביל, הבוט מתחזק או נחלש קצת.</li>` : ""}
     </ul>
   </section>`;
 }
@@ -546,7 +543,6 @@ function renderHome() {
     <label class="stack"><span class="label">השם שלך</span><input class="field" id="name" maxlength="20" value="${esc(name)}" placeholder="למשל: נועה"></label>
     <div class="row"><button class="btn go" data-act="create" data-mode="duel">⚔️ חדר חדש</button>
       <button class="btn primary" data-act="create" data-mode="bot">🤖 נגד בוט</button></div>
-    <p class="muted">הבוט לומד את הקצב והדיוק שלך ומתאים את עצמו, אבל רק עד גבול מסוים.</p>
     <div class="row"><span class="label">או הצטרפות עם קוד</span>
       <input class="field code" id="join-code" maxlength="4" autocomplete="off" placeholder="AB3K" dir="ltr">
       <button class="btn primary" data-act="join">הצטרפות</button></div>
