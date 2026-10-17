@@ -20,8 +20,10 @@ A 1v1 quiz duel in the style of the Israeli Psychometric Entrance Test, at
   They are not NITE questions.
 - The host can import a NITE practice test PDF into a room (`site/import.js`). The room keeps the
   questions as images with the answer key. The page then shows the NITE copyright notice.
-  The import keeps about 66 questions per test. It skips questions that share a reading passage
-  or a chart. It needs a PDF with a text layer, such as the NITE `_acc` files.
+  Reading passages play as a passage round: both players read (2 minutes by default, or until both
+  press ready), then race on the passage's questions with the passage open in a panel. Chart
+  questions show their chart. The host can leave passages out. The import needs a PDF with a text
+  layer, such as the NITE `_acc` files.
 - NITE practice tests: [public use](https://www.nite.org.il/practice-tests/hebrew-tests-public-use/)
   (free public tools are allowed, with the notice) and
   [personal use](https://www.nite.org.il/?page_id=2617) (personal practice only).

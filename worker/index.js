@@ -7,8 +7,9 @@ const CODE_LENGTH = 4;
 const CODE_PATTERN = new RegExp(`^[${CODE_ALPHABET}]{${CODE_LENGTH}}$`);
 const TOKEN_PATTERN = /^[A-Za-z0-9]{16,64}$/;
 const SEATS = /** @type {const} */ (["a", "b"]);
-const LIMITS = { target: [1, 50], grace: [3, 60] };
-const DEFAULTS = { target: 10, grace: 15 };
+const LIMITS = { target: [1, 50], grace: [3, 60], reading: [20, 600] };
+/** reading: seconds to read a passage before its questions. passages: false leaves passage questions out. */
+const DEFAULTS = { target: 10, grace: 15, reading: 120, passages: true };
 const FIRST_COUNTDOWN_MS = 3000;
 const NEXT_COUNTDOWN_MS = 1800;
 const REVEAL_MS = 5500;
@@ -27,6 +28,7 @@ const IMPORT_MAX_QUESTIONS = 400;
 const IMAGE_MAX_BYTES = 1_000_000;
 const IMAGE_TYPES = ["image/webp", "image/png", "image/jpeg"];
 const SECTIONS = ["verbal", "quantitative", "english"];
+const CONTEXT_KINDS = ["passage", "chart"];
 const IMAGE_CHOICES = ["1", "2", "3", "4"];
 const NITE_NOTICE = "השאלות הן מתוך נוסחי בחינות לדוגמה של המרכז הארצי לבחינות ולהערכה (מאל\"ו), בעל זכויות היוצרים. השימוש בחומרים נעשה באחריות המשתמש בלבד, ומאל\"ו אינו אחראי לדיוק או לנכונות של כל שינוי שייעשה או תוספת שתיעשה, אם תיעשה, כמו פתרונות או הסברים לשאלות.";
 
@@ -51,7 +53,7 @@ export default {
       }
       return Response.json({ error: "no free room code" }, { status: 503 });
     }
-    const match = url.pathname.match(/^\/api\/rooms\/([^/]+)\/(ws|bank|image)$/);
+    const match = url.pathname.match(/^\/api\/rooms\/([^/]+)\/(ws|bank|image|context)$/);
     if (match) {
       const [, rawCode, route] = match;
       const code = rawCode.toUpperCase();
@@ -80,13 +82,14 @@ function shuffled(length) {
 
 /**
  * @typedef {"a" | "b"} Seat
- * @typedef {"lobby" | "countdown" | "question" | "reveal" | "over"} Phase
+ * @typedef {"lobby" | "reading" | "countdown" | "question" | "reveal" | "over"} Phase
  * @typedef {{ choice: number, at: number }} Answer
  * @typedef {{ correct: number, tie: boolean, deltas: Record<Seat, number> }} Result
  * @typedef {{ number: number, q: number, openedAt: number | null, first: Seat | null,
- *   graceEndsAt: number | null, answers: Partial<Record<Seat, Answer>>, result: Result | null }} Round
- * @typedef {{ title: string, count: number, counts: Record<string, number> }} ImportedBank
- * @typedef {{ code: string, settings: { target: number, grace: number }, bank: ImportedBank | null,
+ *   graceEndsAt: number | null, answers: Partial<Record<Seat, Answer>>, result: Result | null,
+ *   context: string | null, ready: Record<Seat, boolean> | null }} Round
+ * @typedef {{ title: string, count: number, counts: Record<string, number>, passages: number, passageQuestions: number, charts: number }} ImportedBank
+ * @typedef {{ code: string, settings: { target: number, grace: number, reading: number, passages: boolean }, bank: ImportedBank | null,
  *   seats: Record<Seat, { token: string, name: string } | null>, phase: Phase,
  *   scores: Record<Seat, number>, order: number[], cursor: number, round: Round | null,
  *   deadline: number | null, winner: Seat | null, idleSince: number | null, bot: Bot | null }} State
@@ -104,6 +107,8 @@ export class Room extends DurableObject {
     super(ctx, env);
     ctx.blockConcurrencyWhile(async () => {
       this.s = (await ctx.storage.get("s")) ?? null;
+      // A room saved by an older version lacks newer settings.
+      if (this.s) this.s.settings = { ...DEFAULTS, ...this.s.settings };
     });
   }
 
@@ -128,6 +133,7 @@ export class Room extends DurableObject {
     if (route === "bank" && request.method === "POST") return this.importBank(request);
     if (route === "bank" && request.method === "DELETE") return this.importBank(request, true);
     if (route === "image" && request.method === "GET") return this.roundImage(request);
+    if (route === "context" && request.method === "GET") return this.contextImage(request);
     if (route !== "ws") return Response.json({ error: "not found" }, { status: 404 });
     const pair = new WebSocketPair();
     this.ctx.acceptWebSocket(pair[1]);
@@ -163,7 +169,11 @@ export class Room extends DurableObject {
         if (me.seat !== "a") return refuse("only the host changes settings");
         if (s.phase !== "lobby" && s.phase !== "over") return refuse("settings are locked during a match");
         const next = { ...s.settings };
-        for (const key of /** @type {const} */ (["target", "grace"])) {
+        if (msg.passages !== undefined) {
+          if (typeof msg.passages !== "boolean") return refuse("passages must be true or false");
+          next.passages = msg.passages;
+        }
+        for (const key of /** @type {const} */ (["target", "grace", "reading"])) {
           if (msg[key] === undefined) continue;
           const [min, max] = LIMITS[key];
           if (!Number.isInteger(msg[key]) || msg[key] < min || msg[key] > max) return refuse(`${key} must be ${min} to ${max}`);
@@ -177,6 +187,10 @@ export class Room extends DurableObject {
         if (!me.seat) return refuse("spectators cannot start");
         if (!s.seats.a || !s.seats.b) return refuse("waiting for a second player");
         if (s.phase !== (msg.t === "start" ? "lobby" : "over")) return refuse(`cannot ${msg.t} now`);
+        const order = this.buildOrder();
+        if (!order.length) return refuse("no questions: turn passages on or import another set");
+        s.order = order;
+        s.cursor = 0;
         s.scores = { a: 0, b: 0 };
         s.winner = null;
         s.round = null;
@@ -188,6 +202,13 @@ export class Room extends DurableObject {
         if (!Number.isInteger(msg.choice) || msg.choice < 0 || msg.choice > 3) return refuse("bad choice");
         if (s.round.answers[me.seat]) return refuse("already answered");
         this.submit(me.seat, msg.choice, now);
+        break;
+      }
+      case "ready": {
+        const round = s.round;
+        if (!me.seat || s.phase !== "reading" || !round?.ready) return refuse("nothing to read now");
+        round.ready[me.seat] = true;
+        if (SEATS.every((x) => round.ready?.[x])) this.endReading(now);
         break;
       }
       case "taunt": {
@@ -222,7 +243,9 @@ export class Room extends DurableObject {
       this.s = null;
       return;
     }
-    if (s.phase === "countdown" && s.deadline !== null && now >= s.deadline) {
+    if (s.phase === "reading" && s.deadline !== null && now >= s.deadline) {
+      this.endReading(now);
+    } else if (s.phase === "countdown" && s.deadline !== null && now >= s.deadline) {
       s.phase = "question";
       s.deadline = null;
       if (s.round) s.round.openedAt = now;
@@ -292,18 +315,48 @@ export class Room extends DurableObject {
     }
   }
 
+  /**
+   * The match order: passage questions stay together in test order after their passage,
+   * every other question is its own unit, and the units are shuffled.
+   */
+  buildOrder() {
+    const s = /** @type {State} */ (this.s);
+    if (!s.bank) return shuffled(QUESTIONS.length);
+    const units = new Map();
+    for (const row of this.ctx.storage.sql.exec("SELECT b.i, b.context, c.kind FROM bank b LEFT JOIN contexts c ON c.id = b.context ORDER BY b.i")) {
+      if (row.kind === "passage" && !s.settings.passages) continue;
+      const key = row.kind === "passage" ? `p:${row.context}` : `q:${row.i}`;
+      if (!units.has(key)) units.set(key, []);
+      units.get(key).push(row.i);
+    }
+    const list = [...units.values()];
+    return shuffled(list.length).flatMap((u) => list[u]);
+  }
+
   nextRound(now, countdownMs) {
     const s = /** @type {State} */ (this.s);
     if (s.cursor >= s.order.length) {
-      s.order = shuffled(this.bankSize());
+      s.order = this.buildOrder();
       s.cursor = 0;
     }
+    const previous = s.round?.context ?? null;
+    const q = s.order[s.cursor++];
+    const { context, contextKind } = this.question(q);
+    // A new passage starts with a reading phase. The next questions of the same passage do not.
+    const read = contextKind === "passage" && context !== previous;
     s.round = {
-      number: (s.round?.number ?? 0) + 1, q: s.order[s.cursor++], openedAt: null, first: null,
-      graceEndsAt: null, answers: {}, result: null,
+      number: (s.round?.number ?? 0) + 1, q, openedAt: null, first: null,
+      graceEndsAt: null, answers: {}, result: null, context,
+      ready: read ? { a: false, b: Boolean(s.bot) } : null,
     };
+    s.phase = read ? "reading" : "countdown";
+    s.deadline = now + (read ? s.settings.reading * 1000 : countdownMs);
+  }
+
+  endReading(now) {
+    const s = /** @type {State} */ (this.s);
     s.phase = "countdown";
-    s.deadline = now + countdownMs;
+    s.deadline = now + NEXT_COUNTDOWN_MS;
   }
 
   /**
@@ -330,23 +383,23 @@ export class Room extends DurableObject {
     s.deadline = now + REVEAL_MS;
   }
 
-  bankSize() {
-    return this.s?.bank ? this.s.bank.count : QUESTIONS.length;
-  }
-
-  /** Index i of the room's bank. An imported question is an image, its choices are the numbers 1 to 4. */
+  /**
+   * Index i of the room's bank. An imported question is an image, its choices are the numbers 1 to 4.
+   * It can point to a context: a passage or a chart that several questions share.
+   */
   question(i) {
-    if (!this.s?.bank) return { ...QUESTIONS[i], image: false };
-    const row = this.ctx.storage.sql.exec("SELECT id, section, answer FROM bank WHERE i = ?", i).one();
+    if (!this.s?.bank) return { ...QUESTIONS[i], image: false, context: null, contextKind: null };
+    const row = this.ctx.storage.sql.exec("SELECT b.id, b.section, b.answer, b.context, c.kind FROM bank b LEFT JOIN contexts c ON c.id = b.context WHERE b.i = ?", i).one();
     return {
       id: row.id, section: row.section, kind: "imported", dir: "rtl", prompt: null, choices: IMAGE_CHOICES,
-      answer: row.answer, explain: null, image: true,
+      answer: row.answer, explain: null, image: true, context: row.context ?? null, contextKind: row.kind ?? null,
     };
   }
 
   /**
    * The host uploads an imported question set, or deletes it to go back to the built-in set.
-   * Body: { token, title, questions: [{ id, section, answer, mime, image: base64 }] }.
+   * Body: { token, title, questions: [{ id, section, answer, mime, image: base64, context: id | null }],
+   *   contexts: [{ id, kind: "passage" | "chart", mime, image: base64 }] }.
    */
   async importBank(request, remove = false) {
     const s = /** @type {State} */ (this.s);
@@ -355,37 +408,65 @@ export class Room extends DurableObject {
     if (typeof body?.token !== "string" || s.seats.a?.token !== body.token) return Response.json({ error: "only the host imports questions" }, { status: 403 });
     if (s.phase !== "lobby" && s.phase !== "over") return Response.json({ error: "questions are locked during a match" }, { status: 409 });
     const sql = this.ctx.storage.sql;
-    sql.exec("CREATE TABLE IF NOT EXISTS bank (i INTEGER PRIMARY KEY, id TEXT NOT NULL, section TEXT NOT NULL, answer INTEGER NOT NULL CHECK (answer BETWEEN 0 AND 3), mime TEXT NOT NULL, image BLOB NOT NULL)");
+    // An import replaces the whole set, so the tables start fresh with the current schema.
+    const reset = () => {
+      sql.exec("DROP TABLE IF EXISTS bank");
+      sql.exec("DROP TABLE IF EXISTS contexts");
+      sql.exec("CREATE TABLE contexts (id TEXT PRIMARY KEY, kind TEXT NOT NULL CHECK (kind IN ('passage', 'chart')), mime TEXT NOT NULL, image BLOB NOT NULL)");
+      sql.exec("CREATE TABLE bank (i INTEGER PRIMARY KEY, id TEXT NOT NULL, section TEXT NOT NULL, answer INTEGER NOT NULL CHECK (answer BETWEEN 0 AND 3), mime TEXT NOT NULL, image BLOB NOT NULL, context TEXT REFERENCES contexts (id))");
+    };
     if (remove) {
-      sql.exec("DELETE FROM bank");
+      this.ctx.storage.transactionSync(reset);
       s.bank = null;
     } else {
       const list = body.questions;
       const title = typeof body.title === "string" ? body.title.trim().slice(0, 80) : "";
       if (!Array.isArray(list) || !list.length || list.length > IMPORT_MAX_QUESTIONS) return Response.json({ error: `send 1 to ${IMPORT_MAX_QUESTIONS} questions` }, { status: 400 });
+      const image = (x) => {
+        const bytes = typeof x?.image === "string" ? Uint8Array.fromBase64(x.image) : null;
+        return bytes && bytes.length > 0 && bytes.length <= IMAGE_MAX_BYTES && IMAGE_TYPES.includes(x.mime) ? bytes : null;
+      };
+      const contextList = body.contexts ?? [];
+      if (!Array.isArray(contextList)) return Response.json({ error: "contexts must be a list" }, { status: 400 });
+      const contexts = new Map();
+      for (const [i, c] of contextList.entries()) {
+        const bytes = image(c);
+        if (typeof c?.id !== "string" || c.id.length > 60 || !CONTEXT_KINDS.includes(c.kind) || !bytes || contexts.has(c.id)) {
+          return Response.json({ error: `context ${i + 1} is not valid` }, { status: 400 });
+        }
+        contexts.set(c.id, [c.id, c.kind, c.mime, bytes]);
+      }
       const rows = [];
       for (const [i, q] of list.entries()) {
-        const bytes = typeof q?.image === "string" ? Uint8Array.fromBase64(q.image) : null;
-        const ok = typeof q.id === "string" && q.id.length <= 40 && SECTIONS.includes(q.section) &&
-          Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3 && IMAGE_TYPES.includes(q.mime) &&
-          bytes && bytes.length > 0 && bytes.length <= IMAGE_MAX_BYTES;
+        const bytes = image(q);
+        const context = q?.context ?? null;
+        const ok = typeof q?.id === "string" && q.id.length <= 40 && SECTIONS.includes(q.section) &&
+          Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3 && bytes &&
+          (context === null || contexts.has(context));
         if (!ok) return Response.json({ error: `question ${i + 1} is not valid` }, { status: 400 });
-        rows.push([i, q.id, q.section, q.answer, q.mime, bytes]);
+        rows.push([i, q.id, q.section, q.answer, q.mime, bytes, context]);
       }
       this.ctx.storage.transactionSync(() => {
-        sql.exec("DELETE FROM bank");
-        for (const row of rows) sql.exec("INSERT INTO bank (i, id, section, answer, mime, image) VALUES (?, ?, ?, ?, ?, ?)", ...row);
+        reset();
+        for (const row of contexts.values()) sql.exec("INSERT INTO contexts (id, kind, mime, image) VALUES (?, ?, ?, ?)", ...row);
+        for (const row of rows) sql.exec("INSERT INTO bank (i, id, section, answer, mime, image, context) VALUES (?, ?, ?, ?, ?, ?, ?)", ...row);
       });
       const counts = {};
       for (const q of list) counts[q.section] = (counts[q.section] ?? 0) + 1;
-      s.bank = { title: title || "שאלון מיובא", count: rows.length, counts };
+      const kinds = [...contexts.values()].map(([, kind]) => kind);
+      s.bank = {
+        title: title || "שאלון מיובא", count: rows.length, counts,
+        passages: kinds.filter((k) => k === "passage").length,
+        passageQuestions: rows.filter((r) => r[6] !== null && contexts.get(r[6])[1] === "passage").length,
+        charts: kinds.filter((k) => k === "chart").length,
+      };
     }
-    s.order = shuffled(this.bankSize());
     s.cursor = 0;
+    s.order = [];
     s.round = null;
     if (s.phase === "over") { s.phase = "lobby"; s.winner = null; s.scores = { a: 0, b: 0 }; }
     await this.commit();
-    return Response.json({ ok: true, count: this.bankSize() });
+    return Response.json({ ok: true, count: s.bank?.count ?? QUESTIONS.length });
   }
 
   /** The image of the open question only, so nobody can read a question before it opens. */
@@ -397,6 +478,23 @@ export class Room extends DurableObject {
     if (!s.bank || !round || !shown || round.number !== wanted) return Response.json({ error: "no image for this round" }, { status: 404 });
     const row = this.ctx.storage.sql.exec("SELECT mime, image FROM bank WHERE i = ?", round.q).one();
     return new Response(row.image, { headers: { "Content-Type": row.mime, "Cache-Control": "private, max-age=600" } });
+  }
+
+  /**
+   * The context of the open round only. A passage opens with its reading phase, a chart with its question.
+   * The id in the URL lets the browser cache a passage across its questions.
+   */
+  contextImage(request) {
+    const s = /** @type {State} */ (this.s);
+    const round = s.round;
+    const id = new URL(request.url).searchParams.get("id");
+    const q = round ? this.question(round.q) : null;
+    const open = q?.contextKind === "passage"
+      ? ["reading", "countdown", "question", "reveal", "over"].includes(s.phase)
+      : ["question", "reveal", "over"].includes(s.phase);
+    if (!s.bank || !q || !id || q.context !== id || !open) return Response.json({ error: "no context for this round" }, { status: 404 });
+    const row = this.ctx.storage.sql.exec("SELECT mime, image FROM contexts WHERE id = ?", id).one();
+    return new Response(row.image, { headers: { "Content-Type": row.mime, "Cache-Control": "private, max-age=3600" } });
   }
 
   openSockets() {
@@ -413,7 +511,7 @@ export class Room extends DurableObject {
     await this.ctx.storage.put("s", s);
 
     const wakes = [];
-    if (s.phase === "countdown" || s.phase === "reveal") wakes.push(s.deadline);
+    if (s.phase === "reading" || s.phase === "countdown" || s.phase === "reveal") wakes.push(s.deadline);
     if (s.phase === "question") wakes.push(s.round?.graceEndsAt);
     if (s.phase === "question" && !s.round?.answers.b) wakes.push(s.bot?.plan?.at);
     if (s.idleSince !== null) wakes.push(s.idleSince + IDLE_MS);
@@ -434,6 +532,7 @@ export class Room extends DurableObject {
     const shown = s.phase === "question" || s.phase === "reveal" || s.phase === "over";
     const revealed = s.phase === "reveal" || s.phase === "over";
     const q = round ? this.question(round.q) : null;
+    const contextOpen = q?.contextKind === "passage" ? s.phase !== "lobby" : shown;
     return {
       t: "state", now: Date.now(), you: seat, code: s.code, settings: s.settings, phase: s.phase,
       scores: s.scores, deadline: s.deadline, winner: s.winner, taunts: TAUNTS, limits: LIMITS,
@@ -443,6 +542,8 @@ export class Room extends DurableObject {
       round: round && q && {
         number: round.number, openedAt: round.openedAt, first: round.first, graceEndsAt: round.graceEndsAt,
         question: shown ? { id: q.id, section: q.section, kind: q.kind, dir: q.dir, prompt: q.prompt, choices: q.choices, image: q.image } : null,
+        context: q.context && contextOpen ? { id: q.context, kind: q.contextKind } : null,
+        ready: round.ready,
         answered: { a: !!round.answers.a, b: !!round.answers.b },
         mine: seat ? round.answers[seat]?.choice ?? null : null,
         choices: revealed ? { a: round.answers.a?.choice ?? null, b: round.answers.b?.choice ?? null } : null,

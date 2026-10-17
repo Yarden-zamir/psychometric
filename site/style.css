@@ -137,6 +137,10 @@ main { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; display: grid;
 .qimage { display: block; width: 100%; height: auto; }
 .qimage-wrap.zoomed .qimage { width: 220%; max-width: none; }
 .zoom-hint { font-size: 0.75rem; }
+details.passage { border: var(--bw) solid var(--border); border-radius: var(--radius); background: var(--raised); }
+details.passage > summary { cursor: pointer; padding: 6px 12px; font-weight: 800; }
+details.passage > .qimage-wrap { border-width: var(--bw) 0 0; border-radius: 0; max-height: 60vh; overflow-y: auto; }
+.reading-timer .fill { background: var(--info); }
 @media (min-width: 700px) { .zoom-hint { display: none; } }
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .choices.numbers { grid-template-columns: repeat(4, 1fr); }
