@@ -1,0 +1,1502 @@
+[
+  {
+    "id": "v-001",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: מנצח : תזמורת",
+    "choices": [
+      "מאמן : קבוצה",
+      "נגן : כינור",
+      "קהל : הופעה",
+      "שחקן : מגרש"
+    ],
+    "answer": 0,
+    "explain": "המנצח מוביל ומכוון את התזמורת, כמו שהמאמן מוביל ומכוון את הקבוצה."
+  },
+  {
+    "id": "v-002",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: צמא : שתייה",
+    "choices": [
+      "רעב : שובע",
+      "עייפות : מנוחה",
+      "מחלה : רופא",
+      "קור : חורף"
+    ],
+    "answer": 1,
+    "explain": "שתייה מסלקת את הצמא, ומנוחה מסלקת את העייפות. שובע הוא תוצאה, לא פעולה."
+  },
+  {
+    "id": "v-003",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: גרגר : חול",
+    "choices": [
+      "עלה : עץ",
+      "פתית : שלג",
+      "אבן : קיר",
+      "דף : ספר"
+    ],
+    "answer": 1,
+    "explain": "גרגר הוא יחידה קטנה אחת של חול, ופתית הוא יחידה קטנה אחת של שלג."
+  },
+  {
+    "id": "v-004",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: מעורפל : בהירות",
+    "choices": [
+      "כבד : משקל",
+      "זקן : שנים",
+      "עייף : מאמץ",
+      "רדוד : עומק"
+    ],
+    "answer": 3,
+    "explain": "דבר מעורפל חסר בהירות, ודבר רדוד חסר עומק."
+  },
+  {
+    "id": "v-005",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: לגמגם : לדבר",
+    "choices": [
+      "לצלוע : ללכת",
+      "לרוץ : ללכת",
+      "ללחוש : לדבר",
+      "לקרוא : לכתוב"
+    ],
+    "answer": 0,
+    "explain": "לגמגם הוא לדבר באופן פגום ומקוטע, ולצלוע הוא ללכת באופן פגום."
+  },
+  {
+    "id": "v-006",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: שעון : זמן",
+    "choices": [
+      "סרגל : קו",
+      "משקפיים : ראייה",
+      "מדחום : טמפרטורה",
+      "מנעול : דלת"
+    ],
+    "answer": 2,
+    "explain": "שעון הוא מכשיר שמודד זמן, ומדחום הוא מכשיר שמודד טמפרטורה."
+  },
+  {
+    "id": "v-007",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: חנפן : מחמאות",
+    "choices": [
+      "קמצן : כסף",
+      "שקרן : אמת",
+      "פטפטן : מילים",
+      "אורח : מתנות"
+    ],
+    "answer": 2,
+    "explain": "החנפן מרבה במחמאות יותר מן הראוי, והפטפטן מרבה במילים יותר מן הראוי."
+  },
+  {
+    "id": "v-008",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: לחזות : עתיד",
+    "choices": [
+      "לזכור : שכחה",
+      "להבטיח : קיום",
+      "לחלום : לילה",
+      "לשחזר : עבר"
+    ],
+    "answer": 3,
+    "explain": "חוזים מה יקרה בעתיד, ומשחזרים מה קרה בעבר."
+  },
+  {
+    "id": "v-009",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: בצורת : גשם",
+    "choices": [
+      "רעב : מזון",
+      "שיטפון : מים",
+      "שלכת : עלים",
+      "סערה : רוח"
+    ],
+    "answer": 0,
+    "explain": "בצורת היא מחסור ממושך בגשם, ורעב הוא מחסור ממושך במזון. שיטפון הוא עודף."
+  },
+  {
+    "id": "v-010",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: טיוטה : חיבור",
+    "choices": [
+      "פרק : ספר",
+      "סקיצה : ציור",
+      "כותרת : מאמר",
+      "מסגרת : תמונה"
+    ],
+    "answer": 1,
+    "explain": "טיוטה היא גרסה ראשונית של חיבור, וסקיצה היא גרסה ראשונית של ציור."
+  },
+  {
+    "id": "v-011",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: נמל : אוניות",
+    "choices": [
+      "שדה תעופה : מטוסים",
+      "מוסך : מכוניות",
+      "כביש : מכוניות",
+      "מספנה : אוניות"
+    ],
+    "answer": 0,
+    "explain": "בנמל אוניות עוגנות, נכנסות ויוצאות, ובשדה תעופה מטוסים נוחתים וממריאים. במספנה בונים אוניות."
+  },
+  {
+    "id": "v-012",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: פסק דין : שופט",
+    "choices": [
+      "תביעה : נאשם",
+      "אבחנה : רופא",
+      "עונש : אסיר",
+      "שיעור : תלמיד"
+    ],
+    "answer": 1,
+    "explain": "השופט קובע את פסק הדין, והרופא קובע את האבחנה. שאר הזוגות מציינים את מי שמקבל דבר."
+  },
+  {
+    "id": "v-013",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: ערפל : ראות",
+    "choices": [
+      "אור : ראייה",
+      "רעש : שמיעה",
+      "קור : חורף",
+      "תרופה : מחלה"
+    ],
+    "answer": 1,
+    "explain": "ערפל פוגע ביכולת לראות, ורעש פוגע ביכולת לשמוע. אור מאפשר ראייה."
+  },
+  {
+    "id": "v-014",
+    "section": "verbal",
+    "kind": "analogy",
+    "dir": "rtl",
+    "prompt": "מצאו את הזוג שהיחס בין מילותיו דומה ביותר ליחס שבין המילים: להתנצל : עלבון",
+    "choices": [
+      "לסלוח : חטא",
+      "להודות : טובה",
+      "לפצות : נזק",
+      "להעליב : התנצלות"
+    ],
+    "answer": 2,
+    "explain": "מי שהעליב מתנצל על העלבון, ומי שגרם נזק מפצה עליו. סולח ומודה הם הצד שנפגע או שנהנה."
+  },
+  {
+    "id": "v-015",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "למרות שהתחזית הבטיחה יום שמשי, השמיים היו ______ כל הבוקר.",
+    "choices": [
+      "בהירים",
+      "מעוננים",
+      "כחולים",
+      "נקיים"
+    ],
+    "answer": 1,
+    "explain": "\"למרות\" מציין ניגוד לתחזית של יום שמשי, ולכן השמיים היו מעוננים."
+  },
+  {
+    "id": "v-016",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "החוקרת לא הסתפקה בתוצאות הראשונות, ולכן ______ הניסוי פעמים רבות לפני שפרסמה את מסקנותיה.",
+    "choices": [
+      "ויתרה על",
+      "חזרה על",
+      "הודיעה על",
+      "התלוננה על"
+    ],
+    "answer": 1,
+    "explain": "מי שאינה מסתפקת בתוצאות ראשונות חוזרת על הניסוי כדי לבדוק אותן."
+  },
+  {
+    "id": "v-017",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "הנאום היה ______ כל כך, שאפילו המאזינים ה______ ביותר התקשו להישאר ערים.",
+    "choices": [
+      "מרתק / עייפים",
+      "קצר / צעירים",
+      "משעמם / סבלניים",
+      "מצחיק / רציניים"
+    ],
+    "answer": 2,
+    "explain": "נאום משעמם גורם לנמנום, ו\"אפילו\" מתאים למאזינים שבדרך כלל מחזיקים מעמד: הסבלניים."
+  },
+  {
+    "id": "v-018",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "בניגוד לאחיו ה______, שנהג להוציא כל שקל שהרוויח, דני חסך בקפידה.",
+    "choices": [
+      "חסכן",
+      "שקדן",
+      "עני",
+      "פזרן"
+    ],
+    "answer": 3,
+    "explain": "מי שמוציא כל שקל הוא פזרן, וזה הניגוד לדני החוסך."
+  },
+  {
+    "id": "v-019",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "ההחלטה התקבלה ______, כלומר כל חברי הוועדה הצביעו בעדה.",
+    "choices": [
+      "פה אחד",
+      "ברוב קולות",
+      "במחלוקת",
+      "בדיעבד"
+    ],
+    "answer": 0,
+    "explain": "\"פה אחד\" פירושו שכולם הסכימו. \"ברוב קולות\" פירושו שרק רובם הסכימו."
+  },
+  {
+    "id": "v-020",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "דבריו של השר היו כה ______, שכל צד בוויכוח פירש אותם כתמיכה בעמדתו.",
+    "choices": [
+      "חד-משמעיים",
+      "עמומים",
+      "בוטים",
+      "קצרים"
+    ],
+    "answer": 1,
+    "explain": "רק דברים עמומים מאפשרים לכל צד לפרש אותם לטובתו."
+  },
+  {
+    "id": "v-021",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "אף שהממצאים ______ את ההשערה המקורית, החוקרים לא מיהרו לזנוח אותה.",
+    "choices": [
+      "סתרו",
+      "אישרו",
+      "חיזקו",
+      "הדגימו"
+    ],
+    "answer": 0,
+    "explain": "\"אף ש\" מציין ניגוד: הממצאים סתרו את ההשערה, ובכל זאת החוקרים לא זנחו אותה."
+  },
+  {
+    "id": "v-022",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "הסופר נודע בסגנונו ה______: משפטיו קצרים, וכל מילה מיותרת נמחקת מהם.",
+    "choices": [
+      "מליצי",
+      "מסורבל",
+      "ארכני",
+      "תמציתי"
+    ],
+    "answer": 3,
+    "explain": "משפטים קצרים בלי מילים מיותרות הם סימן לסגנון תמציתי."
+  },
+  {
+    "id": "v-023",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "התוכנית נראתה ______ על הנייר, אך בפועל התגלו בה ליקויים רבים.",
+    "choices": [
+      "מסובכת",
+      "פגומה",
+      "מיותרת",
+      "מושלמת"
+    ],
+    "answer": 3,
+    "explain": "\"אך\" מציין ניגוד לליקויים שהתגלו, ולכן על הנייר התוכנית נראתה מושלמת."
+  },
+  {
+    "id": "v-024",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "הוא לא נהג ______ מביקורת. להפך, הוא ביקש מעמיתיו להעיר לו על כל טעות.",
+    "choices": [
+      "ליהנות",
+      "ללמוד",
+      "להתחמק",
+      "להתפעל"
+    ],
+    "answer": 2,
+    "explain": "\"להפך\" מראה שהוא חיפש ביקורת, כלומר הוא לא התחמק ממנה."
+  },
+  {
+    "id": "v-025",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "ההסבר שנתן היה ______: הוא נשמע הגיוני במבט ראשון, אך התגלה כחסר בסיס בבדיקה מעמיקה.",
+    "choices": [
+      "מסובך מדי",
+      "מבוסס היטב",
+      "משכנע לכאורה",
+      "בלתי הגיוני בעליל"
+    ],
+    "answer": 2,
+    "explain": "\"לכאורה\" פירושו שהדבר נראה כך אך אינו כך באמת, וזה בדיוק המצב שמתואר."
+  },
+  {
+    "id": "v-026",
+    "section": "verbal",
+    "kind": "sentence-completion",
+    "dir": "rtl",
+    "prompt": "דווקא משום שהניצחון נראה ______, השחקנים ______ ולא התאמנו כראוי, והפסידו.",
+    "choices": [
+      "רחוק / התאמצו",
+      "מובטח / התאמצו",
+      "מובטח / התרשלו",
+      "קשה / התמידו"
+    ],
+    "answer": 2,
+    "explain": "ביטחון בניצחון גרם לשחקנים להתרשל, וזה מסביר שלא התאמנו כראוי והפסידו."
+  },
+  {
+    "id": "v-027",
+    "section": "verbal",
+    "kind": "logic",
+    "dir": "rtl",
+    "prompt": "כל הציפורים במכלאה הן תוכים. חלק מהתוכים במכלאה ירוקים. איזו מהטענות הבאות נכונה בהכרח?",
+    "choices": [
+      "כל הציפורים הירוקות בעולם הן תוכים",
+      "כל התוכים במכלאה ירוקים",
+      "יש במכלאה לפחות ציפור ירוקה אחת",
+      "אין במכלאה ציפורים שאינן ירוקות"
+    ],
+    "answer": 2,
+    "explain": "חלק מהתוכים במכלאה ירוקים, ותוכים הם ציפורים, ולכן יש במכלאה לפחות ציפור ירוקה אחת."
+  },
+  {
+    "id": "v-028",
+    "section": "verbal",
+    "kind": "logic",
+    "dir": "rtl",
+    "prompt": "אם יורד גשם, המשחק נדחה. היום המשחק לא נדחה. מה ניתן להסיק?",
+    "choices": [
+      "היום לא ירד גשם",
+      "היום ירד גשם",
+      "המשחק נדחה מסיבה אחרת",
+      "לא ניתן להסיק דבר על מזג האוויר"
+    ],
+    "answer": 0,
+    "explain": "אילו ירד גשם, המשחק היה נדחה. המשחק לא נדחה, ולכן לא ירד גשם."
+  },
+  {
+    "id": "v-029",
+    "section": "verbal",
+    "kind": "logic",
+    "dir": "rtl",
+    "prompt": "אם יורד גשם, המשחק נדחה. היום המשחק נדחה. מה ניתן להסיק בוודאות?",
+    "choices": [
+      "לא ניתן לדעת אם היום ירד גשם",
+      "היום ירד גשם",
+      "היום לא ירד גשם",
+      "גם מחר המשחק יידחה"
+    ],
+    "answer": 0,
+    "explain": "המשחק יכול להידחות גם מסיבה אחרת, ולכן אי אפשר לדעת אם ירד גשם."
+  },
+  {
+    "id": "v-030",
+    "section": "verbal",
+    "kind": "logic",
+    "dir": "rtl",
+    "prompt": "דנה גבוהה מרון. רון גבוה מעומר. מיכל נמוכה מדנה. איזו מהטענות הבאות נכונה בהכרח?",
+    "choices": [
+      "מיכל גבוהה מרון",
+      "עומר הוא הנמוך מכולם",
+      "מיכל נמוכה מעומר",
+      "דנה גבוהה מעומר"
+    ],
+    "answer": 3,
+    "explain": "דנה גבוהה מרון, ורון גבוה מעומר, ולכן דנה גבוהה מעומר. מקומה של מיכל אינו ידוע."
+  },
+  {
+    "id": "v-031",
+    "section": "verbal",
+    "kind": "logic",
+    "dir": "rtl",
+    "prompt": "כל מי שעבר את הקורס הגיש את העבודה. יוסי לא עבר את הקורס. מה נכון בהכרח?",
+    "choices": [
+      "יוסי לא הגיש את העבודה",
+      "יוסי הגיש את העבודה",
+      "כל מי שהגיש את העבודה עבר את הקורס",
+      "ייתכן שיוסי הגיש את העבודה"
+    ],
+    "answer": 3,
+    "explain": "הכלל אומר רק מה עשו מי שעברו. על מי שלא עבר אין מידע, ולכן שתי האפשרויות פתוחות."
+  },
+  {
+    "id": "v-032",
+    "section": "verbal",
+    "kind": "logic",
+    "dir": "rtl",
+    "prompt": "הטענה \"כל העובדים במשרד מדברים אנגלית\" אינה נכונה. מה נובע מכך בהכרח?",
+    "choices": [
+      "יש במשרד לפחות עובד אחד שאינו מדבר אנגלית",
+      "אף עובד במשרד אינו מדבר אנגלית",
+      "רוב העובדים במשרד אינם מדברים אנגלית",
+      "יש במשרד לפחות עובד אחד שמדבר אנגלית"
+    ],
+    "answer": 0,
+    "explain": "השלילה של \"כל\" היא \"לא כל\", כלומר יש לפחות עובד אחד שאינו מדבר אנגלית."
+  },
+  {
+    "id": "v-033",
+    "section": "verbal",
+    "kind": "logic",
+    "dir": "rtl",
+    "prompt": "אורי: \"לא כל מי שמתאמן בחדר כושר בריא.\" נועה: \"אתה טועה. כל מי שאני מכירה ומתאמן בחדר כושר בריא.\" מהו הפגם בטיעון של נועה?",
+    "choices": [
+      "היא מניחה שכל האנשים הבריאים מתאמנים בחדר כושר",
+      "היא מסיקה מסקנה כללית מקבוצה מוגבלת של אנשים שהיא מכירה",
+      "היא מסכימה בעצם עם אורי",
+      "היא מבלבלת בין סיבה לתוצאה"
+    ],
+    "answer": 1,
+    "explain": "מכריה של נועה הם רק חלק מהמתאמנים, ולכן הם אינם מוכיחים שכל המתאמנים בריאים."
+  },
+  {
+    "id": "v-034",
+    "section": "verbal",
+    "kind": "logic",
+    "dir": "rtl",
+    "prompt": "ארבעה רצים השתתפו במרוץ: א, ב, ג ו-ד. ב סיים לפני ג. א סיים אחרי ד. ג סיים לפני ד. מי סיים ראשון?",
+    "choices": [
+      "א",
+      "ג",
+      "ב",
+      "ד"
+    ],
+    "answer": 2,
+    "explain": "הסדר הוא: ב, ג, ד, א. לכן ב סיים ראשון."
+  },
+  {
+    "id": "v-035",
+    "section": "verbal",
+    "kind": "vocabulary",
+    "dir": "rtl",
+    "prompt": "מה פירוש הביטוי \"לשים מקל בגלגלים\"?",
+    "choices": [
+      "לעזור במצב קשה",
+      "למהר מאוד",
+      "להפריע להתקדמות של דבר",
+      "לוותר על תוכנית"
+    ],
+    "answer": 2,
+    "explain": "מקל בגלגלים עוצר את הסיבוב שלהם, ולכן הביטוי פירושו להפריע להתקדמות."
+  },
+  {
+    "id": "v-036",
+    "section": "verbal",
+    "kind": "vocabulary",
+    "dir": "rtl",
+    "prompt": "מה פירוש המילה \"יומרני\"?",
+    "choices": [
+      "צנוע ומסתפק במועט",
+      "בקיא ומלומד",
+      "חסר החלטיות",
+      "מתיימר ליותר ממה שיש בו"
+    ],
+    "answer": 3,
+    "explain": "יומרני הוא מי שמציג שאיפות או יכולות גדולות מאלה שיש לו באמת."
+  },
+  {
+    "id": "v-037",
+    "section": "verbal",
+    "kind": "vocabulary",
+    "dir": "rtl",
+    "prompt": "מה פירוש המילה \"בדיעבד\"?",
+    "choices": [
+      "מראש",
+      "במקרה",
+      "בסתר",
+      "לאחר מעשה"
+    ],
+    "answer": 3,
+    "explain": "\"בדיעבד\" פירושו במבט לאחור, אחרי שהדבר כבר קרה."
+  },
+  {
+    "id": "v-038",
+    "section": "verbal",
+    "kind": "vocabulary",
+    "dir": "rtl",
+    "prompt": "מה פירוש הביטוי \"הניח את דעתו\"?",
+    "choices": [
+      "הרגיע אותו וסיפק אותו",
+      "התעלם מדעתו",
+      "שכנע אותו לשנות את דעתו",
+      "שכח את עצתו"
+    ],
+    "answer": 0,
+    "explain": "\"הניח את דעתו\" פירושו שדבר מה סיפק אותו והרגיע אותו."
+  },
+  {
+    "id": "v-039",
+    "section": "verbal",
+    "kind": "vocabulary",
+    "dir": "rtl",
+    "prompt": "מה פירוש הביטוי \"אבן נגף\"?",
+    "choices": [
+      "יסוד מוצק",
+      "דבר יקר ערך",
+      "סימן דרך",
+      "מכשול"
+    ],
+    "answer": 3,
+    "explain": "אבן נגף היא אבן שנתקלים בה, ובהשאלה: מכשול."
+  },
+  {
+    "id": "v-040",
+    "section": "verbal",
+    "kind": "vocabulary",
+    "dir": "rtl",
+    "prompt": "מה פירוש הביטוי \"עמד בפרץ\"?",
+    "choices": [
+      "נכנע ללחץ",
+      "נאבק כדי למנוע נזק בשעת סכנה",
+      "חיכה בסבלנות",
+      "פרץ בבכי"
+    ],
+    "answer": 1,
+    "explain": "מי שעומד בפרץ חוסם את הפרצה בחומה, ובהשאלה: נאבק כדי להגן בשעת סכנה."
+  },
+  {
+    "id": "q-001",
+    "section": "quantitative",
+    "kind": "algebra",
+    "dir": "rtl",
+    "prompt": "נתון: 3x + 7 = 22. מהו x?",
+    "choices": [
+      "3",
+      "7",
+      "29/3",
+      "5"
+    ],
+    "answer": 3,
+    "explain": "מחסירים 7 ומקבלים 3x = 15, ולכן x = 5."
+  },
+  {
+    "id": "q-002",
+    "section": "quantitative",
+    "kind": "algebra",
+    "dir": "rtl",
+    "prompt": "נתון: x/4 = y/6. נתון גם: x + y = 20. מהו y?",
+    "choices": [
+      "8",
+      "10",
+      "14",
+      "12"
+    ],
+    "answer": 3,
+    "explain": "x = 4k ו- y = 6k. לכן 10k = 20, k = 2, ו- y = 12."
+  },
+  {
+    "id": "q-003",
+    "section": "quantitative",
+    "kind": "algebra",
+    "dir": "rtl",
+    "prompt": "נתון: x^2 = 49, ו- x < 0. מהו x^3 + x?",
+    "choices": [
+      "-350",
+      "-336",
+      "336",
+      "350"
+    ],
+    "answer": 0,
+    "explain": "x = -7. לכן x^3 + x = -343 - 7 = -350."
+  },
+  {
+    "id": "q-004",
+    "section": "quantitative",
+    "kind": "algebra",
+    "dir": "rtl",
+    "prompt": "נתון: (a + b)^2 = 64. נתון גם: ab = 12. מהו a^2 + b^2?",
+    "choices": [
+      "40",
+      "52",
+      "64",
+      "88"
+    ],
+    "answer": 0,
+    "explain": "a^2 + b^2 = (a + b)^2 - 2ab = 64 - 24 = 40."
+  },
+  {
+    "id": "q-005",
+    "section": "quantitative",
+    "kind": "algebra",
+    "dir": "rtl",
+    "prompt": "נתון: a = 2b. נתון גם: b = 3c, ו- c ≠ 0. מהו a/c?",
+    "choices": [
+      "2/3",
+      "3/2",
+      "6",
+      "1/6"
+    ],
+    "answer": 2,
+    "explain": "a = 2b = 2 · 3c = 6c, ולכן a/c = 6."
+  },
+  {
+    "id": "q-006",
+    "section": "quantitative",
+    "kind": "algebra",
+    "dir": "rtl",
+    "prompt": "נתון: 1/x + 1/y = 1/2. נתון גם: x + y = 18. מהו xy?",
+    "choices": [
+      "9",
+      "18",
+      "36",
+      "72"
+    ],
+    "answer": 2,
+    "explain": "1/x + 1/y = (x + y)/xy. לכן 18/xy = 1/2, ו- xy = 36."
+  },
+  {
+    "id": "q-007",
+    "section": "quantitative",
+    "kind": "word-problem",
+    "dir": "rtl",
+    "prompt": "מחיר של מוצר עלה ב-20%. אחר כך המחיר החדש ירד ב-20%. מה השינוי במחיר לעומת המחיר המקורי?",
+    "choices": [
+      "לא השתנה",
+      "ירד ב-4%",
+      "עלה ב-4%",
+      "ירד ב-2%"
+    ],
+    "answer": 1,
+    "explain": "1.2 · 0.8 = 0.96, כלומר המחיר הסופי נמוך ב-4% מהמחיר המקורי."
+  },
+  {
+    "id": "q-008",
+    "section": "quantitative",
+    "kind": "word-problem",
+    "dir": "rtl",
+    "prompt": "אחרי הנחה של 25%, מחירו של מעיל הוא 150 שקלים. מה היה מחירו לפני ההנחה, בשקלים?",
+    "choices": [
+      "175",
+      "187.5",
+      "200",
+      "225"
+    ],
+    "answer": 2,
+    "explain": "150 הם 75% מהמחיר המקורי. 150 / 0.75 = 200."
+  },
+  {
+    "id": "q-009",
+    "section": "quantitative",
+    "kind": "word-problem",
+    "dir": "rtl",
+    "prompt": "צינור א ממלא בריכה ב-6 שעות. צינור ב ממלא אותה בריכה ב-3 שעות. בכמה שעות ימלאו שני הצינורות יחד את הבריכה?",
+    "choices": [
+      "1.5",
+      "4.5",
+      "2",
+      "9"
+    ],
+    "answer": 2,
+    "explain": "בשעה אחת הם ממלאים 1/6 + 1/3 = 1/2 בריכה, ולכן הם צריכים 2 שעות."
+  },
+  {
+    "id": "q-010",
+    "section": "quantitative",
+    "kind": "word-problem",
+    "dir": "rtl",
+    "prompt": "היום גיל האב גדול פי 3 מגיל בנו. בעוד 12 שנה גיל האב יהיה גדול פי 2 מגיל בנו. בן כמה האב היום?",
+    "choices": [
+      "24",
+      "36",
+      "42",
+      "48"
+    ],
+    "answer": 1,
+    "explain": "3s + 12 = 2(s + 12), ולכן s = 12. גיל האב הוא 36."
+  },
+  {
+    "id": "q-011",
+    "section": "quantitative",
+    "kind": "word-problem",
+    "dir": "rtl",
+    "prompt": "הממוצע של 5 מספרים הוא 12. הוסיפו מספר שישי, והממוצע עלה ל-13. מהו המספר השישי?",
+    "choices": [
+      "18",
+      "13",
+      "14",
+      "25"
+    ],
+    "answer": 0,
+    "explain": "סכום ששת המספרים הוא 78, וסכום חמשת המספרים הוא 60. ההפרש הוא 18."
+  },
+  {
+    "id": "q-012",
+    "section": "quantitative",
+    "kind": "word-problem",
+    "dir": "rtl",
+    "prompt": "נהג נסע מעיר א לעיר ב במהירות 60 קמ\"ש, וחזר באותה דרך במהירות 40 קמ\"ש. מה המהירות הממוצעת שלו בכל הנסיעה, בקמ\"ש?",
+    "choices": [
+      "45",
+      "48",
+      "50",
+      "52"
+    ],
+    "answer": 1,
+    "explain": "אם הדרך 120 ק\"מ: הלוך 2 שעות, חזור 3 שעות. 240 ק\"מ ב-5 שעות הם 48 קמ\"ש."
+  },
+  {
+    "id": "q-013",
+    "section": "quantitative",
+    "kind": "word-problem",
+    "dir": "rtl",
+    "prompt": "ב-40% מהבתים ברחוב יש מרפסת. ב-25% מהבתים שיש בהם מרפסת יש גם חצר. באיזה אחוז מכלל הבתים ברחוב יש גם מרפסת וגם חצר?",
+    "choices": [
+      "15%",
+      "25%",
+      "65%",
+      "10%"
+    ],
+    "answer": 3,
+    "explain": "25% מתוך 40% הם 0.25 · 40% = 10%."
+  },
+  {
+    "id": "q-014",
+    "section": "quantitative",
+    "kind": "word-problem",
+    "dir": "rtl",
+    "prompt": "בכלי יש 20 ליטר תמיסה, ו-30% ממנה מלח. כמה ליטר מים צריך להוסיף כדי שהמלח יהיה 20% מהתמיסה?",
+    "choices": [
+      "10",
+      "5",
+      "12",
+      "15"
+    ],
+    "answer": 0,
+    "explain": "יש 6 ליטר מלח. כדי שזה יהיה 20%, התמיסה צריכה להיות 30 ליטר. מוסיפים 10."
+  },
+  {
+    "id": "q-015",
+    "section": "quantitative",
+    "kind": "numbers",
+    "dir": "rtl",
+    "prompt": "מהי השארית בחלוקה של 2^10 ב-7?",
+    "choices": [
+      "1",
+      "4",
+      "2",
+      "6"
+    ],
+    "answer": 2,
+    "explain": "2^3 = 8 נותן שארית 1. לכן 2^10 = 2^9 · 2 נותן שארית 2."
+  },
+  {
+    "id": "q-016",
+    "section": "quantitative",
+    "kind": "numbers",
+    "dir": "rtl",
+    "prompt": "n הוא מספר שלם אי-זוגי. איזה מהביטויים הבאים הוא בהכרח מספר זוגי?",
+    "choices": [
+      "n^2 + 1",
+      "n^2 + n + 1",
+      "2n + 1",
+      "n^3"
+    ],
+    "answer": 0,
+    "explain": "n^2 אי-זוגי, ולכן n^2 + 1 זוגי. שאר הביטויים אי-זוגיים."
+  },
+  {
+    "id": "q-017",
+    "section": "quantitative",
+    "kind": "numbers",
+    "dir": "rtl",
+    "prompt": "כמה מספרים ראשוניים יש בין 20 ל-40?",
+    "choices": [
+      "3",
+      "5",
+      "6",
+      "4"
+    ],
+    "answer": 3,
+    "explain": "המספרים הראשוניים הם 23, 29, 31 ו-37."
+  },
+  {
+    "id": "q-018",
+    "section": "quantitative",
+    "kind": "numbers",
+    "dir": "rtl",
+    "prompt": "x ו- y הם מספרים שלמים חיוביים, ו- xy = 24. מהו הערך הקטן ביותר האפשרי של x + y?",
+    "choices": [
+      "11",
+      "14",
+      "10",
+      "25"
+    ],
+    "answer": 2,
+    "explain": "הסכום קטן ככל ששני הגורמים קרובים זה לזה: 4 + 6 = 10."
+  },
+  {
+    "id": "q-019",
+    "section": "quantitative",
+    "kind": "numbers",
+    "dir": "rtl",
+    "prompt": "כמה מחלקים חיוביים יש למספר 72?",
+    "choices": [
+      "8",
+      "12",
+      "10",
+      "14"
+    ],
+    "answer": 1,
+    "explain": "72 = 2^3 · 3^2. מספר המחלקים הוא (3 + 1)(2 + 1) = 12."
+  },
+  {
+    "id": "q-020",
+    "section": "quantitative",
+    "kind": "geometry",
+    "dir": "rtl",
+    "prompt": "שטחו של ריבוע הוא 49 סמ\"ר. מהו היקפו, בס\"מ?",
+    "choices": [
+      "14",
+      "28",
+      "49",
+      "196"
+    ],
+    "answer": 1,
+    "explain": "אורך הצלע הוא 7 ס\"מ, ולכן ההיקף הוא 4 · 7 = 28 ס\"מ."
+  },
+  {
+    "id": "q-021",
+    "section": "quantitative",
+    "kind": "geometry",
+    "dir": "rtl",
+    "prompt": "במשולש ישר-זווית אורכי הניצבים הם 6 ס\"מ ו-8 ס\"מ. מהו אורך היתר, בס\"מ?",
+    "choices": [
+      "7",
+      "12",
+      "14",
+      "10"
+    ],
+    "answer": 3,
+    "explain": "לפי משפט פיתגורס: 6^2 + 8^2 = 100, ולכן היתר הוא 10."
+  },
+  {
+    "id": "q-022",
+    "section": "quantitative",
+    "kind": "geometry",
+    "dir": "rtl",
+    "prompt": "במשולש שווה-שוקיים זווית הראש היא 40 מעלות. מה גודלה של כל אחת מזוויות הבסיס, במעלות?",
+    "choices": [
+      "40",
+      "70",
+      "50",
+      "140"
+    ],
+    "answer": 1,
+    "explain": "סכום הזוויות במשולש הוא 180. (180 - 40) / 2 = 70."
+  },
+  {
+    "id": "q-023",
+    "section": "quantitative",
+    "kind": "geometry",
+    "dir": "rtl",
+    "prompt": "הרדיוס של מעגל גדל פי 3. פי כמה גדל שטח המעגל?",
+    "choices": [
+      "3",
+      "6",
+      "27",
+      "9"
+    ],
+    "answer": 3,
+    "explain": "השטח הוא πr^2, ולכן הוא גדל פי 3^2 = 9."
+  },
+  {
+    "id": "q-024",
+    "section": "quantitative",
+    "kind": "geometry",
+    "dir": "rtl",
+    "prompt": "כמה אלכסונים יש במצולע משוכלל בעל 8 צלעות?",
+    "choices": [
+      "16",
+      "24",
+      "20",
+      "28"
+    ],
+    "answer": 2,
+    "explain": "מכל קודקוד יוצאים 5 אלכסונים. 8 · 5 / 2 = 20, כי כל אלכסון נספר פעמיים."
+  },
+  {
+    "id": "q-025",
+    "section": "quantitative",
+    "kind": "probability",
+    "dir": "rtl",
+    "prompt": "מטילים שתי קוביות משחק רגילות. מה ההסתברות שסכום התוצאות יהיה 7?",
+    "choices": [
+      "1/6",
+      "1/12",
+      "1/9",
+      "7/36"
+    ],
+    "answer": 0,
+    "explain": "יש 6 צירופים מתוך 36 שסכומם 7, כלומר 1/6."
+  },
+  {
+    "id": "q-026",
+    "section": "quantitative",
+    "kind": "probability",
+    "dir": "rtl",
+    "prompt": "בכמה דרכים שונות אפשר להושיב 4 אנשים בשורה של 4 כיסאות?",
+    "choices": [
+      "4",
+      "12",
+      "16",
+      "24"
+    ],
+    "answer": 3,
+    "explain": "4 · 3 · 2 · 1 = 24."
+  },
+  {
+    "id": "q-027",
+    "section": "quantitative",
+    "kind": "probability",
+    "dir": "rtl",
+    "prompt": "בשקית יש 3 כדורים אדומים ו-5 כדורים כחולים. מוציאים 2 כדורים בלי להחזיר. מה ההסתברות ששני הכדורים אדומים?",
+    "choices": [
+      "3/28",
+      "9/64",
+      "3/8",
+      "1/4"
+    ],
+    "answer": 0,
+    "explain": "3/8 · 2/7 = 6/56 = 3/28."
+  },
+  {
+    "id": "q-028",
+    "section": "quantitative",
+    "kind": "operator",
+    "dir": "rtl",
+    "prompt": "הפעולה # מוגדרת כך: a#b = 2a - b. מהו 3#(4#5)?",
+    "choices": [
+      "3",
+      "1",
+      "5",
+      "9"
+    ],
+    "answer": 0,
+    "explain": "4#5 = 8 - 5 = 3. אחר כך 3#3 = 6 - 3 = 3."
+  },
+  {
+    "id": "q-029",
+    "section": "quantitative",
+    "kind": "operator",
+    "dir": "rtl",
+    "prompt": "הפעולה $ מוגדרת כך: a$b = a^2 - b^2. נתון: x$3 = 16, ו- x > 0. מהו x?",
+    "choices": [
+      "4",
+      "5",
+      "7",
+      "√7"
+    ],
+    "answer": 1,
+    "explain": "x^2 - 9 = 16, ולכן x^2 = 25 ו- x = 5."
+  },
+  {
+    "id": "q-030",
+    "section": "quantitative",
+    "kind": "operator",
+    "dir": "rtl",
+    "prompt": "לכל מספר שלם חיובי n, הסימון S(n) מייצג את סכום הספרות של n. מהו S(S(987))?",
+    "choices": [
+      "15",
+      "6",
+      "24",
+      "42"
+    ],
+    "answer": 1,
+    "explain": "S(987) = 9 + 8 + 7 = 24. S(24) = 2 + 4 = 6."
+  },
+  {
+    "id": "e-001",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "Although the restaurant was small, its menu was surprisingly ______.",
+    "choices": [
+      "limited",
+      "narrow",
+      "extensive",
+      "brief"
+    ],
+    "answer": 2,
+    "explain": "\"Although\" מציין ניגוד: המסעדה קטנה, אבל התפריט רחב (extensive)."
+  },
+  {
+    "id": "e-002",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "The scientist's theory was ______ by new evidence, so she had to revise it completely.",
+    "choices": [
+      "confirmed",
+      "supported",
+      "inspired",
+      "undermined"
+    ],
+    "answer": 3,
+    "explain": "היא נאלצה לשנות את התאוריה, ולכן הראיות החדשות ערערו אותה (undermined)."
+  },
+  {
+    "id": "e-003",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "Because the instructions were so ______, many of the participants did not understand what they were supposed to do.",
+    "choices": [
+      "precise",
+      "helpful",
+      "detailed",
+      "vague"
+    ],
+    "answer": 3,
+    "explain": "הוראות לא ברורות (vague) גורמות לכך שהמשתתפים לא מבינים מה לעשות."
+  },
+  {
+    "id": "e-004",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "The museum's new exhibit ______ thousands of visitors in its first week.",
+    "choices": [
+      "attracted",
+      "declined",
+      "ignored",
+      "prevented"
+    ],
+    "answer": 0,
+    "explain": "התערוכה משכה (attracted) אלפי מבקרים. שאר המילים אינן מתאימות למבנה המשפט או למשמעות."
+  },
+  {
+    "id": "e-005",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "Despite his ______ appearance, the old man was known for his generosity and warmth.",
+    "choices": [
+      "stern",
+      "friendly",
+      "kind",
+      "gentle"
+    ],
+    "answer": 0,
+    "explain": "\"Despite\" מציין ניגוד לחום ולנדיבות, ולכן המראה שלו קשוח וחמור (stern)."
+  },
+  {
+    "id": "e-006",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "Lisa was ______ to accept the job offer at first, but after visiting the office she agreed immediately.",
+    "choices": [
+      "eager",
+      "reluctant",
+      "determined",
+      "delighted"
+    ],
+    "answer": 1,
+    "explain": "\"but\" מציין שינוי: בהתחלה היא הססה (reluctant), ואחר כך הסכימה מיד."
+  },
+  {
+    "id": "e-007",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "Many ancient manuscripts have been ______ thanks to careful restoration work.",
+    "choices": [
+      "destroyed",
+      "preserved",
+      "forgotten",
+      "abandoned"
+    ],
+    "answer": 1,
+    "explain": "עבודת שחזור זהירה שומרת על כתבי יד (preserved), ולא הורסת אותם."
+  },
+  {
+    "id": "e-008",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "The committee's decision was ______: no one could change it once it had been announced.",
+    "choices": [
+      "irrevocable",
+      "tentative",
+      "flexible",
+      "temporary"
+    ],
+    "answer": 0,
+    "explain": "החלטה שאי אפשר לשנות היא irrevocable, כלומר בלתי הפיכה."
+  },
+  {
+    "id": "e-009",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "Unlike his ______ brother, who spoke to everyone at parties, Mark preferred to sit quietly in a corner.",
+    "choices": [
+      "shy",
+      "reserved",
+      "outgoing",
+      "timid"
+    ],
+    "answer": 2,
+    "explain": "האח מדבר עם כולם, כלומר הוא חברותי (outgoing), בניגוד למארק השקט."
+  },
+  {
+    "id": "e-010",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "The new law was intended to ______ pollution, but in fact emissions continued to rise.",
+    "choices": [
+      "curb",
+      "worsen",
+      "encourage",
+      "cause"
+    ],
+    "answer": 0,
+    "explain": "\"but\" מציין ניגוד לעלייה בפליטות, ולכן החוק נועד לרסן (curb) את הזיהום."
+  },
+  {
+    "id": "e-011",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "The professor's lectures were so ______ that students often struggled to stay awake.",
+    "choices": [
+      "engaging",
+      "lively",
+      "brief",
+      "tedious"
+    ],
+    "answer": 3,
+    "explain": "הרצאות מייגעות (tedious) גורמות לסטודנטים להירדם."
+  },
+  {
+    "id": "e-012",
+    "section": "english",
+    "kind": "sentence-completion",
+    "dir": "ltr",
+    "prompt": "The evidence against the suspect was entirely ______: no one had actually seen him commit the crime.",
+    "choices": [
+      "conclusive",
+      "direct",
+      "circumstantial",
+      "overwhelming"
+    ],
+    "answer": 2,
+    "explain": "ראיות נסיבתיות (circumstantial) אינן כוללות עדות ישירה, וזה מתאים לכך שאיש לא ראה את הפשע."
+  },
+  {
+    "id": "e-013",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"Few people expected the small company to succeed, yet it soon became a market leader.\"",
+    "choices": [
+      "Many people expected the small company to become a market leader, and it did.",
+      "The small company became a market leader because few people expected it to succeed.",
+      "The small company failed, even though few people expected it to.",
+      "Although most people did not think the small company would do well, it quickly became a leader in its market."
+    ],
+    "answer": 3,
+    "explain": "מעטים ציפו להצלחה, ובכל זאת החברה הובילה במהירות את השוק."
+  },
+  {
+    "id": "e-014",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"The meeting was postponed until all the board members could attend.\"",
+    "choices": [
+      "The meeting was cancelled because some board members could not attend.",
+      "The meeting was delayed so that every board member would be able to be present.",
+      "Only some board members attended the meeting after it was postponed.",
+      "The board members postponed their attendance until after the meeting."
+    ],
+    "answer": 1,
+    "explain": "הישיבה נדחתה כדי שכל חברי ההנהלה יוכלו להשתתף. היא לא בוטלה."
+  },
+  {
+    "id": "e-015",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"Had the bridge been inspected earlier, the accident might have been prevented.\"",
+    "choices": [
+      "The accident could perhaps have been avoided if the bridge had been checked sooner.",
+      "The bridge was inspected early, which prevented the accident.",
+      "The accident happened even though the bridge had been inspected early.",
+      "After the accident, the bridge was inspected immediately."
+    ],
+    "answer": 0,
+    "explain": "\"Had ... been\" הוא תנאי שלא התקיים: הגשר לא נבדק מוקדם, ואולי לכן קרתה התאונה."
+  },
+  {
+    "id": "e-016",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"It was not until she moved abroad that she realized how much she missed her family.\"",
+    "choices": [
+      "She moved abroad because she missed her family.",
+      "Before moving abroad, she already knew how much she would miss her family.",
+      "Only after she moved to another country did she understand how much she missed her family.",
+      "She did not miss her family after she moved abroad."
+    ],
+    "answer": 2,
+    "explain": "\"not until\" פירושו \"רק אחרי\": רק אחרי המעבר לחו\"ל היא הבינה כמה היא מתגעגעת."
+  },
+  {
+    "id": "e-017",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"The novel is less a story about war than a study of friendship.\"",
+    "choices": [
+      "The novel is about war, not friendship.",
+      "The novel examines war and friendship equally.",
+      "The novel is a war story that the author studied with friends.",
+      "The novel focuses more on friendship than on war."
+    ],
+    "answer": 3,
+    "explain": "\"less X than Y\" פירושו שהדגש הוא על Y, כלומר על החברות ולא על המלחמה."
+  },
+  {
+    "id": "e-018",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"Contrary to popular belief, bats are not blind.\"",
+    "choices": [
+      "Most people correctly believe that bats are not blind.",
+      "Bats are blind, despite what many people believe.",
+      "Popular belief holds that bats can see well.",
+      "Although many people think otherwise, bats can see."
+    ],
+    "answer": 3,
+    "explain": "רבים חושבים שעטלפים עיוורים, אבל זה לא נכון: הם רואים."
+  },
+  {
+    "id": "e-019",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"The more he tried to explain, the more confused his listeners became.\"",
+    "choices": [
+      "His listeners became confused, so he stopped trying to explain.",
+      "His listeners grew increasingly confused as he continued his attempts to explain.",
+      "He was confused, so he could not explain the matter to his listeners.",
+      "The longer he spoke, the better his listeners understood him."
+    ],
+    "answer": 1,
+    "explain": "\"the more ... the more\" מתאר קשר: ככל שהסביר יותר, הבלבול של המאזינים גדל."
+  },
+  {
+    "id": "e-020",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"Not only did the storm damage the crops, but it also destroyed several homes.\"",
+    "choices": [
+      "The storm damaged several homes but did not affect the crops.",
+      "The crops were damaged by the storm, which was caused by the destruction of homes.",
+      "The storm harmed the crops and, in addition, ruined a number of houses.",
+      "The storm destroyed only the crops near several homes."
+    ],
+    "answer": 2,
+    "explain": "\"Not only ... but also\" פירושו \"גם וגם\": הסערה פגעה ביבול וגם הרסה בתים."
+  },
+  {
+    "id": "e-021",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"She is anything but lazy.\"",
+    "choices": [
+      "She is lazy in almost every way.",
+      "She is lazy about everything except work.",
+      "She is a very hard-working person.",
+      "She is sometimes lazy and sometimes active."
+    ],
+    "answer": 2,
+    "explain": "\"anything but\" פירושו \"בכלל לא\". היא בכלל לא עצלנית, כלומר היא חרוצה מאוד."
+  },
+  {
+    "id": "e-022",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"Scarcely had the concert begun when the power went out.\"",
+    "choices": [
+      "The concert began only after the electricity returned.",
+      "The electricity failed almost immediately after the concert started.",
+      "The power went out shortly before the concert began.",
+      "The concert started late because of a power failure."
+    ],
+    "answer": 1,
+    "explain": "\"Scarcely had ... when\" פירושו \"רק התחיל ומיד\": החשמל נפל מיד אחרי תחילת הקונצרט."
+  },
+  {
+    "id": "e-023",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"The policy, while popular with voters, has done little to reduce unemployment.\"",
+    "choices": [
+      "The policy is unpopular because it has failed to reduce unemployment.",
+      "Voters support the policy because it has greatly reduced unemployment.",
+      "The policy has reduced unemployment slightly, which made it unpopular.",
+      "Although voters like the policy, it has not been very effective in lowering unemployment."
+    ],
+    "answer": 3,
+    "explain": "המדיניות אהודה על הבוחרים, אבל היא כמעט לא הורידה את האבטלה."
+  },
+  {
+    "id": "e-024",
+    "section": "english",
+    "kind": "restatement",
+    "dir": "ltr",
+    "prompt": "Which of the following best restates the sentence: \"There is no reason to doubt the accuracy of the report.\"",
+    "choices": [
+      "The accuracy of the report is questionable.",
+      "There is no way to check whether the report is accurate.",
+      "The report can be considered accurate.",
+      "Nobody has a reason to read the report."
+    ],
+    "answer": 2,
+    "explain": "אין סיבה לפקפק בדיוק של הדוח, כלומר אפשר לסמוך עליו."
+  },
+  {
+    "id": "e-025",
+    "section": "english",
+    "kind": "vocabulary",
+    "dir": "ltr",
+    "prompt": "The word \"abundant\" is closest in meaning to:",
+    "choices": [
+      "rare",
+      "plentiful",
+      "tiny",
+      "empty"
+    ],
+    "answer": 1,
+    "explain": "abundant פירושו מצוי בשפע (plentiful)."
+  },
+  {
+    "id": "e-026",
+    "section": "english",
+    "kind": "vocabulary",
+    "dir": "ltr",
+    "prompt": "The word \"candid\" is closest in meaning to:",
+    "choices": [
+      "frank",
+      "hidden",
+      "careful",
+      "sweet"
+    ],
+    "answer": 0,
+    "explain": "candid פירושו גלוי לב וכן (frank)."
+  },
+  {
+    "id": "e-027",
+    "section": "english",
+    "kind": "vocabulary",
+    "dir": "ltr",
+    "prompt": "The word \"diminish\" is closest in meaning to:",
+    "choices": [
+      "decrease",
+      "expand",
+      "describe",
+      "delay"
+    ],
+    "answer": 0,
+    "explain": "diminish פירושו לקטון או להקטין (decrease)."
+  },
+  {
+    "id": "e-028",
+    "section": "english",
+    "kind": "vocabulary",
+    "dir": "ltr",
+    "prompt": "The word \"meticulous\" is closest in meaning to:",
+    "choices": [
+      "careless and hasty",
+      "quick and efficient",
+      "extremely careful and precise",
+      "generous and kind"
+    ],
+    "answer": 2,
+    "explain": "meticulous פירושו קפדני מאוד ומדויק בפרטים."
+  },
+  {
+    "id": "e-029",
+    "section": "english",
+    "kind": "vocabulary",
+    "dir": "ltr",
+    "prompt": "The word \"obsolete\" is closest in meaning to:",
+    "choices": [
+      "brand new",
+      "no longer in use",
+      "very popular",
+      "hard to find"
+    ],
+    "answer": 1,
+    "explain": "obsolete פירושו מיושן, כזה שכבר אין בו שימוש."
+  },
+  {
+    "id": "e-030",
+    "section": "english",
+    "kind": "vocabulary",
+    "dir": "ltr",
+    "prompt": "The word \"commend\" is closest in meaning to:",
+    "choices": [
+      "blame",
+      "command",
+      "ignore",
+      "praise"
+    ],
+    "answer": 3,
+    "explain": "commend פירושו לשבח (praise). command היא מילה אחרת שפירושה לפקד."
+  }
+]

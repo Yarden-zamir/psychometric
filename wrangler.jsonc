@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "psychometric",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "psychometric.yarden-zamir.com", "custom_domain": true }],
+  "assets": { "directory": "./site", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
+  "durable_objects": { "bindings": [{ "name": "ROOMS", "class_name": "Room" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }],
+  "observability": { "enabled": true }
+}
