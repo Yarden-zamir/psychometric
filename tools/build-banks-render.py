@@ -13,6 +13,21 @@ import pymupdf
 from PIL import Image
 
 
+# Ink is darker than the NITE watermark, so the trim keeps the text and drops the empty page margin.
+INK_LEVEL = 170
+TRIM_MARGIN = 16
+
+
+def trim(image):
+    ink = image.convert("L").point(lambda v: 255 if v < INK_LEVEL else 0)
+    box = ink.getbbox()
+    if not box:
+        return image
+    left, top, right, bottom = box
+    return image.crop((max(0, left - TRIM_MARGIN), max(0, top - TRIM_MARGIN),
+                       min(image.width, right + TRIM_MARGIN), min(image.height, bottom + TRIM_MARGIN)))
+
+
 def render(pdf, region):
     # parts already follow the importer's page/column reading order.
     scale = 2
@@ -37,6 +52,7 @@ def render(pdf, region):
             x = 0 if region["section"] == "english" else stacked.width - image.width
             stacked.paste(image, (x, offset))
             offset += image.height
+        stacked = trim(stacked)
         for quality in [85, 70, 55, 40, 25]:
             encoded = io.BytesIO()
             stacked.save(encoded, format="WEBP", quality=quality)

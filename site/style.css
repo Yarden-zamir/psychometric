@@ -41,14 +41,14 @@ body {
 h1, h2, h3 { font-weight: 800; letter-spacing: -0.01em; margin: 0; }
 code, .mono { font-family: var(--mono); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.label { text-transform: uppercase; font-weight: 800; font-size: 0.7rem; letter-spacing: 0.06em; color: var(--muted); }
+.label { text-transform: uppercase; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.05em; color: var(--muted); }
 .muted { color: var(--muted); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
 .card { background: var(--surface); border: var(--bw) solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
 .sticker {
   display: inline-block; padding: 0 6px; line-height: 1.5; white-space: nowrap;
-  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+  font-size: 0.78rem; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase;
   color: #000000; background: var(--pink);
   border: var(--bw) solid var(--shadow-ink); border-radius: 4px;
   box-shadow: 2px 2px 0 0 var(--shadow-ink);
@@ -92,16 +92,22 @@ input.field.code { font-family: var(--mono); text-transform: uppercase; letter-s
 .brand h1 { font-size: 1.35rem; }
 .head-right { display: flex; align-items: center; gap: 10px; }
 main { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 18px; }
-.foot { max-width: 860px; margin: 0 auto; padding: 0 16px 30px; font-size: 0.75rem; color: var(--muted); }
+.foot { max-width: 860px; margin: 0 auto; padding: 0 16px 30px; font-size: 0.85rem; line-height: 1.5; color: var(--muted); }
 .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .pad { padding: 16px 18px; }
 .stack { display: grid; gap: 12px; }
 .center { text-align: center; justify-items: center; }
 
 /* Home. */
-.hero { text-align: center; padding: 26px 18px; }
+.hero { text-align: center; padding: 18px; }
 .hero h2 { font-size: 2.2rem; line-height: 1.1; }
-.hero .vs-mini { font-size: 3rem; margin: 6px 0; }
+.hero .vs-mini { font-size: 2.4rem; line-height: 1; }
+.hero p { margin: 0; font-size: 1.1rem; }
+/* Home actions: one full-width button per way to play, then the join row. */
+.actions { display: grid; gap: 12px; }
+.actions .btn { width: 100%; justify-content: center; font-size: 1.25rem; padding: 12px 16px; font-weight: 800; }
+.join { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+.join .field.code { width: 100%; font-size: 1.3rem; }
 .rules li { margin: 4px 0; }
 
 /* Players: two cards and a VS between them. */
@@ -121,6 +127,13 @@ main { max-width: 860px; margin: 0 auto; padding: 20px 16px 40px; display: grid;
 .pips i.on { background: var(--green); }
 .player.b .pips i.on { background: var(--yellow); }
 .answered { min-height: 1.6em; }
+.versus.compact { gap: 8px; }
+.versus.compact .player { grid-template-columns: 1fr auto; grid-template-areas: "name score" "status score"; align-items: center; justify-items: start; text-align: start; padding: 8px 12px; gap: 2px 10px; }
+.versus.compact .player .name { grid-area: name; font-size: 1rem; }
+.versus.compact .player .score { grid-area: score; font-size: 2rem; }
+.versus.compact .player .answered { grid-area: status; min-height: 1.5em; }
+.versus.compact .pips, .versus.compact .player .tag { display: none; }
+.versus.compact .vs { font-size: 1rem; padding: 1px 6px; }
 
 .code-big { font-family: var(--mono); font-weight: 600; font-size: 2.6rem; letter-spacing: 0.25em; padding: 4px 14px; background: var(--select); color: var(--select-fg); border: var(--bw) solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); display: inline-block; direction: ltr; }
 .settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
@@ -142,18 +155,20 @@ label.toggle .mono { font-weight: 600; opacity: 0.75; }
 /* Question. */
 .qcard { padding: 18px; display: grid; gap: 14px; }
 .qhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.prompt { font-size: 1.2rem; font-weight: 600; white-space: pre-wrap; }
+.prompt { font-size: 1.3rem; line-height: 1.6; font-weight: 600; white-space: pre-wrap; }
 .prompt[dir="ltr"], .choices[dir="ltr"] { font-family: var(--sans); text-align: left; }
 .qimage-wrap { overflow-x: auto; cursor: zoom-in; border: var(--bw) solid var(--border); border-radius: var(--radius); background: #FFFFFF; }
 .qimage-wrap.zoomed { cursor: zoom-out; }
-.qimage { display: block; width: 100%; height: auto; }
-.qimage-wrap.zoomed .qimage { width: 220%; max-width: none; }
-.zoom-hint { font-size: 0.75rem; }
+/* app.js sets the width from the image pixels, so the text shows at reading size. */
+.qimage { display: block; max-width: 100%; height: auto; }
+.qimage-wrap.zoomed .qimage { max-width: none; }
+.qimage-wrap.fits { cursor: default; }
+.zoom-hint { font-size: 0.9rem; }
 details.passage { border: var(--bw) solid var(--border); border-radius: var(--radius); background: var(--raised); }
 details.passage > summary { cursor: pointer; padding: 6px 12px; font-weight: 800; }
 details.passage > .qimage-wrap { border-width: var(--bw) 0 0; border-radius: 0; max-height: 60vh; overflow-y: auto; }
 .grace.reading-timer .fill { background: var(--info); }
-@media (min-width: 700px) { .zoom-hint { display: none; } }
+.qcard:not(:has(.qimage-wrap:not(.fits))) .zoom-hint { display: none; }
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .choices.numbers { grid-template-columns: repeat(4, 1fr); }
 .choice {
@@ -184,8 +199,8 @@ details.passage > .qimage-wrap { border-width: var(--bw) 0 0; border-radius: 0; 
 .grace .secs { font-family: var(--mono); font-weight: 600; font-size: 1.8rem; text-align: center; }
 .grace.urgent .secs { animation: throb 500ms ease-in-out infinite alternate; color: var(--error); }
 
-.taunts { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
-.taunts .btn { font-size: 1.3rem; padding: 2px 8px; }
+.taunts { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; max-width: 520px; width: 100%; margin: 0 auto; }
+.taunts .btn { font-size: 1.3rem; padding: 4px 0; }
 
 /* Effects. The user asked for flashing and motion in the game, so the no-animation rule of tick3d does not hold here. */
 #fx { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
@@ -246,5 +261,10 @@ body.panic::after { content: ""; position: fixed; inset: 0; pointer-events: none
   .choices { grid-template-columns: 1fr; }
   .choices.numbers { grid-template-columns: repeat(4, 1fr); }
   .player .score { font-size: 1.9rem; }
+  .versus.compact .player .score { font-size: 1.7rem; }
+  /* On a phone the question image gets the full card width. */
+  main { padding-inline: 10px; }
+  .qcard { padding: 12px 10px; }
+  .prompt { font-size: 1.2rem; }
   .vs { font-size: 1.1rem; }
 }

@@ -11,6 +11,7 @@ const NAME_KEY = "psy.name";
 const MUTE_KEY = "psy.mute";
 const TOKEN_KEY = "psy.token";
 const URGENT_SECONDS = 5;
+const HOME_NOTICE = "השאלות: בחינות לדוגמה של המרכז הארצי לבחינות ולהערכה (מאל\"ו), ושאלות מקוריות בסגנון הבחינה.";
 const OWN_NOTICE = "השאלות המובנות נכתבו במיוחד למשחק, בסגנון הבחינה הפסיכומטרית. הן אינן שאלות של מאל\"ו.";
 
 /** One token per tab, so two tabs on one device can be two players, and a reload keeps the seat. */
@@ -162,7 +163,7 @@ const LINES = {
   tie: ["תיקו! 🤝", "מוחות גדולים חושבים דומה 🧠🧠", "אף אחד לא זז 😐"],
   freeze: ["קפאת מול השעון 🧊", "הזמן נגמר ⌛"],
   rivalRight: ["היריב/ה קטף/ה נקודה 😤", "אוי, הם צדקו 😩"],
-  rivalWrong: ["היריב/ה נפל/ה בפח 😂", "נקודה פחות ליריב/ה 🎯"],
+  rivalWrong: ["היריב/ה נפלו בפח 😂", "גם היריב/ה טעו 🎯"],
 };
 
 /* ---------- Connection ---------- */
@@ -176,6 +177,8 @@ let retry = 0;
 let code = null;
 let fatal = null;
 let importStatus = "";
+// The NITE images are rendered at 2x the PDF size. 0.62 of their pixels shows the text at about 16px.
+const IMAGE_READING_SCALE = 0.62;
 // Imported questions are wide page crops. A tap zooms them, and the zoom holds across renders.
 let zoomed = false;
 let zoomedContext = null;
@@ -281,27 +284,29 @@ function revealEffects(next, me) {
     if (result.tie) sfx.tie(); else sfx.pop();
     return;
   }
-  const mine = result.deltas[me];
-  const theirs = result.deltas[other(me)];
-  const answered = next.round.choices[me] !== null;
+  const choices = next.round.choices;
+  const answered = choices[me] !== null;
+  const iRight = choices[me] === result.correct;
+  const theyRight = choices[other(me)] === result.correct;
+  const theyAnswered = choices[other(me)] !== null;
   if (result.tie) {
     sfx.tie();
     burst(["🤝", "🧠"], 14);
     say(`${pick(LINES.tie)}<small>שניכם צדקתם, אין נקודות</small>`, "info", next);
-  } else if (mine > 0) {
+  } else if (iRight) {
     sfx.right();
     flash("var(--green)");
     burst(["✨", "🧠", "💥", "⭐"], 26);
-    say(`${pick(LINES.right)}<small><span class="ltr">+1</span>${theirs < 0 ? ` · והיריב/ה <span class="ltr">−1</span> 😈` : ""}</small>`, "good", next);
-  } else if (mine < 0) {
+    say(`${pick(LINES.right)}<small><span class="ltr">+1</span> לך${theyAnswered ? " · היריב/ה טעו 😈" : ""}</small>`, "good", next);
+  } else if (answered) {
     sfx.wrong();
     flash("var(--error)");
     shake();
-    say(`${pick(LINES.wrong)}<small><span class="ltr">−1</span>${theirs > 0 ? ` · והיריב/ה <span class="ltr">+1</span>` : ""}</small>`, "bad", next);
+    say(`${pick(LINES.wrong)}<small>${theyRight ? `טעות · <span class="ltr">+1</span> ליריב/ה` : "טעות, אין נקודות"}</small>`, "bad", next);
   } else if (!answered) {
     sfx.freeze();
     burst(["🧊", "⌛"], 12);
-    say(`${pick(LINES.freeze)}<small>${theirs > 0 ? pick(LINES.rivalRight) : theirs < 0 ? pick(LINES.rivalWrong) : ""}</small>`, theirs > 0 ? "bad" : "info", next);
+    say(`${pick(LINES.freeze)}<small>${theyRight ? pick(LINES.rivalRight) : theyAnswered ? pick(LINES.rivalWrong) : ""}</small>`, theyRight ? "bad" : "info", next);
   }
 }
 
@@ -384,7 +389,10 @@ function playerCard(seat) {
     else status = `<span class="sticker">חושבים…</span>`;
   } else if (state.phase === "reveal" && round?.result) {
     const d = round.result.deltas[seat];
-    status = round.result.tie ? `<span class="sticker info">תיקו</span>` : d > 0 ? `<span class="sticker ok ltr">+1</span>` : d < 0 ? `<span class="sticker bad ltr">−1</span>` : `<span class="sticker">0</span>`;
+    const choice = round.choices?.[seat] ?? null;
+    status = round.result.tie ? `<span class="sticker info">תיקו</span>`
+      : d > 0 ? `<span class="sticker ok ltr">+1</span>`
+      : choice !== null ? `<span class="sticker bad">✗ טעות</span>` : `<span class="sticker">לא ענו</span>`;
   }
   const you = state.you === seat ? `<span class="sticker wait tag">אני</span>` : "";
   return `<div class="card player ${seat} ${p.online ? "" : "offline"}">${you}
@@ -393,7 +401,8 @@ function playerCard(seat) {
 }
 
 function scoreboard() {
-  return `<section class="versus">${playerCard("a")}<span class="vs">VS</span>${playerCard("b")}</section>`;
+  // In a match the scoreboard is one compact row, so the question gets the screen.
+  return `<section class="versus ${state.phase === "lobby" ? "" : "compact"}">${playerCard("a")}<span class="vs">VS</span>${playerCard("b")}</section>`;
 }
 
 function lobby() {
@@ -439,7 +448,7 @@ function lobby() {
     <ul class="rules">
       <li>שאלה אחת לשניכם. מי שעונה ראשון/ה נועל/ת תשובה.</li>
       <li>אחרי התשובה הראשונה, ליריב/ה יש ${grace} שניות לענות.</li>
-      <li>תשובה נכונה: +1. תשובה שגויה: −1. שתי תשובות נכונות: תיקו, אין נקודות.</li>
+      <li>תשובה נכונה: +1. תשובה שגויה: 0. שתי תשובות נכונות: תיקו, אין נקודות.</li>
       <li>מי שמגיע/ה ראשון/ה ל־${target} נקודות מנצח/ת.</li>
       ${state.bank.passages && state.settings.passages ? `<li>קטע קריאה: קודם קוראים (עד ${state.settings.reading} שניות, או עד ששניכם מוכנים), ואז מתחרים על השאלות שלו.</li>` : ""}
     </ul>
@@ -474,8 +483,8 @@ function questionCard() {
     return `<button class="${cls.join(" ")}" data-choice="${i}" ${canAnswer ? "" : "disabled"}>${label}${who ? `<span class="who">${who}</span>` : ""}</button>`;
   }).join("");
   const body = q.image
-    ? `<div class="qimage-wrap ${zoomed ? "zoomed" : ""}"><img class="qimage" src="/api/rooms/${esc(state.code)}/image?round=${round.number}" alt="שאלה ${round.number}"></div>
-       <span class="muted zoom-hint">👆 הקשה על השאלה מגדילה אותה</span>`
+    ? `<div class="qimage-wrap ${zoomed ? "zoomed" : ""}" dir="${q.section === "english" ? "ltr" : "rtl"}"><img class="qimage" src="/api/rooms/${esc(state.code)}/image?round=${round.number}" alt="שאלה ${round.number}"></div>
+       <span class="muted zoom-hint">👆 הקשה מגדילה · 📱 לרוחב נוח יותר לקרוא</span>`
     : `<div class="prompt" dir="${esc(q.dir)}">${esc(q.prompt)}</div>`;
   const grace = state.phase === "question" && round.graceEndsAt
     ? `<div class="grace"><div class="secs">${state.settings.grace}</div><div class="bar"><div class="fill"></div></div></div>`
@@ -531,21 +540,27 @@ function tauntBar() {
 
 function renderHome() {
   roomChip.innerHTML = "";
-  foot.textContent = OWN_NOTICE;
+  foot.textContent = HOME_NOTICE;
   const name = localStorage.getItem(NAME_KEY) ?? "";
   app.innerHTML = `
   <section class="card hero stack center">
     <div class="vs-mini">🧠⚡🧠</div>
     <h2>דו־קרב פסיכומטרי</h2>
-    <p class="muted">שאלה אחת, שני מוחות, שעון אחד שמתקתק. מי שעונה ראשון/ה ובצדק לוקח/ת את הנקודה.</p>
+    <p class="muted">שאלה אחת, שני מוחות, שעון שמתקתק. מי שעונה ראשון ונכון לוקח את הנקודה.</p>
   </section>
   <section class="card pad stack">
     <label class="stack"><span class="label">השם שלך</span><input class="field" id="name" maxlength="20" value="${esc(name)}" placeholder="למשל: נועה"></label>
-    <div class="row"><button class="btn go" data-act="create" data-mode="duel">⚔️ חדר חדש</button>
-      <button class="btn primary" data-act="create" data-mode="bot">🤖 נגד בוט</button></div>
-    <div class="row"><span class="label">או הצטרפות עם קוד</span>
-      <input class="field code" id="join-code" maxlength="4" autocomplete="off" placeholder="AB3K" dir="ltr">
-      <button class="btn primary" data-act="join">הצטרפות</button></div>
+    <div class="actions">
+      <button class="btn go" data-act="create" data-mode="duel">⚔️ חדר חדש · שני מכשירים</button>
+      <button class="btn primary" data-act="create" data-mode="bot">🤖 משחק נגד הבוט</button>
+    </div>
+  </section>
+  <section class="card pad stack">
+    <span class="label">יש לך קוד? הצטרפות לחדר</span>
+    <div class="join">
+      <input class="field code" id="join-code" maxlength="4" autocomplete="off" placeholder="AB3K" dir="ltr" inputmode="text" autocapitalize="characters">
+      <button class="btn primary" data-act="join">הצטרפות</button>
+    </div>
   </section>`;
   const nameInput = document.getElementById("name");
   nameInput.addEventListener("input", () => localStorage.setItem(NAME_KEY, nameInput.value.trim()));
@@ -600,6 +615,13 @@ function bind() {
   }
   for (const el of app.querySelectorAll("[data-taunt]")) {
     el.addEventListener("click", () => { sound(); sendMsg({ t: "taunt", emoji: el.dataset.taunt }); el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); });
+  }
+  for (const img of app.querySelectorAll("img.qimage")) {
+    const fit = () => {
+      img.style.width = `${Math.round(img.naturalWidth * IMAGE_READING_SCALE)}px`;
+      img.parentElement?.classList.toggle("fits", img.naturalWidth * IMAGE_READING_SCALE <= (img.parentElement?.clientWidth ?? 0));
+    };
+    if (img.complete && img.naturalWidth) fit(); else img.addEventListener("load", fit, { once: true });
   }
   for (const wrap of app.querySelectorAll(".qimage-wrap")) {
     wrap.addEventListener("click", () => {

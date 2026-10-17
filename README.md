@@ -7,7 +7,7 @@ A 1v1 quiz duel in the style of the Israeli Psychometric Entrance Test, at
 
 - Both players get the same question. The first answer locks in.
 - After the first answer, the other player has a grace time to answer (15 seconds by default).
-- A right answer earns 1 point. A wrong answer costs 1 point. Two right answers are a tie, and nobody scores.
+- A right answer earns 1 point. A wrong answer scores 0. Two right answers are a tie, and nobody scores.
 - The first player to reach the target wins (10 points by default).
 - The host sets the target, the grace time and the subjects (verbal, quantitative, English) in the lobby.
 - "🤖 נגד בוט" starts a room against a bot. The page does not show its level. The bot copies the accuracy and speed of the player,

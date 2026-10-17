@@ -402,8 +402,8 @@ export class Room extends DurableObject {
   }
 
   /**
-   * Scoring: a wrong answer costs 1 point. A right answer earns 1 point,
-   * but two right answers are a tie and nobody scores.
+   * Scoring: a right answer earns 1 point, but two right answers are a tie and nobody scores.
+   * A wrong answer scores 0.
    */
   reveal(now) {
     const s = /** @type {State} */ (this.s);
@@ -414,7 +414,7 @@ export class Room extends DurableObject {
     const deltas = { a: 0, b: 0 };
     for (const seat of SEATS) {
       if (!round.answers[seat] || tie) continue;
-      deltas[seat] = right(seat) ? 1 : -1;
+      deltas[seat] = right(seat) ? 1 : 0;
       s.scores[seat] += deltas[seat];
     }
     round.result = { correct, tie, deltas };

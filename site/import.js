@@ -347,6 +347,34 @@ export async function findQuestions(pdfDocument) {
   return { title: titleOf(pages), questions, contexts };
 }
 
+// Ink is darker than the NITE watermark, so the trim keeps the text and drops the empty page margin.
+// Same values as tools/build-banks-render.py.
+const INK_LEVEL = 170, TRIM_MARGIN = 16;
+
+/** A copy of the canvas without its empty margins, or the canvas itself when it has no ink. */
+function trimmed(canvas) {
+  const { width, height } = canvas;
+  const data = canvas.getContext('2d').getImageData(0, 0, width, height).data;
+  let left = width, right = -1, top = height, bottom = -1;
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const i = (y * width + x) * 4;
+      if (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2] >= INK_LEVEL) continue;
+      if (x < left) left = x;
+      if (x > right) right = x;
+      if (y < top) top = y;
+      if (y > bottom) bottom = y;
+    }
+  }
+  if (right < 0) return canvas;
+  left = Math.max(0, left - TRIM_MARGIN); top = Math.max(0, top - TRIM_MARGIN);
+  right = Math.min(width - 1, right + TRIM_MARGIN); bottom = Math.min(height - 1, bottom + TRIM_MARGIN);
+  const out = document.createElement('canvas');
+  out.width = right - left + 1; out.height = bottom - top + 1;
+  out.getContext('2d').drawImage(canvas, left, top, out.width, out.height, 0, 0, out.width, out.height);
+  return out;
+}
+
 function canvasBlob(canvas, type, quality) {
   return new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob)
     : reject(new Error(`Could not encode image as ${type}.`)), type, quality));
@@ -399,10 +427,11 @@ export async function renderQuestion(pdfDocument, region, scale = 2) {
         } finally { partCanvas.width = partCanvas.height = 0; }
         offset += crop.height;
       }
+      const output = trimmed(canvas);
       for (const quality of [0.85, 0.7, 0.55, 0.4, 0.25]) {
         let blob;
-        try { blob = await canvasBlob(canvas, 'image/webp', quality); }
-        catch { blob = await canvasBlob(canvas, 'image/png'); }
+        try { blob = await canvasBlob(output, 'image/webp', quality); }
+        catch { blob = await canvasBlob(output, 'image/png'); }
         encoded = true;
         if (blob.size <= 1_000_000) return blob;
         if (blob.type !== 'image/webp') break; // PNG ignores quality

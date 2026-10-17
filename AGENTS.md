@@ -6,7 +6,8 @@ A 1v1 quiz race for two devices. Site: <https://psychometric.yarden-zamir.com>.
   `/bank` and `/image` to the room.
 - Room: one Durable Object (`Room`, SQLite storage) per code. It owns the game state, the timers
   (one alarm) and the WebSockets (hibernation API). The server decides who answered first.
-- Page: static files in `site/`, plain JavaScript, no build step. `app.js` renders the state that the
+- Page: static files in `site/`, plain JavaScript, no build step. Question images show at a fixed
+  reading size (`IMAGE_READING_SCALE`), and the build and the importer trim their empty margins. `app.js` renders the state that the
   room sends and adds the sounds (Web Audio, no files) and the effects.
 - Style: tick3d neo-brutalism tokens, light and dark mode. The game uses motion and flashes on
   purpose. This is an exception to the "no continuous animation" rule of the style.
@@ -18,7 +19,7 @@ A 1v1 quiz race for two devices. Site: <https://psychometric.yarden-zamir.com>.
    tab keeps in `sessionStorage`, so a reload keeps the seat.
 2. Only the host changes the settings and imports questions, and only in the lobby or after a match.
 3. The first answer sets `graceEndsAt` = answer time + grace. The round ends when both answered or at `graceEndsAt`.
-4. Scoring: a wrong answer is −1. A right answer is +1, but two right answers are a tie with no points.
+4. Scoring: a right answer is +1, but two right answers are a tie with no points. A wrong answer is 0.
 5. The player who reaches the target first wins. Only one player can gain in a round.
 6. A socket never sees the correct answer or the choice of the other player before the reveal.
    An imported question image is served only for the open round.
