@@ -152,7 +152,7 @@ label.toggle .mono { font-weight: 600; opacity: 0.75; }
 details.passage { border: var(--bw) solid var(--border); border-radius: var(--radius); background: var(--raised); }
 details.passage > summary { cursor: pointer; padding: 6px 12px; font-weight: 800; }
 details.passage > .qimage-wrap { border-width: var(--bw) 0 0; border-radius: 0; max-height: 60vh; overflow-y: auto; }
-.reading-timer .fill { background: var(--info); }
+.grace.reading-timer .fill { background: var(--info); }
 @media (min-width: 700px) { .zoom-hint { display: none; } }
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .choices.numbers { grid-template-columns: repeat(4, 1fr); }

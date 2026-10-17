@@ -20,6 +20,7 @@ A 1v1 quiz duel in the style of the Israeli Psychometric Entrance Test, at
   They are not NITE questions.
 - The host can import a NITE practice test PDF into a room (`site/import.js`). The room keeps the
   questions as images with the answer key. The page then shows the NITE copyright notice.
+  It keeps every multiple-choice question: 86 per sample test, 130 for the autumn 2020 three-domain test.
   Reading passages play as a passage round: both players read (2 minutes by default, or until both
   press ready), then race on the passage's questions with the passage open in a panel. Chart
   questions show their chart. The host can leave passages out. The import needs a PDF with a text
